@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>🏯《西游记》闯关赛🏯五年级17班经典文学阅读</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 颜色主题 */
+            --primary: #E65100; --secondary: #FFB300; --correct: #8BC34A;
+            --wrong: #EF5350; --timeout: #FF7043; --background-start: #FFF3E0;
+            --background-end: #FFECB3; --card-bg: rgba(255, 255, 255, 0.93); /* 更不透明一点 */
+            --text-dark: #4E342E; --text-light: white; --button-bg: #FFCC80;
+            --button-border: #E65100; --button-text: #BF360C; --button-hover-bg: #FFA726;
+            --explanation-text-popup: #ffffff; /* 弹窗中理由文字颜色 */
+            --primary-rgb: 230, 81, 0; --secondary-rgb: 255, 179, 0;
+            --timeout-rgb: 255, 112, 67; --correct-rgb: 139, 195, 74;
+            --text-dark-rgb: 78, 52, 46;
+
+            /* 基础尺寸 */
+            --base-font-size: 24px; --base-padding: 20px;
+            --base-margin: 15px; --base-radius: 25px;
+
+            /* 字体栈 */
+            --font-fun: 'ZCOOL KuaiLe', cursive, 'Microsoft YaHei', sans-serif;
+            --font-formal: 'KaiTi', 'SimSun', serif, 'Microsoft YaHei';
+            --font-handwriting: 'Long Cang', cursive;
+            --font-elegant: 'Ma Shan Zheng', cursive;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            /* 默认背景，会被 #initialScreen 覆盖 */
+            background: radial-gradient(ellipse at bottom, var(--background-start) 0%, var(--background-end) 100%);
+            font-family: var(--font-fun); font-size: var(--base-font-size);
+            position: relative; overflow: hidden; display: grid; place-items: center;
+            min-height: 100vh; color: var(--text-dark);
+        }
+
+        .screen {
+            width: 100%; max-width: 1200px; height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: var(--base-padding);
+            box-sizing: border-box; text-align: center;
+        }
+
+        #initialScreen {
+            animation: fadeIn 1s ease-out;
+            justify-content: space-around; padding-top: 5vh; padding-bottom: 3vh;
+            /* 西游记风格背景图 - 使用 CSS 渐变模拟 */
+            background-color: #ffe8cc; /* 底色 */
+            background-image:
+                /* 远山剪影 */
+                linear-gradient(to top, rgba(var(--text-dark-rgb), 0.3) 0%, rgba(var(--text-dark-rgb), 0) 20%),
+                radial-gradient(ellipse at bottom, #ffcc80 10%, transparent 60%),
+                /* 云层 */
+                radial-gradient(circle at 10% 20%, rgba(255,255,255,0.6) 5%, transparent 30%),
+                radial-gradient(circle at 80% 30%, rgba(255,255,255,0.5) 8%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(255,255,255,0.4) 15%, transparent 50%),
+                /* 底层渐变 */
+                radial-gradient(ellipse at bottom, var(--background-start) 0%, var(--background-end) 100%);
+            background-size: 100% 100%, 100% 100%, auto, auto, auto, 100% 100%;
+            background-repeat: no-repeat;
+            background-position: bottom center;
+        }
+
+        #quizScreen {
+            display: none; justify-content: flex-start; padding-top: 30px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: var(--primary); font-size: 3.5rem; margin: 0 0 var(--base-margin) 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2); line-height: 1.2;
+        }
+        #initialScreen h1 {
+             font-family: var(--font-formal); font-size: 5.5rem;
+             margin-bottom: calc(var(--base-margin) * 1); font-weight: bold;
+             letter-spacing: 0.1em; color: #a52a2a; /* 棕红色 */
+             text-shadow: 2px 2px 4px rgba(255,255,255,0.5), -1px -1px 2px rgba(0,0,0,0.2);
+        }
+
+        #subtitle {
+            font-size: 1.5rem; margin: 0 0 calc(var(--base-margin) * 2) 0; opacity: 0.9;
+        }
+        #initialScreen #subtitle {
+             font-family: var(--font-formal); font-size: 2.5rem;
+             margin-bottom: calc(var(--base-margin) * 2);
+             font-weight: bold; /* 加粗 */
+             color: var(--text-dark);
+             text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+        }
+
+        /* 金箍 SVG 元素 */
+        .golden-hoop {
+            width: 15vmin; height: auto;
+            margin: calc(var(--base-margin) * 1) auto calc(var(--base-margin) * 2) auto;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+            animation: hoopSpin 20s linear infinite;
+        }
+        .golden-hoop path { stroke: url(#hoopGradient); stroke-width: 12; fill: none; }
+        @keyframes hoopSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* 开始按钮样式 */
+        #startButton {
+            font-family: var(--font-fun); font-size: 3rem;
+            padding: calc(var(--base-padding) * 1.5) calc(var(--base-padding) * 3);
+            cursor: pointer; background: linear-gradient(145deg, var(--primary), #FF7043);
+            color: var(--text-light); border: none; border-radius: var(--base-radius);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25), inset 0 -4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: scale(1);
+        }
+        #startButton:hover {
+            background: linear-gradient(145deg, #FF7043, var(--primary));
+            transform: scale(1.05) rotate(-1deg);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3), inset 0 -4px 8px rgba(0,0,0,0.2);
+        }
+        #startButton:active {
+             transform: scale(0.98) rotate(0deg);
+             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 状态区域 */
+        #statusArea {
+            display: flex; justify-content: space-around; align-items: center;
+            width: 100%; padding: var(--base-padding);
+            background: rgba(255, 255, 255, 0.75); border-radius: var(--base-radius);
+            margin-bottom: var(--base-margin); box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            flex-wrap: wrap; gap: var(--base-margin); order: -1;
+        }
+        #progress, #score {
+            font-size: 1.8rem; font-weight: bold; color: var(--text-dark);
+            background-color: var(--button-bg);
+            padding: calc(var(--base-padding) * 0.6) calc(var(--base-padding) * 1.2);
+            border-radius: calc(var(--base-radius) * 0.6); border: 3px solid var(--secondary);
+            min-width: 100px; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* 倒计时样式优化 */
+        #countdown {
+            font-size: 2.2rem; /* 再加大 */
+            font-weight: bold; /* 加粗 */
+            color: var(--primary); border-color: var(--primary);
+            min-width: 90px; /* 增大最小宽度 */
+            padding: calc(var(--base-padding) * 0.7) calc(var(--base-padding) * 1.3); /* 增大内边距 */
+            border-radius: calc(var(--base-radius) * 0.7); border: 4px solid var(--primary); /* 加粗边框 */
+            background-color: #fff; /* 白色背景更突出 */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; opacity: 0; visibility: hidden; transform: scale(1);
+            animation: countdownPulse 1.5s infinite ease-in-out; /* 添加脉冲动画 */
+        }
+        #countdown.visible { opacity: 1; visibility: visible; }
+        #countdown.warning {
+            color: var(--text-light); background-color: var(--timeout); border-color: var(--timeout);
+            animation: pulseWarningLarge 0.8s infinite, countdownPulse 1.5s infinite ease-in-out; /* 组合动画 */
+        }
+        #countdown.timesup {
+            color: var(--text-light); background-color: var(--wrong); border-color: var(--wrong);
+            animation: shakeLarge 0.5s ease-in-out, countdownPulse 1.5s infinite ease-in-out; /* 组合动画 */
+        }
+        @keyframes countdownPulse { /* 倒计时脉冲动画 */
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+
+        /* 重置按钮 */
+        #restartButton {
+            font-family: var(--font-fun);
+            padding: calc(var(--base-padding) * 0.7) calc(var(--base-padding) * 1.5);
+            font-size: 1.5rem; border: 3px solid var(--primary);
+            border-radius: calc(var(--base-radius) * 0.6); background: var(--button-bg);
+            color: var(--button-text); cursor: pointer; transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        #restartButton:hover {
+            background: var(--button-hover-bg); transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+         #restartButton:active {
+             transform: translateY(1px) scale(0.98); box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+         }
+
+        /* 问题卡片区域 */
+        #quizArea {
+             width: 100%; flex-grow: 1; display: flex; align-items: center;
+             justify-content: center; padding: var(--base-padding);
+             box-sizing: border-box; overflow: hidden;
+        }
+
+        /* 问题卡片 */
+        .question-card {
+            background: var(--card-bg); border-radius: var(--base-radius);
+            padding: calc(var(--base-padding) * 1.5); box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.4s ease-in-out; width: 100%; max-width: 1000px;
+            border: 5px solid rgba(var(--primary-rgb, 230, 81, 0), 0.3);
+            opacity: 0; transform: translateY(30px);
+            animation: cardEnter 0.6s ease-out forwards;
+            max-height: 75vh; overflow-y: auto;
+            display: flex; flex-direction: column;
+        }
+        .question-card.effect-shake { animation: shakeLarge 0.5s ease-in-out; }
+        .question-card.effect-pulse { animation: pulseCorrectLarge 0.6s ease-in-out; }
+
+        /* 问题文本 */
+        .question {
+            font-size: 2.2rem; margin-bottom: calc(var(--base-margin) * 1.5);
+            color: var(--text-dark); line-height: 1.6; font-weight: bold;
+        }
+
+        /* 选项区域 */
+        .options {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: calc(var(--base-margin) * 1.5); margin-top: calc(var(--base-margin) * 1.5);
+        }
+
+        /* 选项按钮 */
+        .options button {
+            font-family: var(--font-fun);
+            padding: calc(var(--base-padding) * 1.2); font-size: 1.8rem;
+            border: 4px solid var(--button-border); border-radius: calc(var(--base-radius) * 0.8);
+            background: linear-gradient(145deg, var(--button-bg), #FFD180);
+            color: var(--button-text); cursor: pointer; transition: all 0.2s ease-in-out;
+            text-align: left; overflow: hidden; white-space: normal; line-height: 1.5;
+            display: flex; align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1), inset 0 -3px 6px rgba(0,0,0,0.1);
+            transform: scale(1); position: relative;
+        }
+        .options button:hover:not(:disabled) {
+            background: linear-gradient(145deg, var(--button-hover-bg), #FFB74D);
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15), inset 0 -3px 6px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+        .options button:active:not(:disabled) {
+            transform: scale(0.97);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 -2px 4px rgba(0,0,0,0.1);
+        }
+        .options button.correct {
+            background: linear-gradient(145deg, var(--correct), #AED581) !important;
+            color: var(--text-light) !important; border-color: transparent !important;
+            animation: bounceCorrectLarge 0.6s ease;
+            box-shadow: 0 6px 12px rgba(var(--correct-rgb, 139, 195, 74), 0.4);
+        }
+        .options button.wrong {
+            background: linear-gradient(145deg, var(--wrong), #E57373) !important;
+            color: var(--text-light) !important; border-color: transparent !important;
+            animation: shakeLarge 0.5s ease;
+            box-shadow: 0 6px 12px rgba(244, 67, 54, 0.4);
+        }
+        .options button.reveal-correct {
+            background: linear-gradient(145deg, var(--correct), #AED581) !important;
+            color: var(--text-light) !important; border: 4px solid white !important;
+            opacity: 1 !important; transform: scale(1.05);
+            box-shadow: 0 0 15px 5px rgba(var(--correct-rgb, 139, 195, 74), 0.6);
+        }
+        .options button.reveal-correct::before {
+            content: '✔'; position: absolute; right: 15px; top: 50%;
+            transform: translateY(-50%); font-size: 1.5em; color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .options button:disabled {
+            cursor: not-allowed; opacity: 0.6; background: #E0E0E0 !important;
+            border-color: #BDBDBD !important; color: #757575 !important; box-shadow: none;
+        }
+         .options button:disabled::before { content: none; }
+
+        /* 移除 .explanation-text 样式，理由显示在弹窗中 */
+
+
+        /* 结果区域 */
+        #resultArea {
+            text-align: center; padding: calc(var(--base-padding) * 2);
+            background: var(--card-bg); border-radius: var(--base-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none;
+            width: 100%; max-width: 800px;
+            border: 5px solid rgba(var(--secondary-rgb, 255, 179, 0), 0.5);
+            animation: fadeInScaleUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        #resultArea.visible { display: block; }
+        #resultArea h2 {
+            color: var(--primary); font-size: 3rem; margin-bottom: var(--base-margin);
+            animation: textShine 2s infinite linear;
+        }
+        #resultArea p {
+            font-family: var(--font-elegant); font-size: 2.5rem;
+            margin-bottom: calc(var(--base-margin) * 2); line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* 特效层 */
+        .effect-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            background-color: rgba(0, 0, 0, 0.65); /* 稍微加深 */
+            opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 1000; pointer-events: none;
+            padding: 20px; /* 内边距防止文字贴边 */
+            box-sizing: border-box;
+        }
+        .effect-overlay.show { opacity: 1; visibility: visible; }
+        #effectText {
+            font-size: 8rem; /* 主提示语字号调整 */
+            font-weight: bold; color: white;
+            text-shadow: 5px 5px 10px rgba(0,0,0,0.5);
+            transform: scale(0.5); opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            text-align: center; /* 文本居中 */
+            line-height: 1.3; /* 调整行高 */
+        }
+        /* 弹窗中理由的样式 */
+        #effectText .explanation-popup {
+            display: block; /* 换行显示 */
+            font-size: 0.3em; /* 相对于主提示语的大小 (即 8rem * 0.3 = 2.4rem) */
+            font-weight: normal;
+            margin-top: 15px; /* 与主提示语的间距 */
+            color: var(--explanation-text-popup); /* 使用白色或浅色 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); /* 轻微阴影 */
+            line-height: 1.5;
+            max-width: 80%; /* 限制最大宽度 */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .effect-overlay.show #effectText { transform: scale(1); opacity: 1; }
+        .effect-overlay.effect-correct #effectText { color: #C5E1A5; animation: popAndFadeLarge 1.5s ease-out forwards; }
+        .effect-overlay.effect-wrong #effectText { color: #FFCDD2; animation: shakeHardFadeOutLarge 3s ease-out forwards; } /* 错误提示持续3秒 */
+        .effect-overlay.effect-timeout #effectText { color: #FFCCBC; animation: fadeInFadeOutLarge 3s ease-out forwards; } /* 超时提示持续3秒 */
+        .effect-overlay.effect-win { background: radial-gradient(circle, rgba(255,215,0,0.8) 0%, rgba(255,255,255,0) 75%); animation: winShineLarge 3s ease-out forwards; }
+        .effect-overlay.effect-lose { background: radial-gradient(circle, rgba(120,120,120,0.7) 0%, rgba(0,0,0,0) 75%); animation: loseDimLarge 3s ease-out forwards; }
+
+        /* 页脚样式 */
+        .page-footer {
+            font-size: 0.8rem; color: rgba(var(--text-dark-rgb, 78, 52, 46), 0.7);
+            padding: calc(var(--base-padding) * 0.5) 0; width: 100%;
+            text-align: center; margin-top: auto; box-sizing: border-box;
+        }
+         #initialScreen .page-footer { margin-bottom: 2vh; }
+
+        /* --- 动画效果 --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeInScaleUp { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes shakeLarge { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-15px) rotate(-3deg); } 40% { transform: translateX(15px) rotate(3deg); } 60% { transform: translateX(-10px) rotate(-2deg); } 80% { transform: translateX(10px) rotate(2deg); } }
+        @keyframes pulseWarningLarge { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--timeout-rgb, 255, 112, 67), 0.7); } 50% { transform: scale(1.15); box-shadow: 0 0 10px 15px rgba(var(--timeout-rgb, 255, 112, 67), 0); } }
+        @keyframes bounceCorrectLarge { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-15px) scale(1.05); } 60% { transform: translateY(5px) scale(0.98); } }
+        @keyframes pulseCorrectLarge { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes popAndFadeLarge { 0% { transform: scale(0.5) rotate(-15deg); opacity: 0; } 30% { transform: scale(1.2) rotate(5deg); opacity: 1; } 80% { transform: scale(1.1) rotate(0deg); opacity: 1; } 100% { transform: scale(1.1) rotate(0deg); opacity: 0; } }
+        /* 调整错误/超时动画时长为 3s */
+        @keyframes shakeHardFadeOutLarge {
+            0% { transform: scale(0.8) translateX(0); opacity: 0; }
+            5% { transform: scale(1.1) translateX(-30px) rotate(-8deg); opacity: 1; } /* 快速出现并晃动 */
+            10% { transform: scale(1.1) translateX(30px) rotate(8deg); opacity: 1; }
+            15% { transform: scale(1.1) translateX(-30px) rotate(-8deg); opacity: 1; }
+            20% { transform: scale(1.1) translateX(30px) rotate(8deg); opacity: 1; }
+            25%, 85% { transform: scale(1.1) translateX(0) rotate(0); opacity: 1; } /* 稳定显示较长时间 */
+            100% { transform: scale(1.1); opacity: 0; } /* 最后渐隐 */
+        }
+        @keyframes fadeInFadeOutLarge {
+            0% { opacity: 0; transform: scale(0.9)}
+            10% { opacity: 1; transform: scale(1.1)} /* 快速出现 */
+            90% { opacity: 1; transform: scale(1.05)} /* 稳定显示 */
+            100% { opacity: 0; transform: scale(1)} /* 渐隐 */
+        }
+        @keyframes winShineLarge { 0% { background: radial-gradient(circle, rgba(255,215,0,0.6) 0%, rgba(255,255,255,0) 80%); } 50% { background: radial-gradient(circle, rgba(255,223,0,0.9) 40%, rgba(255,255,255,0) 85%); } 100% { background: radial-gradient(circle, rgba(255,255,0,0) 80%, rgba(255,255,255,0) 100%); } }
+        @keyframes loseDimLarge { 0% { background: radial-gradient(circle, rgba(100,100,100,0.6) 0%, rgba(0,0,0,0) 80%); } 50% { background: radial-gradient(circle, rgba(60,60,60,0.8) 40%, rgba(0,0,0,0) 85%); } 100% { background: radial-gradient(circle, rgba(0,0,0,0) 80%, rgba(0,0,0,0) 100%); } }
+        @keyframes textShine { 0% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--secondary), 0 0 40px var(--secondary); } 50% { text-shadow: 0 0 15px #fff, 0 0 25px #fff, 0 0 35px var(--secondary), 0 0 45px var(--secondary), 0 0 55px var(--secondary); } 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--secondary), 0 0 40px var(--secondary); } }
+
+        /* 响应式调整 */
+        @media (max-width: 900px) {
+             :root { --base-font-size: 18px; }
+             #initialScreen h1 { font-size: 4rem; }
+             #initialScreen #subtitle { font-size: 1.8rem; }
+             h1 { font-size: 2.8rem; }
+             #startButton { font-size: 2.2rem; padding: calc(var(--base-padding) * 1.2) calc(var(--base-padding) * 2.5); }
+             #progress, #score { font-size: 1.4rem; }
+             #countdown { font-size: 1.8rem; min-width: 80px; padding: calc(var(--base-padding) * 0.6) calc(var(--base-padding) * 1.1); }
+             #restartButton { font-size: 1.2rem; }
+             .question { font-size: 1.8rem; }
+             .options { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--base-margin); }
+             .options button { font-size: 1.5rem; padding: var(--base-padding); }
+             #resultArea h2 { font-size: 2.5rem; }
+             #resultArea p { font-size: 1.8rem; }
+             #effectText { font-size: 6rem; } /* 调整弹窗主字号 */
+             #effectText .explanation-popup { font-size: 0.3em; } /* 调整弹窗理由字号 */
+             .page-footer { font-size: 0.7rem; }
+             .golden-hoop { width: 20vmin; }
+        }
+        @media (max-width: 600px) {
+            :root { --base-font-size: 16px; }
+             #initialScreen h1 { font-size: 3rem; }
+             #initialScreen #subtitle { font-size: 1.5rem; }
+            h1 { font-size: 2.2rem; }
+             #subtitle { font-size: 1.2rem; }
+            #startButton { font-size: 1.8rem; padding: var(--base-padding) calc(var(--base-padding) * 2); }
+            #statusArea { flex-direction: column; align-items: stretch; gap: 5px; }
+            #progress, #score { font-size: 1.2rem; }
+            #countdown { font-size: 1.6rem; min-width: 70px; padding: calc(var(--base-padding) * 0.5) var(--base-padding); }
+            #restartButton { font-size: 1rem; text-align: center; padding: calc(var(--base-padding) * 0.6); }
+            .question { font-size: 1.5rem; }
+            .options { grid-template-columns: 1fr; gap: calc(var(--base-margin) * 0.8); }
+            .options button { font-size: 1.3rem; padding: calc(var(--base-padding) * 0.8); }
+             #resultArea h2 { font-size: 2rem; }
+             #resultArea p { font-size: 1.6rem; }
+             #effectText { font-size: 4rem; } /* 调整弹窗主字号 */
+             #effectText .explanation-popup { font-size: 0.3em; } /* 调整弹窗理由字号 */
+             .page-footer { font-size: 0.6rem; }
+             .golden-hoop { width: 25vmin; }
+        }
+
+    </style>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <linearGradient id="hoopGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color: #FFD700; stop-opacity: 1" /> <stop offset="50%" style="stop-color: #FFB300; stop-opacity: 1" /> <stop offset="100%" style="stop-color: #FFD700; stop-opacity: 1" /> </linearGradient>
+        </defs>
+    </svg>
+
+    <div id="initialScreen" class="screen">
+        <h1>🏯《西游记》闯关赛🏯</h1>
+        <p id="subtitle">五年级17班经典文学阅读</p>
+        <svg class="golden-hoop" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 50,10 A 40,40 0 1 1 49.9,10 Z"/> </svg>
+        <button id="startButton">点击开始挑战</button>
+        <footer class="page-footer">制作：管浩然 V4.0 (弹窗理由 & 视觉增强)</footer>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div id="statusArea">
+            <span id="progress">题目: 1/10</span>
+            <span id="score">得分: 0</span>
+            <span id="countdown">10</span>
+            <button id="restartButton" onclick="restartGame()">重新挑战</button>
+        </div>
+        <div id="quizArea"></div>
+        <div id="resultArea">
+            <h2>挑战完成！</h2>
+            <p id="resultText"></p>
+        </div>
+        <footer class="page-footer">制作：管浩然 V4.0 (弹窗理由 & 视觉增强)</footer>
+    </div>
+
+    <div id="effectLayer" class="effect-overlay">
+        <span id="effectText"></span>
+    </div>
+
+    <audio id="audio-correct" src="sounds/correct.mp3" preload="auto"></audio>
+    <audio id="audio-wrong" src="sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="audio-countdown" src="sounds/tick.mp3" preload="auto"></audio>
+    <audio id="audio-timeout" src="sounds/timeout.mp3" preload="auto"></audio>
+    <audio id="audio-win" src="sounds/win_mid.mp3" preload="auto"></audio> 
+    <audio id="audio-lose" src="sounds/lose.mp3" preload="auto"></audio>  
+
+
+    <script>
+        // DOM 元素获取
+        const initialScreen = document.getElementById('initialScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const startButton = document.getElementById('startButton');
+        const quizArea = document.getElementById('quizArea');
+        const resultArea = document.getElementById('resultArea');
+        const resultTextElement = document.getElementById('resultText');
+        const progressElement = document.getElementById('progress');
+        const scoreElement = document.getElementById('score');
+        const countdownElement = document.getElementById('countdown');
+        const effectLayer = document.getElementById('effectLayer');
+        const effectText = document.getElementById('effectText'); // 注意: 现在是 effectText 元素
+        const restartButton = document.getElementById('restartButton');
+        const countdownAudio = document.getElementById('audio-countdown');
+
+        // --- 题库数据 --- (需要你补充完整的 explanation)
+        const fullQuestionBank = [
+        { q: "《西游记》中“黄眉老佛”的法宝人种袋原本属于哪位神仙？", opts: ["弥勒佛","太上老君","观音菩萨","如来佛祖"], a: 0, explanation: "黄眉老佛是弥勒佛的司磬童子，偷走后天人种袋下界为妖。" },
+{ q: "“金平府”每年元宵节供奉三只犀牛精的酥合香油总量是多少？", opts: ["四万八千斤","三万六千斤","五万斤","十万斤"], a: 0, explanation: "每盏金灯装油五百斤，三妖共需九十六盏灯，合计四万八千斤。" },
+{ q: "唐僧师徒在“小雷音寺”中被困的法宝是什么？", opts: ["金铙","人种袋","幌金绳","紫金铃"], a: 0, explanation: "黄眉老佛用金铙困住孙悟空，后被亢金龙用角钻破救出。" },
+{ q: "“比丘国”国丈白鹿精为炼制丹药需多少小儿心肝？", opts: ["一千一百一十一个","九百九十九个","八百八十八个","六百六十六个"], a: 0, explanation: "白鹿精声称需一千一百一十一个小儿心肝作药引，后被悟空揭穿。" },
+{ q: "孙悟空在灵台方寸山学艺时，菩提祖师为他取名的深意是？", opts: ["悟空者，悟彻空性","纪念出生灵石","象征筋斗云","暗合金箍棒"], a: 0, explanation: "‘悟空’意为领悟万物皆空的佛理，体现修行根本。" },
+{ q: "“金角大王”的幌金绳最初是谁的宝物？", opts: ["九尾狐","太上老君","压龙洞土地","东海龙王"], a: 0, explanation: "幌金绳是九尾狐的腰带，金角银角拜其为干娘后获得。" },
+{ q: "“乌鸡国”国王被救活时使用的丹药来自哪里？", opts: ["太上老君","观音菩萨","南极仙翁","镇元大仙"], a: 0, explanation: "悟空向太上老君求得九转还魂丹，配合井龙王定颜珠复活国王。" },
+{ q: "“狮驼岭三魔”中白象精的绝招是什么？", opts: ["长鼻卷人","吞天食地","三昧神风","移山倒海"], a: 0, explanation: "白象精用象鼻卷人，悟空被卷后捅其鼻孔反制。" },
+{ q: "“女儿国”子母河水的解药是什么？", opts: ["落胎泉水","观音甘露","金丹砂","人参果"], a: 0, explanation: "解阳山破儿洞的落胎泉水可化解子母河水的胎气。" },
+{ q: "“九头虫”被哮天犬咬下的头颅是什么颜色？", opts: ["血红色","碧绿色","紫黑色","金黄色"], a: 1, explanation: "九头虫被哮天犬咬断的头颅流出碧血，凸显妖异特征。" },
+{ q: "“金箍棒”最初作为定海神珍铁的作用是？", opts: ["测量江海深浅","镇压东海龙王","吸收日月精华","封印水妖"], a: 0, explanation: "大禹治水时用其测量江河深度，后遗留东海龙宫。" },
+{ q: "“灭法国”国王因何仇恨僧人？", opts: ["僧人诽谤其祖","僧人谋反","争夺寺庙","天灾归咎"], a: 0, explanation: "国王因僧人诅咒其祖先，发愿杀万僧报复。" },
+{ q: "“朱紫国”金圣宫娘娘被赛太岁掳走多少年？", opts: ["三年","五年","七年","十年"], a: 0, explanation: "金圣宫娘娘被掳三年，朱紫国国王忧思成疾。" },
+{ q: "“黑水河”鼍龙怪与西海龙王的关系是？", opts: ["外甥","儿子","侄子","兄弟"], a: 0, explanation: "鼍龙是西海龙王妹妹之子，其父泾河龙王被魏征所斩。" },
+{ q: "“红孩儿”的三昧真火修炼了多少年？", opts: ["三百年","五百年","一千年","八百年"], a: 0, explanation: "红孩儿在火焰山修炼三百年，习得三昧真火神通。" },
+{ q: "“金角大王”的七星剑上刻有什么图案？", opts: ["北斗七星","南斗六星","二十八宿","五行八卦"], a: 0, explanation: "七星剑镶嵌北斗七星，对应道家“北斗注死”之说。" },
+{ q: "“九灵元圣”下凡为妖的直接原因是？", opts: ["狮奴醉酒","偷盗法宝","私会仙娥","逃避天劫"], a: 0, explanation: "九头狮子趁狮奴偷饮轮回琼液醉酒，私自下界。" },
+{ q: "“玉华州”三位王子分别使用的兵器仿造了谁？", opts: ["悟空、八戒、沙僧","哪吒、杨戬、李靖","四大天王","二十八宿"], a: 0, explanation: "大王子使棒，二王子使钯，三王子使杖，对应三兄弟兵器。" },
+{ q: "“小雷音寺”中黄眉老佛的狼牙棒原是？", opts: ["敲磬槌","降魔杵","擀面杖","烧火棍"], a: 0, explanation: "狼牙棒原是弥勒佛敲磬的槌子，被黄眉童儿偷走下界。" },
+{ q: "“金平府”三只犀牛精被斩后，犀牛角献给何人？", opts: ["玉帝与如来","唐太宗","孙悟空","四木禽星"], a: 0, explanation: "四只犀角献玉帝，一只留金平府，一只送如来镇库。" },
+{ q: "“盘丝洞”蜘蛛精洗澡的泉水原属于谁？", opts: ["七仙女","嫦娥","王母","织女"], a: 0, explanation: "濯垢泉本是七仙女沐浴之地，后被七蜘蛛精霸占。" },
+{ q: "“镇元大仙”与孙悟空结拜的见证人是？", opts: ["福禄寿三星","观音菩萨","唐僧","五庄观弟子"], a: 0, explanation: "镇元子开人参果会，请福禄寿三星作陪并见证结拜。" },
+{ q: "“黄袍怪”在宝象国将唐僧变成什么动物？", opts: ["老虎","狮子","白鹿","黑熊"], a: 0, explanation: "黄袍怪施法将唐僧变为猛虎，关入铁笼引发后续风波。" },
+{ q: "“金箍棒”能随心变化是因为？", opts: ["融入悟空精血","大禹刻符文","太上老君炼制","吸收日月精华"], a: 0, explanation: "金箍棒认主后与悟空心意相通，无需口诀即可变化。" },
+{ q: "“九头虫”盗取的佛宝舍利子最初供奉在何处？", opts: ["祭赛国金光寺","灵山大雷音寺","东海龙宫","五庄观"], a: 0, explanation: "舍利子使金光寺佛塔放霞光，失窃后唐僧扫塔辨冤。" },
+{ q: "“火焰山土地”原本在天庭的职责是？", opts: ["看守八卦炉","管理蟠桃园","饲养天马","炼制仙丹"], a: 0, explanation: "土地原是太上老君看守八卦炉的道士，因悟空踢翻丹炉被贬。" },
+{ q: "“玉面狐狸”招赘牛魔王的原因是什么？", opts: ["寻求庇护","继承家产","倾慕法力","报复铁扇"], a: 0, explanation: "玉面狐狸以万贯家财招赘牛魔王，寻求势力保护。" },
+{ q: "“乌巢禅师”传授给唐僧的经书是？", opts: ["《摩诃般若波罗蜜多心经》","《金刚经》","《法华经》","《楞严经》"], a: 0, explanation: "乌巢禅师在浮屠山授《心经》，助其驱邪静心。" },
+{ q: "“狮驼国”大鹏金翅雕的飞行速度如何？", opts: ["一翅九万里","一翅十万八千里","日行五万里","瞬移无距"], a: 0, explanation: "大鹏扇一翅飞九万里，两翅即超悟空筋斗云。" },
+{ q: "“金角大王”的紫金红葫芦是谁的法宝？", opts: ["太上老君","九尾狐","东海龙王","观音菩萨"], a: 0, explanation: "紫金红葫芦是太上老君盛丹的宝物，被金角偷走下界。" },
+{ q: "“荆棘岭”树精中唯一女性妖怪是？", opts: ["杏仙","松树精","柏树精","桧树精"], a: 0, explanation: "杏仙欲与唐僧成婚，其他树精为其说媒。" },
+{ q: "“黄风怪”的三昧神风最远能刮到何处？", opts: ["灵霄宝殿","花果山","南海","幽冥界"], a: 0, explanation: "灵吉菩萨言此风能刮倒雷音宝刹，直冲凌霄殿。" },
+{ q: "“灭法国”国王被剃度后改国号为？", opts: ["钦法国","敬佛国","宝象国","天竺国"], a: 0, explanation: "悟空剃度国王与百官，灭法国改称钦法国以示敬佛。" },
+{ q: "“九头虫”最终逃往哪个海域？", opts: ["北海","东海","南海","西海"], a: 0, explanation: "九头虫被二郎神重创后借水遁逃往北海，踪迹不明。" },
+{ q: "“金角大王”的羊脂玉净瓶用来装什么？", opts: ["三光神水","星辰砂","阴阳二气","弱水"], a: 0, explanation: "净瓶盛有日月星三光神水，可复活仙树灵根。" },
+{ q: "“唐僧肉”能长生不老的传言始于哪个妖怪？", opts: ["白骨精","金角大王","黄风怪","狮驼岭小妖"], a: 0, explanation: "白骨精首次提及吃唐僧肉可长生，成为众妖共识。" },
+{ q: "“五庄观”人参果树复活的关键之物是？", opts: ["观音的甘露水","太上老君金丹","王母蟠桃","如来菩提汁"], a: 0, explanation: "观音用玉净瓶甘露救活人参果树，化解镇元子与悟空的矛盾。" },
+{ q: "“玉华州”黄狮精盗宝后举办的活动名称是？", opts: ["钉耙宴","金箍会","降妖会","法宝展"], a: 0, explanation: "黄狮精因九齿钉耙最珍贵，故设‘钉耙嘉会’庆贺。" },
+{ q: "“金箍棒”的重量对应人体哪种生理现象？", opts: ["一昼夜呼吸次数","心跳次数","血液流速","经脉循环"], a: 0, explanation: "道家认为人一昼夜呼吸一万三千五百息，与金箍棒重量相合。" },
+{ q: "“九灵元圣”的吼声能震慑什么？", opts: ["三界神魔","四海龙王","地府阎罗","天庭众仙"], a: 0, explanation: "九头狮子一吼可上通三圣，下彻九泉，震慑三界。" },
+{ q: "“车迟国斗法”中鹿力大仙与悟空比试的项目是？", opts: ["剖腹剜心","油锅洗澡","砍头再生","隔板猜物"], a: 0, explanation: "鹿力大仙与悟空比剖腹，被悟空变鹰叼走其脏器而亡。" },
+{ q: "“无底洞”老鼠精供奉的牌位材质是？", opts: ["黄金","檀木","白玉","青铜"], a: 0, explanation: "牌位刻‘尊父李天王之位’，黄金打造以表尊崇。" },
+{ q: "“金角大王”称呼银角大王为？", opts: ["贤弟","兄长","师弟","孩儿"], a: 0, explanation: "金角为兄，银角为弟，二妖原为太上老君炼丹童子。" },
+{ q: "“玉兔精”下界冒充的天竺国公主原身是？", opts: ["素娥仙子","嫦娥侍女","披香玉女","百花仙子"], a: 0, explanation: "素娥仙子曾掌打玉兔，后下界为公主，玉兔为报仇下凡。" },
+{ q: "“通天河”老鼋因唐僧未帮问寿数导致什么后果？", opts: ["沉经落水","暴雨倾盆","妖怪复生","佛塔倒塌"], a: 0, explanation: "归途再过通天河时，老鼋怒沉师徒，经书浸湿凑足八十一难。" },
+{ q: "“狮驼岭”小妖巡山的暗号是？", opts: ["烧火的钻风","巡山的崩将军","总钻风","刁钻古怪"], a: 0, explanation: "小钻风巡山时高喊暗号，被悟空变作总钻风骗取情报。" },
+{ q: "“九头虫”盗取的佛宝舍利子如何保存？", opts: ["九叶灵芝温养","三光神水浸泡","八卦炉炼制","龙宫阵法守护"], a: 0, explanation: "万圣龙王用九叶灵芝滋养舍利子，使其昼夜放光。" },
+{ q: "“黑水河”鼍龙怪的原形是？", opts: ["扬子鳄","蛟龙","巨蟒","水猿"], a: 0, explanation: "鼍龙即鳄鱼，西海龙王外甥，霸占黑水河神府邸。" },
+{ q: "“金箍棒”缩小后的最小形态是？", opts: ["绣花针","细丝","米粒","毫毛"], a: 0, explanation: "悟空将金箍棒缩成绣花针大小藏在耳内，便于携带。" },
+{ q: "“黄袍怪”的夫人百花羞前世是？", opts: ["披香殿玉女","七仙女","嫦娥侍女","王母婢女"], a: 0, explanation: "奎木狼与披香殿侍香玉女私通，玉女转世为宝象国公主。" },
+{ q: "“红孩儿”最终被封为什么职位？", opts: ["善财童子","守山大神","金身罗汉","八部天龙"], a: 0, explanation: "观音用金箍咒降伏红孩儿，命其担任善财童子。" },
+{ q: "“玉华州”三位王子拜师后遭遇的劫难是？", opts: ["兵器被盗","国王病重","妖怪攻城","天降雷火"], a: 0, explanation: "黄狮精盗走三人仿制的兵器，引发钉耙宴事件。" },
+{ q: "“镇元大仙”的乾坤袖能容纳什么？", opts: ["天地万物","四海之水","十万天兵","三界众生"], a: 0, explanation: "镇元子展袖笼乾坤，一袖收走唐僧师徒及白马行李。" },
+{ q: "“九头虫”与万圣公主的关系是？", opts: ["夫妻","兄妹","主仆","仇敌"], a: 0, explanation: "九头虫入赘碧波潭，与万圣龙王之女结为夫妻共盗佛宝。" },
+{ q: "“金角大王”的七星剑由谁打造？", opts: ["太上老君","鲁班","欧冶子","干将莫邪"], a: 0, explanation: "七星剑是太上老君炼魔的宝物，剑身嵌北斗七星纹路。" },
+{ q: "“唐僧”在凌云渡脱去凡胎的象征意义是？", opts: ["肉身成佛","洗髓伐骨","褪去罪孽","重获新生"], a: 0, explanation: "无底船中留下凡胎尸体，金身成佛体现修行圆满。" },
+{ q: "“金箍棒”最初作为定海神珍铁是谁放置的？", opts: ["大禹","太上老君","女娲","东海龙王"], a: 0, explanation: "大禹治水时用其测量江海深浅，后遗落东海龙宫。" },
+{ q: "“狮驼国”原住民被大鹏吃光发生在多少年前？", opts: ["五百年前","三百年前","五十年前","二十年前"], a: 0, explanation: "大鹏五百年前吃光狮驼国百姓，建立妖魔国度。" },
+{ q: "“九灵元圣”擒拿唐僧师徒的神通是？", opts: ["九口叼人","三昧神风","地裂术","摄魂铃"], a: 0, explanation: "九头狮子现本相，九口齐开叼走唐僧、八戒、沙僧及众神。" },
+{ q: "“黄风怪”被灵吉菩萨收服时使用的法宝是？", opts: ["飞龙杖","定风丹","金钵","捆妖索"], a: 0, explanation: "灵吉菩萨掷出飞龙杖化八爪金龙，擒获黄风怪归案。" },
+{ q: "“金平府”青龙山玄英洞的三只犀牛精最怕谁？", opts: ["四木禽星","三昧真火","九齿钉耙","杨柳甘露"], a: 0, explanation: "四木禽星（角木蛟、斗木獬等）是犀牛精的天敌克星。" },
+{ q: "“无底洞”的深度描述是？", opts: ["三百六十里","八百里","一千尺","万丈深渊"], a: 0, explanation: "陷空山无底洞深三百六十里，结构复杂如迷宫。" },
+{ q: "“孙悟空的救命毫毛”共有多少根？", opts: ["三根","六根","九根","十二根"], a: 0, explanation: "观音拔杨柳叶化三根救命毫毛，助其应对生死危机。" },
+{ q: "“玉皇大帝”的修行历经多少劫？", opts: ["一千七百五十劫","十万八千劫","五百罗汉劫","三千佛陀劫"], a: 0, explanation: "如来提及玉帝修行历经一千七百五十劫，每劫十二万九千六百年。" },
+{ q: "“金角大王”的羊脂玉净瓶如何生效？", opts: ["应声装人","念咒收魂","光照摄魄","摇晃爆炸"], a: 0, explanation: "持瓶者唤人姓名，若对方答应即被吸入瓶内，一时三刻化为脓水。" },
+{ q: "“九头虫”的武器月牙铲是谁所赠？", opts: ["万圣龙王","碧波潭工匠","偷盗天庭","自行修炼"], a: 0, explanation: "九头虫入赘碧波潭后，万圣龙王为其打造月牙铲作兵器。" },
+{ q: "“唐僧肉”长生传言导致多少妖怪主动拦截取经队伍？", opts: ["超过三十路","十八路","八十一难","无数"], a: 0, explanation: "白骨精首提此传言后，前后三十余波妖怪因此袭击师徒。" },
+{ q: "“金箍棒”能随心变化体现孙悟空的什么特性？", opts: ["心性通明","法力无边","法宝认主","天地造化"], a: 0, explanation: "棒随心动象征悟空已悟‘心生种种法生，心灭种种法灭’的佛理。" },
+        { q: "《西游记》中唐僧师徒四人取经的最终目的地是？", opts: ["东土大唐","西天大雷音寺","南海普陀山","北天门"], a: 1, explanation: "如来佛祖居西天灵山大雷音寺，唐僧需至此取得三藏真经回东土传教。" },
+{ q: "孙悟空大闹天宫时偷吃了哪种仙果？", opts: ["蟠桃","人参果","黄中李","交梨火枣"], a: 0, explanation: "悟空偷吃蟠桃园九千年一熟的蟠桃，导致蟠桃会无果可献。" },
+{ q: "“金箍棒”重量对应《黄帝内经》中的什么概念？", opts: ["昼夜呼吸次数","经脉循环次数","气血运行周期","五脏精气总数"], a: 0, explanation: "金箍棒重一万三千五百斤，暗合人一昼夜呼吸一万三千五百息，象征生命之息。" },
+{ q: "火焰山土地原本在天庭的职责是？", opts: ["看守八卦炉","管理蟠桃园","饲养天马","炼制仙丹"], a: 0, explanation: "火焰山土地原是太上老君看守八卦炉的道士，因悟空踢翻丹炉被贬下凡。" },
+{ q: "唐僧在取经途中唯一主动接受的礼物是？", opts: ["紫金钵盂","锦襕袈裟","犀牛角","粗布直裰"], a: 0, explanation: "唐太宗赐紫金钵盂用于化斋，是唐僧唯一主动收下的世俗物品。" },
+{ q: "“九头虫”最终被谁的神犬咬伤？", opts: ["二郎神","孙悟空","哪吒","梅山兄弟"], a: 0, explanation: "二郎神的哮天犬咬下九头虫一颗头颅，使其逃往北海。" },
+{ q: "“三昧真火”在道教中的本源是？", opts: ["心、肾、膀胱精气","天地人三才之气","日月星三光精华","金木水火土五行"], a: 0, explanation: "道教认为心火（上昧）、肾火（中昧）、膀胱火（下昧）合称三昧真火。" },
+{ q: "《西游记》开篇提到的四大部洲中，孙悟空出生在？", opts: ["东胜神洲","西牛贺洲","南赡部洲","北俱芦洲"], a: 0, explanation: "花果山位于东胜神洲傲来国，仙石迸裂产石猴。" },
+{ q: "“盘丝洞七妖”象征人的哪种弱点？", opts: ["七情","六欲","五毒","八苦"], a: 0, explanation: "七只蜘蛛精对应喜、怒、哀、惧、爱、恶、欲七种情欲。" },
+{ q: "唐僧通关文牒上第一个盖章的国家是？", opts: ["宝象国","乌鸡国","车迟国","女儿国"], a: 0, explanation: "收服黄袍怪后，宝象国国王首个在文牒加盖玉玺。" },
+{ q: "“九灵元圣”的原形是？", opts: ["九头狮子","金毛犼","白象精","青牛精"], a: 0, explanation: "太乙救苦天尊坐骑九头狮子，趁狮奴醉酒下界为妖。" },
+{ q: "“六耳猕猴”被如来识破后结局如何？", opts: ["被悟空打死","被如来收服","逃往下界","化作飞灰"], a: 0, explanation: "六耳猕猴被如来金钵罩住现形，遭悟空一棒击毙。" },
+{ q: "《西游记》中“紧箍咒”的全称是？", opts: ["定心真言","紧箍儿咒","金箍禁咒","如来密咒"], a: 0, explanation: "观音传授唐僧的咒语名为'定心真言'，俗称紧箍咒。" },
+{ q: "“黄风怪”的三昧神风最怕什么法宝？", opts: ["定风丹","芭蕉扇","杨柳枝","金刚琢"], a: 0, explanation: "灵吉菩萨用定风丹克制黄风怪的神风，以飞龙杖擒之。" },
+{ q: "“金平府三妖”的真身是？", opts: ["犀牛精","狮子精","大象精","鹿精"], a: 0, explanation: "辟寒、辟暑、辟尘三头犀牛精假冒佛爷勒索酥合香油。" },
+{ q: "“灭法国”国王因何杀僧？", opts: ["僧人触犯国法","求长生需僧血","报复前世因果","畏惧佛法传播"], a: 0, explanation: "灭法国王因僧人曾诽谤其祖，遂发愿杀万僧泄愤。" },
+{ q: "“朱紫国国王”病愈后酬谢师徒的方式是？", opts: ["设素宴","赠金银","封官职","建寺庙"], a: 0, explanation: "悟空拒收财物，国王遂摆素宴答谢，突显佛门戒律。" },
+{ q: "“乌巢禅师”传授给唐僧的经书是？", opts: ["《摩诃般若波罗蜜多心经》","《金刚经》","《法华经》","《楞严经》"], a: 0, explanation: "乌巢禅师在浮屠山授《心经》，助唐僧驱邪避灾。" },
+{ q: "“金角大王”的幌金绳原本属于谁？", opts: ["九尾狐","太上老君","东海龙王","观音菩萨"], a: 0, explanation: "幌金绳是压龙洞九尾狐的腰带，金角认其为干娘所得。" },
+{ q: "“狮驼岭三魔”中白象精的兵器是？", opts: ["长枪","钢刀","铁杵","狼牙棒"], a: 0, explanation: "白象精使一杆长枪，鼻卷人时被悟空以棒捅鼻孔制服。" },
+{ q: "“通天河老鼋”托唐僧询问何事？", opts: ["寿数几何","修行正果","子嗣运势","水府归属"], a: 0, explanation: "老鼋修行千年欲脱壳成人，唐僧忘问致归途沉经。" },
+{ q: "“镇元大仙”的绝招“袖里乾坤”能收何物？", opts: ["天地万物","水火雷电","魂魄元神","仙丹法宝"], a: 0, explanation: "镇元子展袖笼天地，一招收走唐僧师徒及行李马匹。" },
+{ q: "“九头驸马”盗取的佛宝藏在何处？", opts: ["碧波潭龙宫","祭赛国塔顶","北海深渊","乱石山"], a: 0, explanation: "九头虫与万圣龙王将舍利子藏于碧波潭，用灵芝温养。" },
+{ q: "“玉面狐狸”与哪位妖怪有姻亲？", opts: ["牛魔王","万圣龙王","九头虫","黄袍怪"], a: 0, explanation: "玉面狐狸携家财招赘牛魔王，引发铁扇公主怨恨。" },
+{ q: "“黄袍怪”将唐僧变作何种动物？", opts: ["老虎","狮子","白鹿","黑熊"], a: 0, explanation: "黄袍怪施法将唐僧变为猛虎，关入宝象国铁笼示众。" },
+{ q: "“红孩儿”最终被封为什么神职？", opts: ["善财童子","守山大神","金身罗汉","八部天龙"], a: 0, explanation: "观音用金箍咒降伏红孩儿，命其任善财童子侍奉左右。" },
+{ q: "“金箍棒”最早在东海中的形态是？", opts: ["擎天巨柱","细针入海","金光万道","铁链锁蛟"], a: 0, explanation: "悟空初入龙宫见金箍棒'二丈余长，斗来粗细'，实为定海神珍。" },
+{ q: "“比丘国”小儿被藏在哪种容器中？", opts: ["鹅笼","竹筐","地窖","铁笼"], a: 0, explanation: "国丈欲取小儿心肝制药，百姓用鹅笼藏儿避祸。" },
+{ q: "“黑水河”河神状告西海龙王的证据是？", opts: ["白玉圭","金铃铛","青铜剑","铁令牌"], a: 0, explanation: "河神持白玉圭求告，揭露鼍龙霸占水府之冤。" },
+{ q: "“九环锡杖”的核心功能是？", opts: ["驱邪护体","降妖伏魔","开启秘境","呼风唤雨"], a: 0, explanation: "唐太宗赐九环锡杖，可'入地驱狼虎，上天摘星辰'。" },
+{ q: "“小雷音寺”妖怪的法宝人种袋能装多少天兵？", opts: ["十万天兵","五千揭谛","二十八宿","梅山六兄弟"], a: 0, explanation: "人种袋展开后天昏地暗，将五方揭谛等神将尽数收走。" },
+{ q: "“车迟国斗法”中唐僧与虎力大仙比试的项目是？", opts: ["云梯坐禅","隔板猜物","油锅洗澡","砍头再生"], a: 0, explanation: "虎力与唐僧在五十丈高台比坐禅，悟空变蜈蚣扰之。" },
+{ q: "“黄眉怪”假扮如来时自称什么佛号？", opts: ["弥勒尊佛","未来佛","东来佛祖","小雷音佛祖"], a: 3, explanation: "黄眉童儿设小雷音寺，自称'黄眉老佛'假冒如来。" },
+{ q: "“金角大王”的七星剑对应哪种天象？", opts: ["北斗七星","南斗六星","紫微垣","太微垣"], a: 0, explanation: "剑身镶嵌北斗七星图案，暗合'北斗注死'之道家理念。" },
+{ q: "“狮驼国”原住民被灭绝的时间是？", opts: ["五百年前","三百年前","五十年前","二十年前"], a: 0, explanation: "大鹏雕五百年前吃光狮驼国百姓，建立妖魔国度。" },
+{ q: "“三打白骨精”后暗中保护唐僧的是？", opts: ["六丁六甲与五方揭谛","观音菩萨","白龙马","日值功曹"], a: 0, explanation: "如来安排众神护持，确保取经人不死以完劫数。" },
+{ q: "“金箍棒”能变化的极限描述是？", opts: ["顶天立地","山岳大小","毫毛粗细","无限延伸"], a: 0, explanation: "棒可'上抵三十三天，下至十八层地狱'，通天彻地。" },
+{ q: "“灭法国”更名后的国号是？", opts: ["钦法国","敬佛国","宝象国","天竺国"], a: 0, explanation: "悟空剃度国王百官，灭法国改称钦法国以示敬佛。" },
+{ q: "“玉兔精”使用的凶器是？", opts: ["捣药杵","绣花针","短剑","玉簪"], a: 0, explanation: "玉兔精持月宫捣药杵与悟空相斗，终被太阴星君收回。" },
+{ q: "“九头虫”被斩首后的血液颜色是？", opts: ["碧绿色","鲜红色","紫黑色","金黄色"], a: 0, explanation: "九头虫断头处碧血淋漓，凸显其妖异特性。" },
+{ q: "“金平府”每年供奉三妖的酥合油重量是？", opts: ["四万八千斤","三万六千斤","五万斤","十万斤"], a: 0, explanation: "每盏金灯装油五百斤，三妖年索四万八千斤。" },
+{ q: "“黄袍怪与百花羞”生有几个孩子？", opts: ["两个","三个","一个","无子嗣"], a: 0, explanation: "百花羞信中提及'生下两个妖儿'，后被悟空摔死。" },
+{ q: "“无底洞”的深度描述是？", opts: ["三百六十里","八百里","一千尺","万丈深渊"], a: 0, explanation: "陷空山无底洞'周围三百余里，洞深三百六十里'。" },
+{ q: "“孙悟空的救命毫毛”由谁所赠？", opts: ["观音菩萨","菩提祖师","如来佛祖","太上老君"], a: 0, explanation: "观音拔杨柳叶化三根毫毛，助悟空阴阳二气瓶脱困。" },
+{ q: "“九头虫”的武器名称是？", opts: ["月牙铲","方天戟","狼牙棒","铁蒺藜"], a: 0, explanation: "九头虫使月牙铲，与悟空、八戒激战多时。" },
+{ q: "“金箍棒”最早作为定海神针的功能是？", opts: ["测量水深","镇压蛟龙","吸收灵气","炼制丹药"], a: 0, explanation: "大禹治水时以定海神珍铁测江海深浅，后遗落东海。" },
+{ q: "“黄风怪”被收服时使用的法器是？", opts: ["飞龙杖","定风丹","金钵","捆妖索"], a: 0, explanation: "灵吉菩萨掷飞龙杖化八爪金龙，擒黄风怪归案。" },
+{ q: "“唐僧取经耗时”总计多少年？", opts: ["十四年","十年","八年","十九年"], a: 0, explanation: "贞观十三年出发，二十七年归，历时十四载。" },
+{ q: "“狮驼岭小妖”巡山时的暗号是？", opts: ["烧火的钻风","巡山的崩将军","总钻风","刁钻古怪"], a: 0, explanation: "小钻风巡山喊'我等是烧火的'，被悟空识破计谋。" },
+{ q: "“镇元大仙”的人参果遇金会如何？", opts: ["落地入土","枯萎凋零","化作飞灰","金光四射"], a: 0, explanation: "人参果遇金而落，遇木而枯，遇水而化，遇火而焦，遇土而入。" },
+{ q: "“金角大王的羊脂玉净瓶”装有何物？", opts: ["三光神水","星辰砂","阴阳二气","弱水"], a: 0, explanation: "净瓶盛三光神水（日月星精华），可复活人参果树。" },
+{ q: "“玉华州”黄狮精盗宝后举办的活动叫？", opts: ["钉耙宴","金箍会","降妖会","法宝展"], a: 0, explanation: "黄狮精因九齿钉耙最珍贵，故设'钉耙嘉会'庆贺。" },
+{ q: "“女儿国”照胎泉的作用是？", opts: ["辨别胎儿性别","治疗不孕","净化水源","预测吉凶"], a: 0, explanation: "子母河水致孕后，照胎泉可照出胎儿男女。" },
+{ q: "“金箍棒”上刻字由谁所题？", opts: ["大禹","太上老君","如来佛祖","东海龙王"], a: 0, explanation: "大禹治水时刻'如意金箍棒'字样于定海神珍铁。" },
+{ q: "“九灵元圣”下凡为妖的缘由是？", opts: ["狮奴醉酒","偷盗法宝","私会仙娥","逃避天劫"], a: 0, explanation: "九头狮子趁狮奴饮轮回琼液沉醉，私逃下界为妖。" },
+{ q: "“孙悟空查看生死簿”时自身编号是？", opts: ["1350号","三千名","无记录","天字号"], a: 0, explanation: "悟空发现生死簿记载'魂字一千三百五十号'为其姓名。" },
+{ q: "“灭法国”最初计划杀害的和尚总数是？", opts: ["九千九百九十六","一万","八千","七千五百"], a: 0, explanation: "已杀九千九百九十六僧，需再杀四人凑整万数。" },
+{ q: "“狮驼岭三魔”中谁飞行速度最快？", opts: ["大鹏金翅雕","青狮精","白象精","黄牙老象"], a: 0, explanation: "大鹏扇翅九万里，两翅即超悟空筋斗云（十万八千里）。" },
+{ q: "“朱紫国”悬赏皇榜张贴的位置是？", opts: ["鼓楼","城门","皇宫","市集"], a: 0, explanation: "悟空揭下鼓楼旁皇榜，塞入八戒衣领引发喜剧冲突。" },
+{ q: "“金箍棒”大小变化的口诀本质是？", opts: ["心意相通","咒语驱动","法宝认主","天地法则"], a: 0, explanation: "悟空凭心意即可操控金箍棒，无需念诵固定口诀。" },
+{ q: "“九头虫”被二郎神射中的头颅类型是？", opts: ["凤首","龙首","蛇首","人首"], a: 0, explanation: "二郎神以弹弓射中凤首，致其失去平衡被犬袭。" },
+{ q: "黄袍怪原本在天庭的职位是什么？", opts: ["奎木狼","天蓬元帅","卷帘大将","金身罗汉"], a: 0, explanation: "黄袍怪本是天庭二十八宿之一的奎木狼，因与披香殿玉女私通，下界到宝象国作乱，化名黄袍怪。" },
+{ q: "唐僧的亲生父亲是谁？", opts: ["陈光蕊","殷开山","刘洪","唐太宗"], a: 0, explanation: "唐僧之父陈光蕊中状元后赴任途中被水贼刘洪杀害，其母忍辱生下唐僧，后唐僧寻仇为父申冤。" },
+{ q: "金角大王手中的法宝“紫金红葫芦”是谁的宝物？", opts: ["太上老君","观音菩萨","东海龙王","如来佛祖"], a: 0, explanation: "金角大王实为太上老君看护金炉的童子，下凡时偷走了老君的紫金红葫芦、羊脂玉净瓶等五件法宝。" },
+{ q: "朱紫国国王的皇后金圣宫娘娘被哪个妖怪掳走？", opts: ["赛太岁","黄眉老佛","大鹏金翅雕","九头虫"], a: 0, explanation: "观音菩萨的坐骑金毛犼（化名赛太岁）掳走金圣宫娘娘三年，其法宝紫金铃险些让孙悟空丧命。" },
+{ q: "五庄观镇元大仙的人参果树被救活时，观音菩萨用了什么？", opts: ["净瓶甘露","三光神水","杨柳枝","金丹砂"], a: 0, explanation: "孙悟空求助观音，菩萨用玉净瓶中的甘露水配合杨柳枝施法，使人参果树起死回生。" },
+{ q: "唐僧在取经前讲的小乘佛法是从谁那里学的？", opts: ["观音菩萨","法明长老","乌巢禅师","洪福寺僧众"], a: 1, explanation: "唐僧自幼在金山寺出家，由法明长老抚养教导。观音显化时指出小乘佛法不足，需取大乘真经。" },
+{ q: "真假美猴王中，假悟空的本体是什么？", opts: ["通臂猿猴","六耳猕猴","赤尻马猴","灵石所化"], a: 1, explanation: "如来佛祖点明六耳猕猴善聆音，能知千里外之事，故变化成悟空模样。最终被如来钵盂罩住，遭悟空打死。" },
+{ q: "《西游记》开篇提到的“花果山福地，水帘洞洞天”最初是谁的居所？", opts: ["孙悟空","赤尻马猴","须菩提祖师","无主之地"], a: 3, explanation: "原著写众猴发现水帘洞时，洞内石碣显示此处早有此对联，但无居住痕迹，实为天造地设的仙洞。" },
+{ q: "乌鸡国国王被推入井中后，尸体由谁保存？", opts: ["井龙王","阎罗王","文殊菩萨","太上老君"], a: 0, explanation: "井龙王用定颜珠保住国王尸身三年不腐，后孙悟空向太上老君求得还魂丹救活国王。" },
+{ q: "如来佛祖给观音的三个箍儿中，紧箍儿给了孙悟空，另外两个用在谁身上？", opts: ["黑熊精和红孩儿","黄风怪和牛魔王","白骨精和蜘蛛精","无底洞鼠精和九头虫"], a: 0, explanation: "禁箍儿收了黑熊精做守山大神，金箍儿套住红孩儿成为善财童子。此三箍专降不服管束的妖魔。" },
+{ q: "观音菩萨的三个箍儿分别套在哪些妖怪身上？", opts: ["红孩儿、黑熊精、孙悟空","红孩儿、牛魔王、黄风怪","黑熊精、黄袍怪、白骨精","六耳猕猴、赛太岁、金角大王"], a: 0, explanation: "如来赐金紧禁三箍，金箍套红孩儿（善财童子），禁箍套黑熊精（守山大神），紧箍套孙悟空。" },
+{ q: "火焰山的形成与谁有关？", opts: ["太上老君","孙悟空","铁扇公主","牛魔王"], a: 1, explanation: "火焰山火源是孙悟空大闹天宫时踢翻太上老君八卦炉，掉落的火砖形成。" },
+{ q: "孙悟空的金箍棒重量是多少斤？", opts: ["一万三千五百","八千四百","九千八百","七千二百"], a: 0, explanation: "金箍棒重一万三千五百斤，原是定海神针铁。" },
+{ q: "唐僧的亲生父亲叫什么名字？", opts: ["陈光蕊","殷开山","刘洪","唐太宗"], a: 0, explanation: "唐僧之父陈光蕊中状元后被水贼刘洪杀害，其母忍辱生下唐僧。" },
+{ q: "乌鸡国国王的尸体被谁用定颜珠保存？", opts: ["井龙王","阎罗王","文殊菩萨","太上老君"], a: 0, explanation: "井龙王用定颜珠保尸身三年不腐，后悟空用还魂丹救活国王。" },
+{ q: "“真假美猴王”中假悟空的本体是什么？", opts: ["六耳猕猴","通臂猿猴","赤尻马猴","灵石化身"], a: 0, explanation: "如来指出假悟空是六耳猕猴，善聆音能变化。" },
+{ q: "红孩儿的三昧真火最怕什么？", opts: ["观音净瓶水","四海龙王的雨","太上老君的法宝","如来袈裟"], a: 0, explanation: "观音用净瓶杨枝甘露熄灭三昧真火，收服红孩儿。" },
+{ q: "白骨精三次变化的顺序是什么？", opts: ["村姑、老妇、老翁","老妇、村姑、老翁","老翁、村姑、老妇","村姑、壮汉、老妇"], a: 0, explanation: "白骨精先变村姑送饭，再变老妇寻女，最后变老翁寻亲。" },
+{ q: "唐僧在金山寺出家时的师父是谁？", opts: ["法明长老","玄奘法师","观音菩萨","乌巢禅师"], a: 0, explanation: "唐僧由法明长老抚养长大，学习小乘佛法。" },
+{ q: "车迟国三位妖道分别是什么动物成精？", opts: ["虎、鹿、羊","狮、象、鹏","牛、蛇、鼠","狐、狼、豹"], a: 0, explanation: "虎力大仙是虎精，鹿力大仙是鹿精，羊力大仙是羚羊精。" },
+{ q: "朱紫国金圣宫娘娘被掳走时身穿什么宝物护体？", opts: ["五彩霞衣","紫金铃","棕衣","麒麟甲"], a: 1, explanation: "紫金铃是赛太岁的法宝，但金圣宫因棕衣护体使妖怪无法近身。" },
+{ q: "《西游记》开篇提到的四大部洲不包括哪个？", opts: ["东胜神洲","西牛贺洲","南赡部洲","中天竺洲"], a: 3, explanation: "四大部洲为东胜神洲、西牛贺洲、南赡部洲、北俱芦洲。" },
+{ q: "孙悟空在八卦炉中炼出了什么神通？", opts: ["火眼金睛","金刚不坏之身","三头六臂","七十二变"], a: 0, explanation: "太上老君用八卦炉炼悟空，反使其炼成火眼金睛。" },
+{ q: "唐僧取经出发时，唐太宗在通关文牒上盖的印章刻有何字？", opts: ["大唐皇帝之宝","通关之印","御弟圣僧","贞观之玺"], a: 0, explanation: "通关文牒需盖皇帝玉玺，印章为'大唐皇帝之宝'。" },
+{ q: "观音菩萨的坐骑金毛犼下界化名为什么？", opts: ["赛太岁","黄眉老佛","青牛精","九头虫"], a: 0, explanation: "金毛犼化名赛太岁，在朱紫国掳走金圣宫娘娘。" },
+{ q: "孙悟空在五行山下被压了多少年？", opts: ["五百年","六百年","四百三十年","三百余年"], a: 0, explanation: "从王莽篡汉到贞观年间，悟空被压约五百年。" },
+{ q: "“皇帝轮流做，明年到我家”出自谁之口？", opts: ["孙悟空","如来佛祖","玉皇大帝","牛魔王"], a: 0, explanation: "悟空大闹天宫时说出此句，体现反抗精神。" },
+{ q: "唐僧在取经路上念紧箍咒次数最多的是哪个事件？", opts: ["三打白骨精","真假美猴王","车迟国斗法","火焰山借扇"], a: 0, explanation: "三打白骨精时唐僧连续念咒，最终驱逐悟空。" },
+{ q: "猪八戒的九齿钉耙是谁打造的？", opts: ["太上老君","鲁班","玉帝赏赐","菩提祖师"], a: 0, explanation: "钉耙由太上老君用神冰铁锻造，玉帝赐予天蓬元帅。" },
+{ q: "“无底洞”的老鼠精自称是什么公主？", opts: ["地涌夫人","玉兔公主","百花羞公主","金圣宫公主"], a: 0, explanation: "金鼻白毛老鼠精自称地涌夫人，认李天王为义父。" },
+{ q: "《西游记》中“四圣试禅心”出现在第几回？", opts: ["第二十三回","第十二回","第五十四回","第三十七回"], a: 0, explanation: "黎山老母、观音等四圣化身试探师徒禅心。" },
+{ q: "唐僧在取经路上唯一主动想嫁的女性是谁？", opts: ["女儿国国王","玉兔精","蝎子精","老鼠精"], a: 0, explanation: "女儿国国王愿以国相托，唐僧曾动摇但最终拒绝。" },
+{ q: "金角大王和银角大王的干娘是什么妖怪？", opts: ["九尾狐","白骨精","蜘蛛精","蟒蛇精"], a: 0, explanation: "压龙洞九尾狐是金角兄弟的干娘，被悟空打死。" },
+{ q: "“花果山福地，水帘洞洞天”最早是谁发现的？", opts: ["孙悟空","通背猿猴","赤尻马猴","无主之地"], a: 3, explanation: "众猴发现水帘洞时对联已存在，原无主人。" },
+{ q: "沙僧在流沙河吃了几个取经人？", opts: ["九个","七个","五个","三个"], a: 0, explanation: "沙僧项挂九个取经人骷髅，后成为唐僧弟子。" },
+{ q: "“黄风岭”的黄风怪本体是什么？", opts: ["貂鼠","老虎","狮子","黄蜂"], a: 0, explanation: "黄风怪是灵山脚下得道的貂鼠，被灵吉菩萨收服。" },
+{ q: "《西游记》中“弼马温”的官职掌管什么？", opts: ["天马","御花园","兵器库","蟠桃园"], a: 0, explanation: "弼马温即避马瘟，天庭管理天马的末等官职。" },
+{ q: "观音菩萨的净瓶杨柳枝有何作用？", opts: ["起死回生","降妖伏魔","呼风唤雨","变化万物"], a: 0, explanation: "观音用净瓶甘露救活人参果树。" },
+{ q: "唐僧取经团队中谁没有成佛？", opts: ["猪八戒","沙僧","白龙马","孙悟空"], a: 0, explanation: "八戒封净坛使者，沙僧封金身罗汉，白龙封八部天龙。" },
+{ q: "“三借芭蕉扇”发生在第几回？", opts: ["第五十九至六十一回","第四十回","第七十二回","第八十五回"], a: 0, explanation: "悟空三调芭蕉扇是火焰山章节的核心情节。" },
+{ q: "玉兔精下界冒充了哪个国家的公主？", opts: ["天竺国","宝象国","乌鸡国","车迟国"], a: 0, explanation: "玉兔精假冒天竺国公主，抛绣球招亲唐僧。" },
+{ q: "“小雷音寺”的妖怪是谁的童子？", opts: ["弥勒佛","太上老君","观音菩萨","文殊菩萨"], a: 0, explanation: "黄眉童儿偷弥勒金铙下界假扮如来。" },
+{ q: "《西游记》中谁用金刚琢收走众神兵器？", opts: ["青牛精","金角大王","黄袍怪","赛太岁"], a: 0, explanation: "太上老君坐骑青牛精用金刚琢套走诸神法宝。" },
+{ q: "“荆棘岭”的树精们与唐僧谈论什么？", opts: ["诗词","佛法","长生术","治国之道"], a: 0, explanation: "树精邀唐僧品茶吟诗，后被八戒捣毁。" },
+{ q: "唐僧在凌云渡脱去凡胎的方式是？", opts: ["乘无底船","架彩虹桥","飞越深渊","腾云驾雾"], a: 0, explanation: "接引佛祖用无底船助唐僧脱胎成佛。" },
+{ q: "“南山大王”是什么妖怪？", opts: ["豹子精","狮子精","老虎精","狼精"], a: 0, explanation: "南山大王是艾叶花皮豹子精，占据隐雾山。" },
+{ q: "《西游记》中“盂兰盆会”由谁举办？", opts: ["如来佛祖","玉皇大帝","观音菩萨","弥勒佛"], a: 0, explanation: "盂兰盆会是如来召开的佛会，观音领命寻取经人。" },
+{ q: "“通天河”的老鼋因何事求助唐僧？", opts: ["问寿数","求超度","寻宝物","报冤仇"], a: 0, explanation: "老鼋托唐僧问如来自己何时能脱壳成人身。" },
+{ q: "猪八戒的钉耙全名是什么？", opts: ["上宝沁金耙","九齿钉耙","降妖宝杖","混铁棍"], a: 0, explanation: "全称'上宝沁金耙'，由太上老君亲自锻造。" },
+{ q: "“七绝山”的妖怪是什么动物？", opts: ["蟒蛇","红鳞大蟒","巨蜥","蛟龙"], a: 1, explanation: "七绝山驼罗庄的红鳞大蟒被悟空钻腹而死。" },
+{ q: "“木仙庵”的四位树精不包括谁？", opts: ["松树","柏树","桧树","杏树"], a: 3, explanation: "四操为松、柏、桧、竹，杏仙是后来加入。" },
+{ q: "《西游记》中“金平府”的妖怪是谁？", opts: ["犀牛精","狮子精","大象精","鹿精"], a: 0, explanation: "三只犀牛精假冒佛爷偷酥合香油。" },
+{ q: "“灭法国”后来改名叫什么？", opts: ["钦法国","宝象国","车迟国","乌鸡国"], a: 0, explanation: "悟空剃度国王百官后，灭法国改钦法国。" },
+{ q: "“九头虫”最终被谁击败？", opts: ["二郎神","孙悟空","哮天犬","梅山兄弟"], a: 0, explanation: "二郎神助阵，九头虫被哮天犬咬下一头逃窜。" },
+{ q: "唐僧取经耗时多少年？", opts: ["十四年","十年","八年","十九年"], a: 0, explanation: "贞观十三年出发，贞观二十七年归，共十四年。" },
+{ q: "“盘丝洞”的蜘蛛精共有多少只？", opts: ["七只","五只","九只","三只"], a: 0, explanation: "七只蜘蛛精对应七情，被悟空尽数打死。" },
+{ q: "《西游记》中“金蝉子”是唐僧第几世？", opts: ["第十世","第一世","第五世","第七世"], a: 0, explanation: "金蝉子十世修行，前九世皆在流沙河被吃。" },
+{ q: "“九环锡杖”的功用是什么？", opts: ["驱邪护体","降妖伏魔","开启秘境","呼风唤雨"], a: 0, explanation: "唐太宗赐九环锡杖，可驱邪避毒护唐僧周全。" },
+{ q: "“狮驼岭三魔”中谁最厉害？", opts: ["大鹏金翅雕","青狮精","白象精","黄牙老象"], a: 0, explanation: "大鹏是如来舅舅，神通最强，扇翅九万里。" },
+{ q: "“无字真经”事件发生在何处？", opts: ["灵山藏经阁","凌云渡","通天河","大雷音寺"], a: 0, explanation: "迦叶阿傩传无字经，师徒折返后得真经。" },
+{ q: "“木叉”是谁的弟子？", opts: ["观音菩萨","文殊菩萨","普贤菩萨","地藏菩萨"], a: 0, explanation: "木叉又名惠岸行者，观音大弟子，助收服红孩儿。" },
+{ q: "白龙马原本是西海龙王第几子？", opts: ["三太子","大太子","二太子","四太子"], a: 0, explanation: "白龙马原是西海龙王敖闰的第三子，因纵火烧毁玉帝赏赐的明珠被贬至蛇盘山。" },
+{ q: "灭法国国王最初计划杀多少名和尚？", opts: ["九千九百九十六","一万","八千","七千五百"], a: 0, explanation: "灭法国国王已杀九千九百九十六个无名和尚，需再杀四名凑足一万，后被悟空剃度感化。" },
+{ q: "唐僧取经全程共计多少天？", opts: ["五千零四十日","五千零四十八日","四千八百日","六万三千日"], a: 0, explanation: "观音计算取经耗时五千零四十日，后因差八日补足藏数，实际总天数五千零四十八日。" },
+{ q: "沙和尚使用的兵器全称是什么？", opts:["降妖宝杖","月牙铲","降魔杵","混铁棍"], a: 0, explanation: "沙僧兵器为降妖宝杖，由月宫梭罗木制成，鲁班亲自打造，玉帝亲赐卷帘大将。" },
+{ q: "阴阳二气瓶的触发条件是什么？", opts:["被困者发声说话","念动咒语","摇晃瓶身","光照瓶口"], a: 0, explanation: "被困者若在阴阳二气瓶内出声，则会触发瓶内火焰与毒蛇攻击，需保持沉默方可保命。" },
+{ q: "九灵元圣的主人是谁？", opts:["太乙救苦天尊","元始天尊","太上老君","南极仙翁"], a: 0, explanation: "九灵元圣是太乙救苦天尊的坐骑九头狮子，趁狮奴醉酒偷下凡间为妖。" },
+{ q: "唐僧成佛后的封号是什么？", opts:["旃檀功德佛","斗战胜佛","净坛使者","金身罗汉"], a: 0, explanation: "如来封唐僧为旃檀功德佛，孙悟空为斗战胜佛，八戒为净坛使者，沙僧为金身罗汉。" },
+{ q: "“真假美猴王”中如来用何物辨出六耳猕猴？", opts:["金钵盂","照妖镜","慧眼","紧箍咒"], a: 0, explanation: "如来用金钵盂罩住六耳猕猴现出原形，被悟空一棒打死，自此再无二心。" },
+{ q: "乌鸡国国王复活时用了谁的丹药？", opts:["太上老君","观音菩萨","南极仙翁","镇元大仙"], a: 0, explanation: "悟空向太上老君求得还魂丹，配合井龙王定颜珠保尸，救活乌鸡国国王。" },
+{ q: "黄风怪的三昧神风最怕什么克制？", opts:["定风丹","芭蕉扇","杨柳枝","金刚琢"], a: 0, explanation: "灵吉菩萨用飞龙杖和定风丹降服黄风怪，破其神风法术。" },
+{ q: "金角大王的五件法宝不包括哪个？", opts:["金刚琢","紫金红葫芦","羊脂玉净瓶","七星剑"], a: 0, explanation: "金角携带紫金葫芦、玉净瓶、七星剑、幌金绳、芭蕉扇五宝，金刚琢为青牛精所有。" },
+{ q: "狮驼岭三魔中与如来有亲缘关系的是？", opts:["大鹏金翅雕","青狮精","白象精","黄牙老象"], a: 0, explanation: "大鹏是如来佛母孔雀大明王菩萨的弟弟，按辈分算如来的舅舅。" },
+{ q: "唐太宗赐给唐僧的锡杖有多少环？", opts:["九环","七环","五环","十二环"], a: 0, explanation: "九环锡杖为唐太宗所赐，具有驱邪护体之效，与锦襕袈裟同为取经宝物。" },
+{ q: "人参果遇何物会落入土中？", opts:["金器","木器","玉器","铁器"], a: 0, explanation: "镇元大仙的人参果遇金而落，遇木而枯，遇水而化，遇火而焦，遇土而入。" },
+{ q: "灭法国后来改名为？", opts:["钦法国","宝象国","车迟国","天竺国"], a: 0, explanation: "悟空剃度国王百官后，灭法国改国号为钦法国，意为敬佛之国。" },
+{ q: "红孩儿最终被谁收为善财童子？", opts:["观音菩萨","如来佛祖","文殊菩萨","弥勒佛"], a: 0, explanation: "观音用金箍咒降伏红孩儿，令其成为座前善财童子，位列仙班。" },
+{ q: "玉兔精下界冒充了哪个国家的公主？", opts:["天竺国","宝象国","朱紫国","女儿国"], a: 0, explanation: "玉兔精假冒天竺国公主抛绣球招亲，后被太阴星君收回月宫。" },
+{ q: "如来赐予的三藏真经共有多少卷？", opts:["五千零四十八","一万五千","三千","八百"], a: 0, explanation: "三藏真经共计三十五部五千零四十八卷，对应取经耗时五千零四十八日。" },
+{ q: "孙悟空的救命毫毛是谁所赠？", opts:["观音菩萨","菩提祖师","如来佛祖","太上老君"], a: 0, explanation: "观音拔杨柳叶化三根救命毫毛，助悟空在阴阳二气瓶内脱困。" },
+{ q: "女儿国子母河的水喝了会怎样？", opts:["怀孕生子","化为脓血","长生不老","法力尽失"], a: 0, explanation: "唐僧和八戒误饮子母河水腹痛怀孕，需饮落胎泉水方能化解。" },
+{ q: "孙悟空在五行山下被压期间，谁负责看守并定期喂食？", opts: ["土地神与山神","五方揭谛","六丁六甲","观音菩萨"], a: 0, explanation: "如来命五行山土地神会同五方揭谛监押悟空，饥时喂铁丸，渴时饮铜汁。" },
+{ q: "“混世四猴”中不属于如来说法的是？", opts: ["灵明石猴","赤尻马猴","通臂猿猴","六耳猕猴"], a: 2, explanation: "如来指出混世四猴为灵明石猴、赤尻马猴、通臂猿猴、六耳猕猴，通臂猿猴实为悟空同类。" },
+{ q: "唐僧取经团队中唯一主动退出取经的是谁？", opts: ["无此情况","猪八戒","沙僧","白龙马"], a: 0, explanation: "原著中师徒四人皆未主动退出，八戒虽有抱怨但始终跟随。" },
+{ q: "“九齿钉耙”的主要材料是什么？", opts: ["神冰铁","玄铁","乌金","寒玉"], a: 0, explanation: "太上老君用神冰铁亲自锤炼，借五方五帝、六丁六甲之力锻造九齿钉耙。" },
+{ q: "金翅大鹏雕的飞行速度与谁相当？", opts: ["孙悟空筋斗云","如来佛手掌","哪吒风火轮","观音莲花座"], a: 0, explanation: "大鹏扇一翅九万里，两翅赶上悟空筋斗云（一翻十万八千里），最终被如来佛法降服。" },
+{ q: "“金蝉脱壳”在原著中指什么？", opts: ["唐僧前世身份","悟空变化术","八戒逃生法","妖怪替身术"], a: 0, explanation: "金蝉子是唐僧前世，脱壳喻十世修行，每次转世皆如金蝉脱壳般舍弃旧身。" },
+{ q: "“七仙女”摘蟠桃时告知悟空蟠桃会未请他的是谁？", opts: ["红衣仙女","青衣仙女","素衣仙女","皂衣仙女"], a: 0, explanation: "红衣仙女直言蟠桃会受邀名单，激怒悟空导致大闹天宫。" },
+{ q: "“芭蕉扇”共有几把？", opts: ["两把","一把","三把","四把"], a: 0, explanation: "铁扇公主持阴扇灭火，太上老君持阳扇炼丹，皆为混沌开辟时灵叶所化。" },
+{ q: "“鹰愁涧”白龙吞食唐僧坐骑时，悟空丢失何物？", opts: ["马鞍","缰绳","通关文牒","紫金钵盂"], a: 0, explanation: "白龙吞马时扯断马鞍，导致悟空需向观音求取鞍辔，后得龙宫宝物。" },
+{ q: "“九九八十一难”中最后一难是？", opts: ["通天河落水","凌云渡脱胎","铜台府冤案","晒经石损经"], a: 3, explanation: "归途过通天河老鼋问寿未果，师徒落水，经书晒石时粘破，凑足八十一难。" },
+{ q: "“黄眉老佛”的法宝人种袋原本属于谁？", opts: ["弥勒佛","太上老君","观音菩萨","文殊菩萨"], a: 0, explanation: "黄眉童儿偷弥勒佛的后天袋子（人种袋）下界，自称黄眉老佛设小雷音寺。" },
+{ q: "“万寿山五庄观”门前的对联内容？", opts: ["长生不老神仙府，与天同寿道人家","花果山福地，水帘洞洞天","灵根育孕源流出，心性修持大道生","禅心朗照千江月，真性情涵万里天"], a: 0, explanation: "五庄观对联彰显镇元大仙地仙之祖的地位，与天同寿，悟空初读时曾嗤笑。" },
+{ q: "“如意真仙”与哪位妖怪有亲缘关系？", opts: ["牛魔王","红孩儿","铁扇公主","九头虫"], a: 0, explanation: "如意真仙是牛魔王的弟弟，霸占解阳山破儿洞，阻挠悟空取落胎泉水。" },
+{ q: "“唐僧肉长生”传言最早由谁散播？", opts: ["金角大王","白骨精","黄风怪","狮驼岭小妖"], a: 1, explanation: "白骨精首次提及吃唐僧肉可长生，此后成为众妖共识，推动取经劫难。" },
+{ q: "“观音禅院”失火事件中，悟空借来何物护住唐僧？", opts: ["避火罩","芭蕉扇","定风丹","锦襕袈裟"], a: 0, explanation: "悟空向广目天王借避火罩护住唐僧，放任禅院烧毁以惩戒贪心老僧。" },
+{ q: "“木叉”在天庭的职位是？", opts: ["惠岸行者","卷帘大将","托塔天王","哪吒三太子"], a: 0, explanation: "木叉即惠岸行者，观音大弟子，曾助收服红孩儿，身份为李靖次子。" },
+{ q: "“金平府元宵节”偷酥合香油的是？", opts: ["三只犀牛精","九头虫","黄风怪","豹子精"], a: 0, explanation: "辟寒、辟暑、辟尘三头犀牛精假冒佛爷，每年勒索百姓金灯油。" },
+{ q: "“荆棘岭树精”中唯一女性妖怪是？", opts: ["杏仙","松树精","柏树精","桧树精"], a: 0, explanation: "杏仙欲与唐僧成婚，其他树精（松、柏、桧、竹）为其说媒，后被八戒铲除。" },
+{ q: "“唐僧通关文牒”上第一个盖章的国家是？", opts: ["宝象国","乌鸡国","车迟国","女儿国"], a: 0, explanation: "收服黄袍怪后，宝象国国王首个在文牒上加盖玉玺，正式开启取经历程。" },
+{ q: "“九头驸马”的真实身份是？", opts: ["九头虫","九尾狐","九灵元圣","九头狮子"], a: 0, explanation: "九头虫盗取祭赛国佛宝，与万圣龙王之女成婚，后被二郎神重创逃往北海。" },
+{ q: "“孙行者”名号最早由谁所起？", opts: ["菩提祖师","唐僧","观音菩萨","东海龙王"], a: 0, explanation: "菩提祖师为悟空取“孙悟空”法名，后唐僧称其“行者”，合称孙行者。" },
+{ q: "“黑水河”鼍龙怪与西海龙王的关系？", opts: ["外甥","儿子","侄子","兄弟"], a: 0, explanation: "鼍龙是西海龙王妹妹之子，其父泾河龙王被魏征梦斩，后霸占黑水河神府。" },
+{ q: "“灵感大王”每年索要童男童女供奉的村子是？", opts: ["陈家庄","高老庄","驼罗庄","李家庄"], a: 0, explanation: "灵感大王（观音莲花池金鱼）在通天河作乱，要求陈家庄每年献祭孩童。" },
+{ q: "“金箍棒”缩小后藏在耳中的形态是？", opts: ["绣花针","细丝","米粒","毫毛"], a: 0, explanation: "金箍棒口诀可使大小变化，最小缩成绣花针藏于耳内，需时取出即长。" },
+{ q: "“唐僧”在取经途中唯一主动哭泣是为谁？", opts: ["母亲殷温娇","唐太宗","孙悟空","生父陈光蕊"], a: 0, explanation: "唐僧见母亲受难十八年，首次落泪，后救母复仇，此情节在附录中详述。" },
+{ q: "“小西天”黄眉怪用何物冒充雷音寺？", opts: ["金铙","人种袋","狼牙棒","木鱼"], a: 0, explanation: "黄眉童儿用金铙困住悟空，假造小雷音寺，弥勒佛现身收服时悟空曾钻腹报复。" },
+{ q: "“玉华州”三位王子分别拜谁为师？", opts: ["悟空、八戒、沙僧","唐僧、悟空、八戒","唐僧、沙僧、白龙马","悟空、哪吒、杨戬"], a: 0, explanation: "大王子学棒法，二王子学钯法，三王子学杖法，后兵器被黄狮精盗走引发风波。" },
+{ q: "“盘丝洞”蜘蛛精洗澡的湖泊叫？", opts: ["濯垢泉","落胎泉","子母河","碧波潭"], a: 0, explanation: "七只蜘蛛精占濯垢泉（原属七仙女），每日三次洗浴，被悟空偷衣戏弄。" },
+{ q: "孙悟空出生时目运金光惊动玉帝，其出生地在何处？", opts: ["花果山山顶仙石","东海海底神铁","昆仑山灵石","女娲补天遗石"], a: 0, explanation: "原著第一回描述花果山山顶仙石迸裂产石猴，目运金光射冲斗府，惊动玉帝。" },
+{ q: "唐僧被唐太宗赐予的称号是什么？", opts: ["御弟圣僧","三藏法师","金蝉长老","大唐佛子"], a: 0, explanation: "唐太宗与唐僧结拜为兄弟，赐号御弟，通关文牒称'御弟圣僧'。" },
+{ q: "猪八戒的钉耙在何处被妖怪偷走？", opts: ["玉华州","金平府","天竺国","狮驼岭"], a: 0, explanation: "玉华州三位王子仿造兵器，黄狮精盗走悟空三兄弟兵器引发钉耙宴。" },
+{ q: "“无底洞”中的牌位迫使谁下界收妖？", opts: ["托塔李天王","哪吒三太子","二郎神","太上老君"], a: 0, explanation: "老鼠精洞中供奉李天王牌位，悟空告至天庭，李天王父子遂下界降妖。" },
+{ q: "牛魔王与孙悟空结拜时的称号是？", opts: ["平天大圣","覆海大圣","混天大圣","移山大圣"], a: 0, explanation: "七大圣结义中，牛魔王称平天大圣，孙悟空称齐天大圣。" },
+{ q: "唐僧取经路线图中标注的起点是？", opts: ["长安洪福寺","两界山","五行山","鹰愁涧"], a: 0, explanation: "取经实际起点为长安城洪福寺，唐太宗亲自送行。" },
+{ q: "“九环锡杖”能抵御哪种灾害？", opts: ["毒虫瘴气","刀剑伤害","水火侵袭","妖法幻术"], a: 0, explanation: "观音称九环锡杖可'铜镶铁造九连环，九节仙藤永驻颜，入地能驱狼虎穴，上天可摘星斗还'，侧重驱邪避毒。" },
+{ q: "金角大王称呼太上老君为？", opts: ["主人","师父","祖师","道祖"], a: 0, explanation: "金角被收服时哭诉'师父，弟子伺候你多年'，揭示其童子身份。" },
+{ q: "“八十一难”中唯一重复的劫难是？", opts: ["通天河落水","黄风怪阻路","黑河沉没","流沙河受阻"], a: 0, explanation: "去时通天河遇灵感大王，归途再渡通天河老鼋沉经，两次计入劫难。" },
+{ q: "“三打白骨精”后悟空被驱逐，暗中保护唐僧的是？", opts: ["六丁六甲与五方揭谛","观音菩萨","白龙马","日值功曹"], a: 0, explanation: "如来安排六丁六甲、五方揭谛等神祇暗中护持，确保取经人不死。" },
+{ q: "朱紫国国王因何病症三年不愈？", opts: ["相思惊惧","中毒吐血","妖邪附体","金铃灼伤"], a: 0, explanation: "金圣宫娘娘被赛太岁掳走，国王惊忧成疾，病症为'双鸟失群'之症。" },
+{ q: "“黄眉老佛”手中法宝人种袋的原主是？", opts: ["弥勒佛","如来佛祖","燃灯古佛","药师佛"], a: 0, explanation: "人种袋是弥勒佛后天袋子，被司磬黄眉童儿偷走下界为妖。" },
+{ q: "“金蝉子”被贬凡间的罪名是？", opts: ["听经打瞌睡","轻慢佛法","私传经文","妄议因果"], a: 0, explanation: "如来斥责金蝉子'不听说法，轻慢我之大教'，故贬其真灵转世。" },
+{ q: "“通天河老鼋”所求之事是？", opts: ["询问寿数","请求超度","讨要佛经","报仇雪恨"], a: 0, explanation: "老鼋托唐僧问如来自己何时能脱壳修成人身，唐僧忘问导致归途沉河。" },
+{ q: "“五庄观”清风明月两童子给唐僧的人参果数量是？", opts: ["两颗","三颗","一颗","四颗"], a: 0, explanation: "镇元子吩咐童子打两颗人参果款待故人，悟空偷摘四颗引发争端。" },
+{ q: "“九头虫”盗取的佛宝供奉在何处？", opts: ["祭赛国金光寺","小雷音寺","灵山藏经阁","朱紫国麒麟山"], a: 0, explanation: "九头虫盗取舍利子致祭赛国佛塔无光，引发唐僧扫塔辨奇冤。" },
+{ q: "“狮驼岭”小妖传递信息用的令牌叫？", opts: ["巡山令","狮驼令","阴阳牌","金翅符"], a: 0, explanation: "小钻风持'巡山总钻风'令牌，被悟空变作'总钻风'骗取情报。" },
+{ q: "“紫金铃”的正确使用方法是？", opts: ["三个铃铛齐摇","按顺序摇晃","火、烟、沙分用","念咒投掷"], a: 0, explanation: "赛太岁称三个紫金铃齐摇可喷火、生烟、扬沙，悟空盗铃后反制。" },
+{ q: "“七绝山”得名于？", opts: ["七种恶臭","七种毒物","七座险峰","七条妖河"], a: 0, explanation: "因满山柿子树腐烂产生七种臭味（烂桃、酸枣等），故称七绝山。" },
+{ q: "唐僧在取经途中唯一自主决定绕行的劫难是？", opts: ["灭法国","荆棘岭","火焰山","黑水河"], a: 0, explanation: "灭法国要杀僧，唐僧坚持绕城，悟空却设计入城改造国王。" },
+{ q: "“金箍棒”上刻的文字是？", opts: ["如意金箍棒，重一万三千五百斤","天河定底神珍铁","大禹治水之物","灵阳棒一号"], a: 0, explanation: "悟空初得金箍棒时见其上镌刻'如意金箍棒'与重量字样。" },
+{ q: "“万圣龙王”居住的潭水叫？", opts: ["碧波潭","黑水河","鹰愁涧","乱石山"], a: 0, explanation: "万圣龙王与九头虫盘踞碧波潭，盗取祭赛国佛宝舍利。" },
+{ q: "“黄风怪”的神风对悟空造成何种伤害？", opts: ["吹伤火眼金睛","刮走筋斗云","吹散毫毛分身","撕裂虎皮裙"], a: 0, explanation: "三昧神风吹得悟空眼珠酸痛泪流不止，后借灵吉菩萨定风丹破解。" },
+{ q: "“木叉”这个名字的含义是？", opts: ["木制佛器","佛前灯芯","佛门法器","木鱼化身"], a: 0, explanation: "木叉即佛门法器'锡杖'的异称，暗合惠岸行者身份。" },
+{ q: "“黑水河”河神向悟空告状时呈上的证据是？", opts: ["白玉圭","金铃铛","青铜剑","铁令牌"], a: 0, explanation: "河神被鼍龙霸占府邸后，持白玉圭求告西海龙王，被悟空识破冤情。" },
+{ q: "“金角大王”用来装人的法宝是？", opts: ["紫金红葫芦","羊脂玉净瓶","幌金绳","芭蕉扇"], a: 0, explanation: "紫金红葫芦喊名应声即收人，银角曾用此宝装悟空。" },
+{ q: "“小雷音寺”中困住悟空的金铙需如何破解？", opts: ["亢金龙角钻洞","三昧真火熔炼","玉净瓶水腐蚀","金刚琢击碎"], a: 0, explanation: "亢金龙用角钻入金铙缝隙，悟空变小钻出，方得脱困。" },
+{ q: "“天竺国假公主”使用的凶器是？", opts: ["捣药杵","绣花针","短剑","玉簪"], a: 0, explanation: "玉兔精用月宫捣药杵与悟空打斗，后被太阴星君收回。" },
+{ q: "“乌鸡国”太子辨认父亲的关键信物是？", opts: ["白玉圭","金厢玉佩","九环锡杖","通关文牒"], a: 0, explanation: "悟空让太子见乌鸡国王鬼魂手持白玉圭，与王后所藏另一半契合为证。" },
+{ q: "“黄袍怪”将哪个孩童变作老虎？", opts: ["百花羞公主之子","宝象国太子","白鹿精童子","朱紫国世子"], a: 0, explanation: "黄袍怪与百花羞公主生有二子，后被悟空摔死，但未提及变虎情节。" },
+{ q: "“金毛犼”脖子上挂的法宝是？", opts: ["紫金铃","金刚琢","人种袋","阴阳瓶"], a: 0, explanation: "赛太岁项挂三个紫金铃，能放火、烟、沙，后被悟空用假铃调包。" },
+{ q: "“车迟国斗法”中唐僧与虎力大仙比试的是？", opts: ["云梯坐禅","隔板猜物","油锅洗澡","砍头再生"], a: 0, explanation: "虎力大仙与唐僧在五十丈高台比坐禅，悟空变蜈蚣扰乱致其败落。" },
+{ q: "“九头虫”被哮天犬咬下的头是？", opts: ["血瘤头","蛇头","龙头","凤头"], a: 0, explanation: "九头虫现本相时，哮天犬窜上咬掉其一颗血淋淋的头颅。" },
+{ q: "“荆棘岭”树精中作诗的桧树精自号？", opts: ["劲节十八公","孤直公","凌空子","拂云叟"], a: 2, explanation: "四树精别称：松曰劲节，柏曰孤直，桧曰凌空，竹曰拂云。" },
+{ q: "“金角大王”的母狐狸精住在？", opts: ["压龙洞","盘丝洞","无底洞","白骨洞"], a: 0, explanation: "金角银角拜压龙洞九尾狐为干娘，悟空假扮小妖骗得幌金绳。" },
+{ q: "“狮驼国”原住民被吃光的惨剧发生在？", opts: ["五百年前","三百年前","五十年前","二十年前"], a: 0, explanation: "大鹏雕五百年前吃光狮驼国百姓，建立妖国。" },
+{ q: "“蜘蛛精”的师兄是什么妖怪？", opts: ["蜈蚣精","蝎子精","蟒蛇精","蝙蝠精"], a: 0, explanation: "盘丝洞七蛛女称黄花观百眼魔君（蜈蚣精）为师兄，用毒茶害唐僧。" },
+{ q: "“比丘国”小儿被藏在何处？", opts: ["鹅笼","竹筐","地窖","铁笼"], a: 0, explanation: "家家门口挂鹅笼藏小儿，笼用五色彩缎遮盖，躲避国丈取心制药。" },
+{ q: "“白龙马”在何处被收为坐骑？", opts: ["鹰愁涧","流沙河","黑水河","通天河"], a: 0, explanation: "鹰愁涧小白龙吞食唐僧白马，观音点化其变白龙马代步。" },
+{ q: "“金箍棒”最初在东海中的形态是？", opts: ["擎天巨柱","细针入海","金光万道","铁链锁蛟"], a: 0, explanation: "悟空入龙宫见金箍棒'斗来粗，二丈余长'，实为定海神珍铁。" },
+{ q: "“小西天”黄眉怪用何物冒充雷音寺？", opts: ["金铙","人种袋","木鱼","铜钟"], a: 0, explanation: "黄眉用金铙困住悟空，假造小雷音寺，弥勒佛笑称'童儿偷我法宝'。" },
+{ q: "“唐僧肉”长生不老的传言始于？", opts: ["白骨夫人","金角大王","黄风怪","狮驼岭小妖"], a: 0, explanation: "白骨精首次提出'唐僧乃金蝉长老临凡，十世修行的好人，吃他肉可长寿'。" },
+{ q: "“五庄观”人参果树复活后，镇元子与悟空结为？", opts: ["兄弟","师徒","道友","仇敌"], a: 0, explanation: "镇元子与悟空结拜兄弟，开人参果会款待众人，尽释前嫌。" },
+{ q: "“黑熊精”最终被收服后的职责是？", opts: ["守山大神","善财童子","金身罗汉","八部天龙"], a: 0, explanation: "观音用禁箍咒收服黑熊精，命其看守落伽山后山。" },
+{ q: "“朱紫国”国王病愈后酬谢悟空的是？", opts: ["金银珠宝","城池土地","紫金铃","素酒素宴"], a: 3, explanation: "国王欲赠金银，悟空不受，最终接受素宴答谢，突显出家人本色。" },
+{ q: "“玉华州”黄狮精的兵器鉴赏会叫？", opts: ["钉耙宴","金箍会","降妖会","法宝展"], a: 0, explanation: "黄狮精盗走三件兵器后举办'钉耙嘉会'，因九齿钉耙最珍贵得名。" },
+{ q: "“女儿国”子母河水源于何处？", opts: ["解阳山","落胎泉","昆仑山","凌霄殿"], a: 0, explanation: "解阳山破儿洞泉水可解子母河胎气，后被如意真仙霸占收费。" },
+{ q: "“金平府”三只犀牛精最怕哪种天敌？", opts: ["四木禽星","二十八宿","梅山兄弟","五方揭谛"], a: 0, explanation: "悟空请来角木蛟、斗木獬、奎木狼、井木犴四星宿，犀牛见克星现原形。" },
+{ q: "“三打白骨精”时唐僧首次念紧箍咒的原因？", opts: ["误认悟空杀村姑","悟空顶撞师父","悟空毁尸灭迹","白骨精施法"], a: 0, explanation: "唐僧肉眼凡胎，见悟空打死'村姑'，怒念紧箍咒惩罚。" },
+{ q: "“无底洞”老鼠精的洞府深达多少里？", opts: ["三百六十里","八百里","一千尺","万丈深渊"], a: 0, explanation: "洞名'陷空山无底洞'，入口仅缸口大，内深三百六十里。" },
+{ q: "“黄风怪”的神风三昧从何处学来？", opts: ["灵山脚下","蓬莱仙岛","方寸山","五庄观"], a: 0, explanation: "黄风怪原是灵山脚下得道貂鼠，偷吃琉璃盏内清油后逃亡。" },
+{ q: "“九头虫”盗取的佛宝是？", opts: ["舍利子","金丹砂","紫金铃","定风丹"], a: 0, explanation: "祭赛国金光寺佛塔舍利被九头虫盗取，致佛塔无光引发冤案。" },
+{ q: "“狮驼岭”三魔中白象精的兵器是？", opts: ["长枪","钢刀","铁杵","狼牙棒"], a: 0, explanation: "白象精使一柄长枪，鼻卷人时被悟空用金箍棒捅鼻孔制服。" },
+{ q: "“金角大王”的幌金绳原本属于谁？", opts: ["太上老君","九尾狐","东海龙王","观音菩萨"], a: 1, explanation: "幌金绳是九尾狐的腰带，金角银角拜其为干娘时获得。" },
+{ q: "“玉面狐狸”是哪个妖怪的妾室？", opts: ["牛魔王","万圣龙王","九头虫","黄袍怪"], a: 0, explanation: "玉面狐狸精携家财招赘牛魔王，引发铁扇公主与悟空冲突。" },
+{ q: "“黄袍怪”的夫人百花羞前世是？", opts: ["披香殿玉女","七仙女","嫦娥侍女","王母婢女"], a: 0, explanation: "奎木狼与披香殿玉女私通，玉女转世为宝象国公主百花羞。" },
+{ q: "“灵感大王”的鱼鳞能抵挡哪种攻击？", opts: ["冰雹","火焰","兵器","雷电"], a: 0, explanation: "悟空用金箍棒变冰雹砸妖，灵感大王现原形以鱼鳞抵挡。" },
+{ q: "“朱紫国”国王悬赏求医的榜文高挂何处？", opts: ["鼓楼","城门","皇宫","市集"], a: 0, explanation: "悟空揭下鼓楼旁皇榜，塞入八戒衣领引发喜剧冲突。" },
+{ q: "“青牛精”偷走的金刚琢能套取何物？", opts: ["诸般兵器与法宝","魂魄元神","水火雷电","仙丹灵药"], a: 0, explanation: "金刚琢可套万物，悟空请来的天兵天将法宝均被收走。" },
+{ q: "“灭法国”国王被剃度后改国号为？", opts: ["钦法国","敬佛国","宝象国","天竺国"], a: 0, explanation: "悟空剃度国王百官，灭法国改称钦法国，寓意敬佛。" },
+{ q: "“金箍棒”重量一万三千五百斤对应什么？", opts: ["昼夜呼吸次数","周天星辰数","人体穴位数","八十一难数"], a: 0, explanation: "道家认为人一昼夜呼吸一万三千五百息，金箍棒重量暗合此数。" },
+{ q: "“九灵元圣”擒拿唐僧师徒的神通是？", opts: ["九口叼人","三昧神风","地裂术","摄魂铃"], a: 0, explanation: "九头狮子现本相，九口齐开叼走唐僧、八戒、沙僧及众神。" },
+{ q: "“牛魔王”与悟空大战时曾变作哪种动物？", opts: ["天鹅","黄鹰","香獐","白鹤"], a: 0, explanation: "牛魔王与悟空斗法变化：牛变天鹅，猴变海东青；牛变黄鹰，猴变乌凤..." },
+{ q: "“荆棘岭”树精中哪位提议与唐僧联诗？", opts: ["劲节十八公","孤直公","凌空子","拂云叟"], a: 0, explanation: "松树精劲节十八公率先邀请唐僧'坐怀风月，对景联诗'。" },
+{ q: "“乌鸡国”太子验证真国王的关键证据是？", opts: ["白玉圭","乌鸡国宝印","母后证词","御花园水井"], a: 0, explanation: "悟空让太子见乌鸡国王鬼魂手持白玉圭，与王后所藏另一半契合。" },
+{ q: "“金角大王”用紫金葫芦装过哪位神仙？", opts: ["银角大王","孙悟空","九尾狐","太上老君"], a: 1, explanation: "银角大王用紫金葫芦装悟空，反被悟空用假葫芦骗装自身。" },
+{ q: "“白龙马”在取经途中唯一出手助战是对阵？", opts: ["黄袍怪","奎木狼","九头虫","黄毛貂鼠"], a: 0, explanation: "白龙马化身宫娥刺杀黄袍怪未果，是唯一一次主动参战。" },
+{ q: "“小雷音寺”中困住悟空的金铙需如何破解？", opts: ["亢金龙用角钻洞","三昧真火烧熔","观音玉净瓶水化","如来金钵收服"], a: 0, explanation: "亢金龙将角钻入金铙缝隙，悟空在角尖钻孔脱身。" },
+{ q: "“九头虫”盗取佛宝后藏在何处？", opts: ["碧波潭龙宫","乱石山","祭赛国塔顶","北海深渊"], a: 0, explanation: "九头虫与万圣龙王将舍利子藏于碧波潭龙宫，用九叶灵芝温养。" },
+{ q: "“唐僧”取经途中唯一主动接受的礼物是？", opts: ["锦襕袈裟","紫金钵盂","犀牛角","粗布直裰"], a: 1, explanation: "唐太宗赐紫金钵盂用于化斋，灭法国王后赠粗布直裰，唯紫金钵盂为主动接受。" },
+{ q: "“狮驼国”大鹏金翅雕的阴阳二气瓶怕什么？", opts: ["钻窍术","三昧真火","定风丹","杨柳枝"], a: 0, explanation: "悟空用观音所赠三根救命毫毛变金刚钻钻透瓶底逃生。" },
+{ q: "“黄风怪”的三昧神风能刮到何处？", opts: ["灵霄宝殿","花果山","南海","幽冥界"], a: 0, explanation: "悟空被风吹至须弥山，灵吉菩萨言此风能刮倒雷音宝刹至凌霄殿。" },
+{ q: "“金平府”三只犀牛精每年索要多少斤酥合香油？", opts: ["四万八千斤","三万六千斤","五万斤","十万斤"], a: 0, explanation: "三犀假扮佛爷每年索要四万八千斤酥合香油，每盏灯装油五百斤。" },
+{ q: "“九头虫”被二郎神射落的是哪种头颅？", opts: ["凤首","龙首","蛇首","人首"], a: 0, explanation: "二郎神用弹弓射中九头虫凤首，哮天犬趁机咬下其蛇头。" },
+{ q: "“女儿国”国境外的迎阳驿设有？", opts: ["照胎泉","落胎泉","子母河","解阳山"], a: 0, explanation: "迎阳驿照胎泉可照出胎儿性别，配合子母河水确保生女。" },
+{ q: "“金箍棒”上刻的“如意金箍棒”五个字由谁所写？", opts: ["大禹","太上老君","如来佛祖","东海龙王"], a: 0, explanation: "大禹治水时留'如意金箍棒'字样，后成定海神珍铁。" },
+{ q: "“镇元大仙”的乾坤袖能装下何物？", opts: ["天地万物","水火雷电","魂魄元神","仙丹法宝"], a: 0, explanation: "镇元子用乾坤袖一招收走唐僧师徒，悟空纵筋斗云亦难逃脱。" },
+{ q: "“黄眉怪”的人种袋能装多少天兵？", opts: ["十万天兵","五千揭谛","二十八宿","梅山六兄弟"], a: 0, explanation: "人种袋展开后天昏地暗，将悟空请来的五方揭谛、四值功曹等尽数收走。" },
+{ q: "“金角大王”的七星剑由哪七颗星命名？", opts: ["北斗七星","南斗六星","二十八宿","紫微垣星"], a: 0, explanation: "七星剑剑身镶北斗七星图案，暗合'北斗注死'之道家理念。" },
+{ q: "“狮驼岭”小妖巡山口令中的暗号是？", opts: ["烧火的钻风","巡山的崩将军","总钻风","刁钻古怪"], a: 0, explanation: "小钻风巡山喊'我等是烧火的，怕改了号，钻风号令'，被悟空识破。" },
+{ q: "“九头虫”最终逃往何处？", opts: ["北海","西海","东海","南海"], a: 0, explanation: "九头虫被二郎神射伤后，借水遁逃往北海，原著称'至今犹在北海作怪'。" },
+{ q: "“无底洞”中供奉的牌位材质是？", opts: ["黄金","檀木","白玉","青铜"], a: 0, explanation: "牌位'尊父李天王之位''尊兄哪吒三太子之位'皆为黄金打造，凸显神圣。" },
+{ q: "“唐僧”在取经途中唯一主动念紧箍咒是为？", opts: ["三打白骨精","真假美猴王","驱逐黄袍怪","惩戒杀强盗"], a: 3, explanation: "悟空打死多名强盗，唐僧怒念紧箍咒并写下贬书，此为自主惩戒行为。" },
+{ q: "“金平府”青龙山玄英洞三妖最怕？", opts: ["四木禽星","三昧真火","九齿钉耙","杨柳甘露"], a: 0, explanation: "四木禽星（角木蛟、斗木獬、奎木狼、井木犴）是犀牛精克星，见之现形。" },
+{ q: "“黄袍怪”将唐僧变作何种动物？", opts: ["老虎","狮子","白鹿","黑熊"], a: 0, explanation: "黄袍怪诬陷唐僧为虎精，施法将其变为猛虎，关进宝象国铁笼。" },
+{ q: "“九头驸马”与哪个龙王结亲？", opts: ["万圣龙王","西海龙王","东海龙王","碧波潭龙王"], a: 0, explanation: "九头虫入赘碧波潭万圣龙王家族，与龙王之女万圣公主成婚。" },
+{ q: "“红孩儿”最终被观音收为？", opts: ["善财童子","守山大神","金身罗汉","八部天龙"], a: 0, explanation: "观音用金箍咒降伏红孩儿，封为善财童子，位列仙班。" },
+{ q: "“金箍棒”能随悟空心意变化的极限是？", opts: ["顶天立地","山岳大小","毫毛粗细","无限延伸"], a: 0, explanation: "悟空曾将金箍棒变作'斗来粗，二丈长短'，但极限描写为'上抵三十三天，下至十八层地狱'。" },
+{ q: "“狮驼岭”三魔中青狮精的绝招是？", opts: ["吞天食地","三昧神风","法天象地","移山倒海"], a: 0, explanation: "青狮精曾一口吞下十万天兵，与悟空斗法时再现吞天神通。" },
+{ q: "“黄风怪”被灵吉菩萨收服时使用的法宝是？", opts: ["飞龙杖","定风丹","金钵","捆妖索"], a: 0, explanation: "灵吉菩萨用飞龙杖化作八爪金龙抓住黄风怪，押回灵山受罚。" },
+{ q: "“唐僧”取经途中唯一穿过的俗家服饰是？", opts: ["锦襕袈裟","虎皮裙","鸳鸯戏水袍","宝象国官服"], a: 3, explanation: "宝象国国王赠唐僧官服伪装，以便觐见，此为其唯一穿俗服情节。" },
+{ q: "“金角大王”的羊脂玉净瓶用来装？", opts: ["三光神水","星辰砂","阴阳二气","弱水"], a: 0, explanation: "玉净瓶装有三光神水（日、月、星三光精华），可复活人参果树。" },
+{ q: "“九头虫”的武器是？", opts: ["月牙铲","方天戟","狼牙棒","铁蒺藜"], a: 0, explanation: "九头虫使一柄月牙铲，与悟空、八戒鏖战，后被二郎神射伤。" },
+{ q: "“玉面狐狸”死后遗产归谁所有？", opts: ["铁扇公主","牛魔王","万圣龙王","悟空"], a: 0, explanation: "玉面狐狸被沙僧打死，其积雷山摩云洞家财尽归铁扇公主。" },
+{ q: "“黄眉怪”假扮如来时自称什么佛？", opts: ["弥勒尊佛","未来佛","东来佛祖","小雷音佛祖"], a: 3, explanation: "黄眉怪设小雷音寺自称'黄眉老佛'，假冒如来制造劫难。" },
+{ q: "“金箍棒”最早作为定海神珍的功能是？", opts: ["测量水深","镇压蛟龙","吸收灵气","炼制丹药"], a: 0, explanation: "大禹治水时用定海神珍铁测量江海深浅，后遗落东海。" },
+{ q: "“九灵元圣”下凡为妖的缘由是？", opts: ["狮奴醉酒","偷盗法宝","私会仙娥","逃避天劫"], a: 0, explanation: "太乙救苦天尊坐骑九灵元圣趁狮奴醉酒吞饮轮回琼液，私自下界。" },
+{ q: "“通天河”老鼋的修行目标是？", opts: ["脱壳成人","位列仙班","长生不老","修得正果"], a: 0, explanation: "老鼋修行千年欲脱壳修成人形，托唐僧问如来自己寿数几何。" },
+{ q: "“镇元大仙”与悟空结拜的见证人是？", opts: ["福禄寿三星","观音菩萨","唐僧师徒","五庄观弟子"], a: 0, explanation: "镇元子开人参果会，请来福禄寿三星作陪，见证与悟空结拜。" },
+{ q: "“黄袍怪”的奎木狼本体属于？", opts: ["二十八宿","三十六天罡","七十二地煞","九曜星官"], a: 0, explanation: "奎木狼是西方白虎七宿之首，位列二十八星宿。" },
+{ q: "“金角大王”的七星剑暗合哪种天象？", opts: ["北斗七星","南斗六星","紫微垣","太微垣"], a: 0, explanation: "七星剑剑身镶嵌北斗七星图案，对应北斗注死的道教观念。" },
+{ q: "“白龙马”在取经团队中的日常职责是？", opts: ["驮唐僧","挑行李","化斋饭","探道路"], a: 0, explanation: "白龙马专职驮唐僧，八戒挑担，沙僧牵马，分工明确。" },
+{ q: "“小雷音寺”中黄眉怪的狼牙棒原名？", opts: ["短软狼牙棒","敲磬槌","降魔杵","混铁棍"], a: 1, explanation: "黄眉怪兵器原是弥勒佛敲磬的槌子，下凡后幻化为狼牙棒。" },
+{ q: "“九头虫”的血液颜色是？", opts: ["碧绿色","鲜红色","紫黑色","金黄色"], a: 0, explanation: "九头虫被咬掉一头后，碧血淋淋，凸显其妖异特性。" },
+{ q: "“唐僧”在凌云渡脱胎时乘坐的船是？", opts: ["无底船","莲花船","独木舟","金筏"], a: 0, explanation: "接引佛祖撑无底船，唐僧脱去凡胎肉身，成就金身。" },
+{ q: "“金箍棒”能大小变化的口诀是？", opts: ["如意金箍棒，大！大！大！","长！长！长！","大大大，小小小","大如须弥，小如芥子"], a: 0, explanation: "悟空初得金箍棒时念'再短细些更妙'，棒即缩小，口诀实为心意相通。" },
+{ q: "“狮驼国”大鹏金翅雕的阴阳二气瓶被谁破坏？", opts: ["孙悟空","观音菩萨","如来佛祖","弥勒佛"], a: 0, explanation: "悟空用观音所赠三根救命毫毛变金刚钻钻透瓶底逃脱。" },
+{ q: "“黄风岭”土地称黄风怪为？", opts: ["黄风大王","黄毛貂鼠","灵山逃犯","三昧妖王"], a: 0, explanation: "土地公向悟空透露'那怪称黄风大王，是灵山脚下得道貂鼠'。" },
+{ q: "“金平府”三只犀牛精被斩后，角被献给？", opts: ["玉帝与如来","唐太宗","孙悟空","四木禽星"], a: 0, explanation: "四星官取六只犀牛角，四只进贡玉帝，一只留金平府，一只赠如来。" },
+{ q: "“九头虫”所盗佛宝舍利子由谁供奉？", opts: ["祭赛国金光寺","小雷音寺","灵山宝刹","朱紫国麒麟山"], a: 0, explanation: "舍利子使金光寺佛塔放霞光，失窃后唐僧扫塔辨冤。" },
+{ q: "“无底洞”中悟空发现的老鼠精罪证是？", opts: ["牌位与供品","唐僧袈裟","紫金铃","人骨遗骸"], a: 0, explanation: "供桌上有李天王与哪吒牌位及香花蜡烛，成为悟空告天依据。" },
+{ q: "“金角大王”的幌金绳弱点在于？", opts: ["松绳咒","紧绳咒","断绳法","火焚烧"], a: 0, explanation: "九尾狐掌握松绳咒，悟空骗得咒语后反用幌金绳捆妖。" },
+{ q: "“镇元大仙”的绝技“袖里乾坤”能装？", opts: ["天地万物","四海之水","十万天兵","三界众生"], a: 0, explanation: "镇元子展袖笼乾坤，一招收走唐僧师徒及行李马匹。" },
+{ q: "“黄袍怪”与百花羞公主生有几个孩子？", opts: ["两个","三个","一个","无子嗣"], a: 0, explanation: "百花羞信中提及'生下两个妖儿，尽是妖魔之种'，后被悟空摔死。" },
+{ q: "“金箍棒”在东海中的初始重量是？", opts: ["一万三千五百斤","十万八千斤","十万斤","九万九千九百斤"], a: 0, explanation: "悟空初得金箍棒时见其上刻'重一万三千五百斤'。" },
+{ q: "《西游记》中“定风丹”是谁的法宝？", opts: ["灵吉菩萨","太上老君","如来佛祖","弥勒佛"], a: 0, explanation: "灵吉菩萨赠定风丹，助悟空抵御芭蕉扇狂风。" },
+             { q: "孙悟空被如来佛压在五行山下之前，最后一场战斗的对手是谁？", opts: ["二郎神","巨灵神","哪吒","托塔李天王"], a: 0, explanation: "孙悟空大闹天宫，玉帝请来外甥二郎神。两人大战三百回合，变化多端，最终悟空被太上老君的金刚琢打中，才被二郎神擒获。" },
+            { q: "唐僧取经出发时，唐太宗赐予的随身宝物叫什么？", opts: ["紫金钵盂","锦襕袈裟","九环锡杖","通关文牒"], a: 2, explanation: "唐太宗与唐僧结拜，除赐给紫金钵盂化斋外，还赠送了九环锡杖防身和锦襕袈裟护体。通关文牒是官方文件。" },
+            { q: "下列哪个妖怪原本是太上老君的坐骑？", opts: ["金角大王","黄袍怪","青牛精","九头虫"], a: 2, explanation: "青牛精是太上老君的坐骑，它偷走了老君的金刚琢下凡作怪，在金兜山难住了孙悟空。" },
+            { q: "猪八戒在天庭时担任什么职务？", opts: ["卷帘大将","天蓬元帅","弼马温","御前侍卫"], a: 1, explanation: "猪八戒曾是天庭掌管天河水兵的天蓬元帅，因醉酒调戏嫦娥被贬下凡间，错投猪胎。" },
+            { q: "沙和尚在流沙河时，脖子上挂的是什么？", opts: ["佛珠","骷髅头","金牌","玉佩"], a: 1, explanation: "沙僧被贬流沙河后，以吃人为生。他脖子上挂的九个骷髅头，是吃了九个取经人的头颅串成的。" },
+            { q: "《西游记》中，火焰山的火是谁扇出来的？", opts: ["铁扇公主","红孩儿","太上老君","牛魔王"], a: 2, explanation: "火焰山的火源于孙悟空当年踢倒太上老君的八卦炉，掉落的几块砖带有火气形成的。铁扇公主的芭蕉扇可以扇灭此火。" },
+            { q: "孙悟空的金箍棒原名是什么？", opts: ["定海神针","降妖宝杖","九齿钉耙","如意金箍棒"], a: 3, explanation: "金箍棒全名为“如意金箍棒”，也叫“灵阳棒”，原是大禹治水时测量海水深浅的定子，又名“定海神针铁”。" },
+            { q: "唐僧师徒四人取得的真经属于哪个教派？", opts: ["道教","佛教","儒教","基督教"], a: 1, explanation: "唐僧西天取经，前往西天大雷音寺求取的是大乘佛教的三藏真经。" },
+            { q: "白骨精第一次变成什么模样来欺骗唐僧？", opts: ["老翁","村姑","小孩","壮汉"], a: 1, explanation: "白骨精想吃唐僧肉，第一次变化成一个提着饭篮的美貌村姑，前来诱骗唐僧。" },
+            { q: "在女儿国，谁喝了子母河的水导致怀孕？", opts: ["唐僧和孙悟空","孙悟空和猪八戒","唐僧和猪八戒","猪八戒和沙僧"], a: 2, explanation: "唐僧和猪八戒误饮了西梁女国子母河的水，导致两人腹痛怀孕，后悟空去解阳山破儿洞取来落胎泉水才得以解脱。" },
+            { q: "“三打白骨精”之后，孙悟空被唐僧赶回了哪里？", opts: ["花果山","东海龙宫","天庭","南海普陀山"], a: 0, explanation: "唐僧肉眼凡胎，不识妖怪变化，三次误会悟空打死好人，念紧箍咒并将悟空赶回了花果山水帘洞。" },
+            { q: "牛魔王最终被谁收服了？", opts: ["孙悟空","哪吒和托塔天王","如来佛祖","观音菩萨"], a: 1, explanation: "牛魔王神通广大，悟空久战不胜。最后是玉帝派来的托塔李天王和哪吒三太子，加上佛派和道派神仙合力才将其收服。" },
+            { q: "红孩儿的“三昧真火”最怕什么？", opts: ["观音菩萨的净瓶水","孙悟空的猴毛","猪八戒的钉耙","沙僧的宝杖"], a: 0, explanation: "红孩儿的三昧真火能克制孙悟空，但观音菩萨的杨枝甘露（净瓶水）是天地间的至纯之水，能熄灭三昧真火。" },
+            { q: "车迟国三个妖道不包括以下哪个？", opts: ["虎力大仙","鹿力大仙","羊力大仙","牛力大仙"], a: 3, explanation: "车迟国与悟空斗法的是虎力、鹿力、羊力三位大仙，它们分别是老虎、白鹿和羚羊成精。" },
+            { q: "是谁帮助孙悟空推倒了人参果树？", opts: ["猪八戒","沙和尚","土地公公","镇元大仙的童子"], a: 0, explanation: "悟空偷摘人参果被发现后，八戒在一旁煽风点火，激得悟空怒起，一棒将人参果树推倒。" },
+            { q: "观音菩萨的坐骑是什么？", opts: ["金毛犼","白象","青狮","莲花"], a: 0, explanation: "观音菩萨的坐骑是金毛犼，曾在朱紫国化名赛太岁掳走金圣宫娘娘。" },
+            { q: "《西游记》的作者一般认为是哪位明代小说家？", opts: ["罗贯中","施耐庵","吴承恩","曹雪芹"], a: 2, explanation: "根据现有资料和研究，学界普遍认为明代小说家吴承恩是《西游记》的主要作者。" },
+            { q: "孙悟空是从哪里学得七十二变和筋斗云的？", opts: ["东海龙王","菩提祖师","如来佛祖","太上老君"], a: 1, explanation: "孙悟空漂洋过海，在西牛贺洲灵台方寸山斜月三星洞拜菩提祖师为师，学得了长生不老术、七十二变和筋斗云。" },
+            { q: "唐僧在哪条河收服了沙和尚？", opts: ["通天河","黑水河","流沙河","子母河"], a: 2, explanation: "沙和尚原是天庭卷帘大将，被贬后在流沙河兴风作浪，后被观音点化，在此等候唐僧，最终皈依。" },
+            { q: "在比丘国用小孩心肝做药引的是哪个妖怪？", opts: ["白鹿精（国丈）","金鼻白毛老鼠精","黄眉老祖","蝎子精"], a: 0, explanation: "比丘国的国丈原是寿星的坐骑白鹿精，他化作道士迷惑国王，要用一千一百一十一个小孩的心肝做药引。" },
+            { q: "《西游记》中“三打白骨精”发生在什么山？", opts: ["白虎岭","火焰山","五指山","花果山"], a: 0, explanation: "三打白骨精的故事发生在白虎岭。" },
+            { q: "观音菩萨给红孩儿戴上的禁锢叫什么？", opts: ["紧箍儿","金箍儿","禁箍儿","如意箍"], a: 2, explanation: "观音菩萨收服红孩儿时，用的是五个金箍中的禁箍儿，使其归顺成为善财童子。" },
+            { q: "唐僧取经团队中，谁在流沙河皈依？", opts: ["孙悟空","猪八戒","沙悟净","白龙马"], a: 2, explanation: "沙悟净（沙和尚）在流沙河被唐僧收服并皈依。" },
+            { q: "孙悟空在炼丹炉里练就的本领是？", opts: ["七十二变","火眼金睛","筋斗云","法天象地"], a: 1, explanation: "孙悟空被投入太上老君的八卦炉中，在巽位被风烟吹打，意外练成了火眼金睛。" },
+            { q: "朱紫国国王的病因与哪种妖怪有关？", opts: ["金毛犼","赛太岁","黄眉怪","百眼魔君"], a: 0, explanation: "朱紫国国王因金圣宫娘娘被妖怪赛太岁（金毛犼）掳走而忧思成疾。" },
+            { q: "“真假美猴王”中假扮孙悟空的是？", opts: ["通臂猿猴","六耳猕猴","赤尻马猴","灵明石猴"], a: 1, explanation: "假扮孙悟空的是六耳猕猴，神通与悟空一般无二，最终被如来佛祖辨认并由悟空打死。" },
+            { q: "唐僧的亲生父亲叫什么名字？", opts: ["陈光蕊","殷开山","刘洪","唐太宗"], a: 0, explanation: "唐僧（陈玄奘）的父亲是陈光蕊，母亲是殷开山的女儿殷温娇。" },
+            { q: "孙悟空大闹天宫时没有砸毁哪个建筑？", opts: ["蟠桃园","通明殿","凌霄殿","兜率宫"], a: 0, explanation: "孙悟空偷吃了蟠桃，但主要是捣乱和吃光，并未大规模砸毁蟠桃园本身。" },
+            { q: "金角大王用来装人的法宝葫芦最初盛放的是？", opts: ["仙丹","圣水","毒烟","三昧真火"], a: 1, explanation: "紫金红葫芦原是太上老君盛放圣水的器具。" },
+            { q: "唐僧取经全程用了多少年？", opts: ["14年","17年","19年","21年"], a: 0, explanation: "根据原著描述和历史记载，唐玄奘西行取经往返共用了约17年，但在小说中常被简化或记为14年到达西天。" },
+            { q: "火焰山的形成与孙悟空打翻什么有关？", opts: ["炼丹炉","琉璃盏","蟠桃宴","诛仙台"], a: 0, explanation: "孙悟空大闹天宫时踢倒了太上老君的八卦炉，几块带火的砖掉落凡间形成了火焰山。" },
+            { q: "黄风怪使用的三昧神风克制了谁的什么神通？", opts: ["孙悟空火眼金睛","如来佛五指山","观音菩萨甘露水","灵吉菩萨定风丹"], a: 0, explanation: "黄风怪的三昧神风吹得孙悟空火眼金睛疼痛难忍，几乎失明。" },
+            { q: "“女儿国”剧情中出现的特殊河水是？", opts: ["子母河","落胎泉","黑水河","流沙河"], a: 0, explanation: "西梁女国的子母河水，男子饮用后会怀孕。" },
+            { q: "沙僧原本在天庭担任的官职是？", opts: ["天蓬元帅","卷帘大将","弼马温","西海龙王"], a: 1, explanation: "沙和尚原是玉帝身边的卷帘大将，因在蟠桃会上失手打碎琉璃盏被贬下凡。" },
+            { q: "下列哪位神仙的坐骑没有下界为妖？", opts: ["太乙救苦天尊","寿星","文殊菩萨","赤脚大仙"], a: 3, explanation: "太乙救苦天尊的九灵元圣、寿星的白鹿、文殊的青狮都曾下界为妖，赤脚大仙没有明确的坐骑下凡记录。" },
+            { q: "玉华州三个王子分别模仿谁打造武器？", opts: ["金箍棒-钉耙-禅杖","钉耙-禅杖-金箍棒","禅杖-金箍棒-钉耙","金箍棒-禅杖-钉耙"], a: 0, explanation: "玉华州大王子模仿悟空打造金箍棒，二王子模仿八戒打造九齿钉耙，三王子模仿沙僧打造降妖宝杖。" },
+            { q: "孙悟空在五庄观推倒的树属于哪种灵根？", opts: ["人参果树","蟠桃树","菩提树","扶桑树"], a: 0, explanation: "五庄观的宝树是天地灵根人参果树，三千年一开花，三千年一结果，再三千年才得熟。" },
+            { q: "黄袍怪原本在天庭的职位是什么？", opts: ["奎木狼","天蓬元帅","卷帘大将","金身罗汉"], a: 0, explanation: "黄袍怪本是天庭二十八宿之一的奎木狼，因与披香殿玉女私通，下界到宝象国作乱，化名黄袍怪。" },
+            { q: "金角大王手中的法宝“紫金红葫芦”是谁的宝物？", opts: ["太上老君","观音菩萨","东海龙王","如来佛祖"], a: 0, explanation: "金角大王实为太上老君看护金炉的童子，下凡时偷走了老君的紫金红葫芦、羊脂玉净瓶等五件法宝。" },
+            { q: "朱紫国国王的皇后金圣宫娘娘被哪个妖怪掳走？", opts: ["赛太岁","黄眉老佛","大鹏金翅雕","九头虫"], a: 0, explanation: "观音菩萨的坐骑金毛犼（化名赛太岁）掳走金圣宫娘娘三年，其法宝紫金铃险些让孙悟空丧命。" },
+            { q: "五庄观镇元大仙的人参果树被救活时，观音菩萨用了什么？", opts: ["净瓶甘露","三光神水","杨柳枝","金丹砂"], a: 0, explanation: "孙悟空求助观音，菩萨用玉净瓶中的甘露水配合杨柳枝施法，使人参果树起死回生。" },
+            { q: "唐僧在取经前讲的小乘佛法是从谁那里学的？", opts: ["观音菩萨","法明长老","乌巢禅师","洪福寺僧众"], a: 1, explanation: "唐僧自幼在金山寺出家，由法明长老抚养教导。观音显化时指出小乘佛法不足，需取大乘真经。" },
+            { q: "乌鸡国国王被推入井中后，尸体由谁保存？", opts: ["井龙王","阎罗王","文殊菩萨","太上老君"], a: 0, explanation: "井龙王用定颜珠保住国王尸身三年不腐，后孙悟空向太上老君求得还魂丹救活国王。" },
+            { q: "如来佛祖给观音的三个箍儿中，紧箍儿给了孙悟空，另外两个用在谁身上？", opts: ["黑熊精和红孩儿","黄风怪和牛魔王","白骨精和蜘蛛精","无底洞鼠精和九头虫"], a: 0, explanation: "禁箍儿收了黑熊精做守山大神，金箍儿套住红孩儿成为善财童子。此三箍专降不服管束的妖魔。" },
+            { q: "观音菩萨的三个箍儿分别套在哪些妖怪身上？", opts: ["红孩儿、黑熊精、孙悟空","红孩儿、牛魔王、黄风怪","黑熊精、黄袍怪、白骨精","六耳猕猴、赛太岁、金角大王"], a: 0, explanation: "如来赐金紧禁三箍，金箍套红孩儿（善财童子），禁箍套黑熊精（守山大神），紧箍套孙悟空。" },
+            { q: "火焰山的形成与谁有关？", opts: ["太上老君","孙悟空","铁扇公主","牛魔王"], a: 1, explanation: "火焰山火源是孙悟空大闹天宫时踢翻太上老君八卦炉，掉落的火砖形成。" },
+            { q: "孙悟空的金箍棒重量是多少斤？", opts: ["一万三千五百","八千四百","九千八百","七千二百"], a: 0, explanation: "金箍棒重一万三千五百斤，原是定海神针铁。" },
+            { q: "乌鸡国国王的尸体被谁用定颜珠保存？", opts: ["井龙王","阎罗王","文殊菩萨","太上老君"], a: 0, explanation: "井龙王用定颜珠保尸身三年不腐，后悟空用还魂丹救活国王。" },
+            { q: "红孩儿的三昧真火最怕什么？", opts: ["观音净瓶水","四海龙王的雨","太上老君的法宝","如来袈裟"], a: 0, explanation: "观音用净瓶杨枝甘露熄灭三昧真火，收服红孩儿。" },
+            { q: "白骨精三次变化的顺序是什么？", opts: ["村姑、老妇、老翁","老妇、村姑、老翁","老翁、村姑、老妇","村姑、壮汉、老妇"], a: 0, explanation: "白骨精先变村姑送饭，再变老妇寻女，最后变老翁寻亲。" },
+            { q: "唐僧在金山寺出家时的师父是谁？", opts: ["法明长老","玄奘法师","观音菩萨","乌巢禅师"], a: 0, explanation: "唐僧由法明长老抚养长大，学习小乘佛法。" },
+            { q: "车迟国三位妖道分别是什么动物成精？", opts: ["虎、鹿、羊","狮、象、鹏","牛、蛇、鼠","狐、狼、豹"], a: 0, explanation: "虎力大仙是虎精，鹿力大仙是鹿精，羊力大仙是羚羊精。" },
+            { q: "朱紫国金圣宫娘娘被掳走时身穿什么宝物护体？", opts: ["五彩霞衣","紫金铃","棕衣","麒麟甲"], a: 1, explanation: "紫金铃是赛太岁的法宝，但金圣宫因棕衣护体使妖怪无法近身。" },
+            { q: "《西游记》开篇提到的四大部洲不包括哪个？", opts: ["东胜神洲","西牛贺洲","南赡部洲","中天竺洲"], a: 3, explanation: "四大部洲为东胜神洲、西牛贺洲、南赡部洲、北俱芦洲。" },
+            { q: "孙悟空在八卦炉中炼出了什么神通？", opts: ["火眼金睛","金刚不坏之身","三头六臂","七十二变"], a: 0, explanation: "太上老君用八卦炉炼悟空，反使其炼成火眼金睛。" },
+            { q: "唐僧取经出发时，唐太宗在通关文牒上盖的印章刻有何字？", opts: ["大唐皇帝之宝","通关之印","御弟圣僧","贞观之玺"], a: 0, explanation: "通关文牒需盖皇帝玉玺，印章为'大唐皇帝之宝'。" },
+            { q: "观音菩萨的坐骑金毛犼下界化名为什么？", opts: ["赛太岁","黄眉老佛","青牛精","九头虫"], a: 0, explanation: "金毛犼化名赛太岁，在朱紫国掳走金圣宫娘娘。" },
+            { q: "孙悟空在五行山下被压了多少年？", opts: ["五百年","六百年","四百三十年","三百余年"], a: 0, explanation: "从王莽篡汉到贞观年间，悟空被压约五百年。" },
+            { q: "“皇帝轮流做，明年到我家”出自谁之口？", opts: ["孙悟空","如来佛祖","玉皇大帝","牛魔王"], a: 0, explanation: "悟空大闹天宫时说出此句，体现反抗精神。" },
+            { q: "唐僧在取经路上念紧箍咒次数最多的是哪个事件？", opts: ["三打白骨精","真假美猴王","车迟国斗法","火焰山借扇"], a: 0, explanation: "三打白骨精时唐僧连续念咒，最终驱逐悟空。" },
+            { q: "猪八戒的九齿钉耙是谁打造的？", opts: ["太上老君","鲁班","玉帝赏赐","菩提祖师"], a: 0, explanation: "钉耙由太上老君用神冰铁锻造，玉帝赐予天蓬元帅。" },
+            { q: "“无底洞”的老鼠精自称是什么公主？", opts: ["地涌夫人","玉兔公主","百花羞公主","金圣宫公主"], a: 0, explanation: "金鼻白毛老鼠精自称地涌夫人，认李天王为义父。" },
+            { q: "《西游记》中“四圣试禅心”出现在第几回？", opts: ["第二十三回","第十二回","第五十四回","第三十七回"], a: 0, explanation: "黎山老母、观音等四圣化身试探师徒禅心。" },
+            { q: "唐僧在取经路上唯一主动想嫁的女性是谁？", opts: ["女儿国国王","玉兔精","蝎子精","老鼠精"], a: 0, explanation: "女儿国国王愿以国相托，唐僧曾动摇但最终拒绝。" },
+            { q: "金角大王和银角大王的干娘是什么妖怪？", opts: ["九尾狐","白骨精","蜘蛛精","蟒蛇精"], a: 0, explanation: "压龙洞九尾狐是金角兄弟的干娘，被悟空打死。" },
+            { q: "沙僧在流沙河吃了几个取经人？", opts: ["九个","七个","五个","三个"], a: 0, explanation: "沙僧项挂九个取经人骷髅，后成为唐僧弟子。" },
+            { q: "“黄风岭”的黄风怪本体是什么？", opts: ["貂鼠","老虎","狮子","黄蜂"], a: 0, explanation: "黄风怪是灵山脚下得道的貂鼠，被灵吉菩萨收服。" },
+            { q: "《西游记》中“弼马温”的官职掌管什么？", opts: ["天马","御花园","兵器库","蟠桃园"], a: 0, explanation: "弼马温即避马瘟，天庭管理天马的末等官职。" },
+            { q: "观音菩萨的净瓶杨柳枝有何作用？", opts: ["起死回生","降妖伏魔","呼风唤雨","变化万物"], a: 0, explanation: "观音用净瓶甘露救活人参果树。" },
+            { q: "唐僧取经团队中谁没有成佛？", opts: ["猪八戒","沙僧","白龙马","孙悟空"], a: 0, explanation: "八戒封净坛使者，沙僧封金身罗汉，白龙封八部天龙。" },
+            { q: "“三借芭蕉扇”发生在第几回？", opts: ["第五十九至六十一回","第四十回","第七十二回","第八十五回"], a: 0, explanation: "悟空三调芭蕉扇是火焰山章节的核心情节。" },
+            { q: "玉兔精下界冒充了哪个国家的公主？", opts: ["天竺国","宝象国","乌鸡国","车迟国"], a: 0, explanation: "玉兔精假冒天竺国公主，抛绣球招亲唐僧。" },
+            { q: "“小雷音寺”的妖怪是谁的童子？", opts: ["弥勒佛","太上老君","观音菩萨","文殊菩萨"], a: 0, explanation: "黄眉童儿偷弥勒金铙下界假扮如来。" },
+            { q: "《西游记》中谁用金刚琢收走众神兵器？", opts: ["青牛精","金角大王","黄袍怪","赛太岁"], a: 0, explanation: "太上老君坐骑青牛精用金刚琢套走诸神法宝。" },
+            { q: "“荆棘岭”的树精们与唐僧谈论什么？", opts: ["诗词","佛法","长生术","治国之道"], a: 0, explanation: "树精邀唐僧品茶吟诗，后被八戒捣毁。" },
+            { q: "唐僧在凌云渡脱去凡胎的方式是？", opts: ["乘无底船","架彩虹桥","飞越深渊","腾云驾雾"], a: 0, explanation: "接引佛祖用无底船助唐僧脱胎成佛。" },
+            { q: "“南山大王”是什么妖怪？", opts: ["豹子精","狮子精","老虎精","狼精"], a: 0, explanation: "南山大王是艾叶花皮豹子精，占据隐雾山。" },
+            { q: "《西游记》中“盂兰盆会”由谁举办？", opts: ["如来佛祖","玉皇大帝","观音菩萨","弥勒佛"], a: 0, explanation: "盂兰盆会是如来召开的佛会，观音领命寻取经人。" },
+            { q: "“通天河”的老鼋因何事求助唐僧？", opts: ["问寿数","求超度","寻宝物","报冤仇"], a: 0, explanation: "老鼋托唐僧问如来自己何时能脱壳成人身。" },
+            { q: "“七绝山”的妖怪是什么动物？", opts: ["蟒蛇","红鳞大蟒","巨蜥","蛟龙"], a: 1, explanation: "七绝山驼罗庄的红鳞大蟒被悟空钻腹而死。" },
+            { q: "“木仙庵”的四位树精不包括谁？", opts: ["松树","柏树","桧树","杏树"], a: 3, explanation: "四操为松、柏、桧、竹，杏仙是后来加入。" },
+            { q: "《西游记》中“金平府”的妖怪是谁？", opts: ["犀牛精","狮子精","大象精","鹿精"], a: 0, explanation: "三只犀牛精假冒佛爷偷酥合香油。" },
+            { q: "“灭法国”后来改名叫什么？", opts: ["钦法国","宝象国","车迟国","乌鸡国"], a: 0, explanation: "悟空剃度国王百官后，灭法国改钦法国。" },
+            { q: "“九头虫”最终被谁击败？", opts: ["二郎神","孙悟空","哮天犬","梅山兄弟"], a: 0, explanation: "二郎神助阵，九头虫被哮天犬咬下一头逃窜。" },
+            { q: "唐僧取经耗时多少年？", opts: ["十四年","十年","八年","十九年"], a: 0, explanation: "贞观十三年出发，贞观二十七年归，共十四年。" },
+            { q: "“盘丝洞”的蜘蛛精共有多少只？", opts: ["七只","五只","九只","三只"], a: 0, explanation: "七只蜘蛛精对应七情，被悟空尽数打死。" },
+            { q: "《西游记》中“金蝉子”是唐僧第几世？", opts: ["第十世","第一世","第五世","第七世"], a: 0, explanation: "金蝉子十世修行，前九世皆在流沙河被吃。" },
+            { q: "“九环锡杖”的功用是什么？", opts: ["驱邪护体","降妖伏魔","开启秘境","呼风唤雨"], a: 0, explanation: "唐太宗赐九环锡杖，可驱邪避毒护唐僧周全。" },
+            { q: "“狮驼岭三魔”中谁最厉害？", opts: ["大鹏金翅雕","青狮精","白象精","黄牙老象"], a: 0, explanation: "大鹏是如来舅舅，神通最强，扇翅九万里。" },
+            { q: "“无字真经”事件发生在何处？", opts: ["灵山藏经阁","凌云渡","通天河","大雷音寺"], a: 0, explanation: "迦叶阿傩传无字经，师徒折返后得真经。" },
+            { q: "“木叉”是谁的弟子？", opts: ["观音菩萨","文殊菩萨","普贤菩萨","地藏菩萨"], a: 0, explanation: "木叉又名惠岸行者，观音大弟子，助收服红孩儿。" },
+            { q: "《西游记》中“定风丹”是谁的法宝？", opts: ["灵吉菩萨","太上老君","如来佛祖","弥勒佛"], a: 0, explanation: "灵吉菩萨赠定风丹，助悟空抵御芭蕉扇狂风。" }
+            // ... (请继续补充剩余题目的 explanation)
+        ];
+        // 简单去重 (基于问题文本 q)
+        const uniqueQuestions = [];
+        const questionTexts = new Set();
+        for (const question of fullQuestionBank) {
+            if (!questionTexts.has(question.q)) {
+                questionTexts.add(question.q);
+                uniqueQuestions.push(question);
+            }
+        }
+        const finalQuestionBank = uniqueQuestions; // 使用去重后的题库
+        console.log(`题库合并去重后，共 ${finalQuestionBank.length} 题。`);
+
+
+        // 游戏状态
+        let currentGame = {
+            questions: [], current: 0, score: 0, timer: null, currentTime: 10, gameActive: false
+        };
+        let QUESTIONS_PER_GAME = 10;
+        const COUNTDOWN_SECONDS = 10;
+
+        // --- 工具函数 ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        function shuffleQuestionOptions(question) {
+            const options = [...question.opts];
+            const correctAnswerText = options[question.a];
+            shuffleArray(options);
+            const newCorrectIndex = options.indexOf(correctAnswerText);
+            if (newCorrectIndex === -1) {
+                 console.error("洗牌选项后找不到正确答案!", question, options);
+                 return { ...question, error: true };
+            }
+            // 保留原始解释，解释与答案顺序无关
+            return { q: question.q, opts: options, a: newCorrectIndex, explanation: question.explanation };
+        }
+        function playSound(id) {
+            const sound = document.getElementById(id);
+            if (sound) {
+                if (id === 'audio-countdown') {
+                    if (sound.paused) {
+                        sound.currentTime = 0;
+                        sound.play().catch(e => console.warn("倒计时音频播放失败:", e));
+                    }
+                } else {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.warn(`音频 ${id} 播放失败:`, e));
+                }
+            } else {
+                console.warn(`未找到 ID 为 "${id}" 的音频元素。`);
+            }
+        }
+
+        // 触发视觉特效覆盖层 (修改以包含理由)
+        function triggerEffect(type, explanation = null) {
+            effectLayer.className = 'effect-overlay'; // 重置类
+            let message = '';
+            let duration = 1500; // 默认正确提示时长
+            let explanationHTML = '';
+
+            // 如果是错误或超时，且有解释文本，则准备解释的 HTML
+            if ((type === 'wrong' || type === 'timeout') && explanation) {
+                explanationHTML = `<span class="explanation-popup">${explanation}</span>`;
+                duration = 3000; // 错误/超时提示持续3秒
+            } else if (type === 'wrong' || type === 'timeout') {
+                 // 如果没有解释文本，也显示3秒
+                 duration = 3000;
+            } else if (type === 'win' || type === 'lose') {
+                duration = 3000; // 胜利/失败提示持续3秒
+            }
+
+
+            switch(type) {
+                case 'correct': message = '✔ 太棒了！'; effectLayer.classList.add('effect-correct'); break;
+                case 'wrong': message = `✘ 哎呀！<br>${explanationHTML}`; effectLayer.classList.add('effect-wrong'); break; // 加入解释
+                case 'timeout': message = `⏳ 时间到！<br>${explanationHTML}`; effectLayer.classList.add('effect-timeout'); break; // 加入解释
+                case 'win': message = '🎉 闯关成功！ 🎉'; effectLayer.classList.add('effect-win'); break;
+                case 'lose': message = '🤔 加油！ 🤔'; effectLayer.classList.add('effect-lose'); break;
+            }
+
+            effectText.innerHTML = message; // 使用 innerHTML 来渲染包含 span 的解释
+            effectLayer.classList.add('show');
+
+            // 动画结束后隐藏特效
+            setTimeout(() => {
+                effectLayer.classList.remove('show');
+                // 过渡效果结束后清理类和内容
+                setTimeout(() => {
+                     effectLayer.className = 'effect-overlay';
+                     effectText.innerHTML = ''; // 清空内容
+                }, 500); // 延迟时间应大于 CSS transition 时间
+            }, duration);
+        }
+
+
+        // --- 结果提示语 ---
+        const resultMessages = {
+            perfect: ["哇！你就是传说中的取经人吧？全对！猴赛雷！👍", "厉害厉害！你对《西游记》了如指掌，简直是行走的藏经阁！📚", "满分通关！看来你深得西游真传，下次可以直接去西天取经了！😎"],
+            great: ["成绩斐然！看来你没少读《西游记》，离大师兄的火眼金睛不远啦！✨", "相当不错！这些妖魔鬼怪都难不倒你，继续努力，争取下次全对！💪", "高分选手！你对西游故事的了解令人佩服，知识储备很扎实嘛！🧠"],
+            good: ["还不错嘛！对《西游记》有一定了解，看来是唐僧的忠实粉丝！😊", "继续加油！答对了不少，说明基础不错，多看看细节就能更上一层楼！📖", "有进步空间！看来你和师父一样，需要多经历些磨难才能取得真经哦！😉"],
+            average: ["嗯……看来你和八戒一样，有时候会开小差哦？再熟悉熟悉故事吧！😅", "不要灰心！《西游记》博大精深，这次就当热身，下次再战！🚀", "知识点有点模糊哦？没关系，多读几遍原著，下次定能降妖除魔！👊"]
+        };
+        function getRandomResultMessage(score, totalQuestions) {
+            const percentage = totalQuestions > 0 ? (score / (totalQuestions * 10)) * 100 : 0;
+            let category;
+            if (percentage >= 95) category = 'perfect';
+            else if (percentage >= 70) category = 'great';
+            else if (percentage >= 40) category = 'good';
+            else category = 'average';
+            const messages = resultMessages[category];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        // --- 游戏逻辑函数 ---
+
+        // 移除 displayExplanation 函数，理由改在 triggerEffect 中处理
+
+        // 开始新游戏
+        function startNewGame() {
+             if (!finalQuestionBank || finalQuestionBank.length === 0) {
+                console.error("最终题库为空..."); alert("题库为空，无法开始游戏！");
+                startButton.disabled = true; startButton.textContent = '题库错误'; return;
+            }
+             QUESTIONS_PER_GAME = Math.min(10, finalQuestionBank.length);
+             if (QUESTIONS_PER_GAME < 1) {
+                 console.error("题库题目太少..."); alert("题库题目太少，无法开始游戏！"); return;
+             }
+            console.log(`开始新游戏，共 ${QUESTIONS_PER_GAME} 题...`);
+            currentGame.current = 0; currentGame.score = 0; currentGame.gameActive = true;
+            clearTimeout(currentGame.timer);
+            resultArea.style.display = 'none'; resultArea.classList.remove('visible');
+            quizArea.innerHTML = ''; quizArea.style.display = 'flex';
+
+            let shuffledBank = [...finalQuestionBank];
+            shuffleArray(shuffledBank);
+            currentGame.questions = shuffledBank.slice(0, QUESTIONS_PER_GAME)
+                                        .map(q => shuffleQuestionOptions(q))
+                                        .filter(q => !q.error);
+            if (currentGame.questions.length < QUESTIONS_PER_GAME) {
+                console.warn(`过滤无效题目后，本局实际题目数为 ${currentGame.questions.length}`);
+                QUESTIONS_PER_GAME = currentGame.questions.length;
+                if (QUESTIONS_PER_GAME === 0) {
+                     console.error("错误：有效题目不足..."); alert("加载题目时出错，请刷新页面重试！"); return;
+                }
+            }
+            console.log("本轮最终选中的有效题目:", currentGame.questions);
+            updateScore(); updateProgress(QUESTIONS_PER_GAME); showQuestion();
+        }
+
+        // 显示问题
+        function showQuestion() {
+            if (!currentGame.questions || currentGame.questions.length === 0 || currentGame.current >= currentGame.questions.length) {
+                console.log("题目显示条件不满足，结束游戏..."); endGame(); return;
+            }
+            const q = currentGame.questions[currentGame.current];
+            console.log(`显示第 ${currentGame.current + 1} 题:`, q);
+            const html = `
+                <div class="question-card">
+                    <div class="question">第${currentGame.current + 1}题：${q.q}</div>
+                    <div class="options">
+                        ${q.opts.map((opt, index) => `
+                            <button id="btn-${index}" onclick="checkAnswer(${index})">
+                                ${String.fromCharCode(65 + index)}. ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    </div>
+            `;
+            quizArea.innerHTML = html;
+            startCountdown();
+        }
+
+        // 检查答案 (修改调用 triggerEffect 传递理由)
+        function checkAnswer(selectedIndex) {
+            if (!currentGame.gameActive) return;
+            clearTimeout(currentGame.timer);
+            countdownElement.classList.remove('visible', 'warning', 'timesup');
+            if (currentGame.current >= currentGame.questions.length) {
+                console.error("检查答案时当前题目索引无效！"); endGame(); return;
+            }
+
+            const q = currentGame.questions[currentGame.current];
+            const buttons = quizArea.querySelectorAll('.options button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const questionCard = quizArea.querySelector('.question-card');
+            const selectedButton = document.getElementById(`btn-${selectedIndex}`);
+            const correctButton = document.getElementById(`btn-${q.a}`);
+
+            if (selectedIndex === q.a) {
+                currentGame.score += 10;
+                selectedButton.classList.add('correct');
+                if (questionCard) questionCard.classList.add('effect-pulse');
+                playSound('audio-correct');
+                triggerEffect('correct'); // 正确时不需要理由
+            } else {
+                selectedButton.classList.add('wrong');
+                if (correctButton) correctButton.classList.add('reveal-correct');
+                else console.error("未找到正确答案按钮！ Index:", q.a);
+                if (questionCard) questionCard.classList.add('effect-shake');
+                playSound('audio-wrong');
+                triggerEffect('wrong', q.explanation); // 传递理由给弹窗
+            }
+
+            updateScore();
+
+            currentGame.gameActive = false;
+            // 延迟时间应略大于弹窗显示时间，确保弹窗消失后再切换题目
+            setTimeout(() => {
+                currentGame.current++; currentGame.gameActive = true;
+                if (currentGame.current < QUESTIONS_PER_GAME) {
+                    updateProgress(QUESTIONS_PER_GAME); showQuestion();
+                } else { endGame(); }
+            }, 3100); // 略大于 3 秒
+        }
+
+        // 启动倒计时
+        function startCountdown() {
+            currentGame.currentTime = COUNTDOWN_SECONDS;
+            countdownElement.textContent = currentGame.currentTime;
+            countdownElement.classList.remove('warning', 'timesup');
+            countdownElement.classList.add('visible');
+            clearTimeout(currentGame.timer);
+            currentGame.timer = setInterval(() => {
+                if (!currentGame.gameActive) { clearTimeout(currentGame.timer); return; }
+                playSound('audio-countdown'); // 使用优化后的播放逻辑
+                currentGame.currentTime--;
+                countdownElement.textContent = currentGame.currentTime;
+                if (currentGame.currentTime <= 3 && currentGame.currentTime > 0) countdownElement.classList.add('warning');
+                else countdownElement.classList.remove('warning');
+                if (currentGame.currentTime <= 0) handleTimeout();
+            }, 1000);
+        }
+
+        // 处理超时 (修改调用 triggerEffect 传递理由)
+        function handleTimeout() {
+            if (!currentGame.gameActive) return;
+            if (currentGame.current >= currentGame.questions.length) {
+                console.error("处理超时时当前题目索引无效！"); endGame(); return;
+            }
+            clearTimeout(currentGame.timer);
+            currentGame.gameActive = false;
+            countdownElement.classList.add('timesup');
+            playSound('audio-timeout');
+
+            const q = currentGame.questions[currentGame.current];
+            triggerEffect('timeout', q.explanation); // 传递理由给弹窗
+
+            const buttons = quizArea.querySelectorAll('.options button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const correctButton = document.getElementById(`btn-${q.a}`);
+            if (correctButton) correctButton.classList.add('reveal-correct');
+            else console.error("超时处理中未找到正确答案按钮！ Index:", q.a);
+
+            const questionCard = quizArea.querySelector('.question-card');
+            if (questionCard) questionCard.classList.add('effect-shake');
+
+            // 延迟时间应略大于弹窗显示时间
+            setTimeout(() => {
+                countdownElement.classList.remove('visible', 'warning', 'timesup');
+                currentGame.current++; currentGame.gameActive = true;
+                if (currentGame.current < QUESTIONS_PER_GAME) {
+                    updateProgress(QUESTIONS_PER_GAME); showQuestion();
+                } else { endGame(); }
+            }, 3100); // 略大于 3 秒
+        }
+
+        // 结束游戏
+        function endGame() {
+            console.log("游戏结束。最终得分:", currentGame.score);
+            currentGame.gameActive = false; clearTimeout(currentGame.timer);
+            countdownElement.classList.remove('visible', 'warning', 'timesup');
+            quizArea.style.display = 'none'; resultArea.style.display = 'block';
+            resultArea.classList.add('visible');
+            const message = getRandomResultMessage(currentGame.score, QUESTIONS_PER_GAME);
+            resultTextElement.innerHTML = `${message}<br><br>你的最终得分是：<span style="color:var(--primary); font-weight:bold;">${currentGame.score}</span>`;
+            const totalQuestions = QUESTIONS_PER_GAME;
+            if (totalQuestions > 0 && currentGame.score >= totalQuestions * 10 * 0.6) { playSound('audio-win'); triggerEffect('win'); } // 统一胜利音效
+            else { playSound('audio-lose'); triggerEffect('lose'); }
+        }
+
+        // 更新进度
+        function updateProgress(totalQuestionsInGame) {
+             const currentQuestionNumber = Math.min(currentGame.current + 1, totalQuestionsInGame);
+             progressElement.textContent = `题目: ${currentQuestionNumber}/${totalQuestionsInGame}`;
+        }
+        // 更新分数
+        function updateScore() { scoreElement.textContent = `得分: ${currentGame.score}`; }
+        // 重新开始游戏
+        function restartGame() {
+            console.log("重新开始游戏..."); initialScreen.style.display = 'none';
+            quizScreen.style.display = 'flex'; startNewGame();
+        }
+
+        // --- 事件监听器 ---
+        startButton.addEventListener('click', () => {
+             if (!finalQuestionBank || finalQuestionBank.length === 0) { alert("题库错误，无法开始游戏！"); return; }
+            initialScreen.style.display = 'none'; quizScreen.style.display = 'flex';
+            startNewGame();
+        });
+
+        // --- 初始化 ---
+        if (!finalQuestionBank || finalQuestionBank.length === 0) {
+             console.error("错误：最终题库数据为空！"); startButton.textContent = '题库错误'; startButton.disabled = true;
+        } else { startButton.disabled = false; startButton.textContent = '点击开始挑战'; }
+
+    </script>
+
+</body>
+</html>

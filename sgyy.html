@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>⚔️《三国演义》闯关赛⚔️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* 三国主题颜色 */
+            --primary: #8B0000; /* 暗红 (主色) */
+            --secondary: #B8860B; /* 暗金 (次色) */
+            --correct: #556B2F; /* 暗橄榄绿 (正确) */
+            --wrong: #A52A2A; /* 棕红 (错误) */
+            --timeout: #CD853F; /* 秘鲁色/赭石色 (超时) */
+            --background-start: #F5F5DC; /* 米色 (背景始) */
+            --background-end: #D2B48C; /* 褐色 (背景末) */
+            --card-bg: rgba(245, 245, 220, 0.95); /* 米黄卡片背景 */
+            --text-dark: #3B241A; /* 深棕文字 */
+            --text-light: white;
+            --button-bg: #DEB887; /* 原木色按钮背景 */
+            --button-border: #8B4513; /* 鞍褐色按钮边框 */
+            --button-text: #5C2E1A; /* 深棕按钮文字 */
+            --button-hover-bg: #CDA67F; /* 按钮悬停 */
+            --explanation-text-popup: #ffffff; /* 弹窗理由文字 */
+            --primary-rgb: 139, 0, 0;
+            --secondary-rgb: 184, 134, 11;
+            --correct-rgb: 85, 107, 47;
+            --text-dark-rgb: 59, 36, 26;
+
+            /* 基础尺寸 */
+            --base-font-size: 24px; --base-padding: 20px;
+            --base-margin: 15px; --base-radius: 15px; /* 圆角减小，更硬朗 */
+
+            /* 字体栈 */
+            --font-fun: 'ZCOOL KuaiLe', cursive, 'Microsoft YaHei', sans-serif;
+            --font-formal: 'KaiTi', 'SimSun', serif, 'Microsoft YaHei'; /* 楷体/宋体 */
+            --font-elegant: 'Ma Shan Zheng', cursive;
+        }
+
+        body {
+            margin: 0; padding: 0;
+            background: radial-gradient(ellipse at center, var(--background-start) 0%, var(--background-end) 100%);
+            font-family: var(--font-fun); font-size: var(--base-font-size);
+            position: relative; overflow: hidden; display: grid; place-items: center;
+            min-height: 100vh; color: var(--text-dark);
+        }
+
+        .screen {
+            width: 100%; max-width: 1200px; height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: var(--base-padding);
+            box-sizing: border-box; text-align: center;
+        }
+
+        #initialScreen {
+            animation: fadeIn 1s ease-out;
+            justify-content: space-around; padding-top: 5vh; padding-bottom: 3vh;
+            /* 三国风格背景图 - CSS 模拟旧地图/水墨 */
+            background-color: #E8D8C0; /* 泛黄纸色 */
+            background-image:
+                /* 水墨纹理 */
+                linear-gradient(rgba(100, 80, 70, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(100, 80, 70, 0.1) 1px, transparent 1px),
+                /* 模拟卷轴边框 */
+                linear-gradient(to right, var(--text-dark) 5px, transparent 5px, transparent calc(100% - 5px), var(--text-dark) calc(100% - 5px)),
+                linear-gradient(to bottom, var(--text-dark) 5px, transparent 5px, transparent calc(100% - 5px), var(--text-dark) calc(100% - 5px)),
+                /* 底层渐变 */
+                radial-gradient(ellipse at center, #F5E8D0 0%, #D2B48C 100%);
+            background-size: 10px 10px, 10px 10px, 100% 100%, 100% 100%, 100% 100%;
+            background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+            border: 10px solid var(--text-dark); /* 卷轴边框 */
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+        }
+
+        #quizScreen {
+            display: none; justify-content: flex-start; padding-top: 30px;
+        }
+
+        /* 标题样式 */
+        h1 {
+            color: var(--primary); font-size: 3.5rem; margin: 0 0 var(--base-margin) 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2); line-height: 1.2;
+        }
+        #initialScreen h1 {
+             font-family: var(--font-formal); font-size: 5.5rem;
+             margin-bottom: calc(var(--base-margin) * 1); font-weight: bold;
+             letter-spacing: 0.1em; color: var(--primary); /* 暗红色 */
+             text-shadow: 1px 1px 2px rgba(255,255,255,0.5), -1px -1px 1px rgba(0,0,0,0.1);
+        }
+
+        #subtitle {
+            font-size: 1.5rem; margin: 0 0 calc(var(--base-margin) * 2) 0; opacity: 0.9;
+        }
+        #initialScreen #subtitle {
+             font-family: var(--font-formal); font-size: 2.5rem;
+             margin-bottom: calc(var(--base-margin) * 4); /* 增大与按钮间距 */
+             font-weight: bold; color: var(--text-dark);
+             text-shadow: 1px 1px 2px rgba(255,255,255,0.3);
+        }
+
+        /* 开始按钮样式 */
+        #startButton {
+            font-family: var(--font-fun); font-size: 3rem;
+            padding: calc(var(--base-padding) * 1.5) calc(var(--base-padding) * 3);
+            cursor: pointer;
+            background: linear-gradient(145deg, var(--primary), #A0522D); /* 暗红到赭石 */
+            color: var(--text-light); border: 3px solid var(--secondary); /* 金色边框 */
+            border-radius: var(--base-radius);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3), inset 0 -4px 6px rgba(0,0,0,0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: scale(1);
+        }
+        #startButton:hover {
+            background: linear-gradient(145deg, #A0522D, var(--primary));
+            transform: scale(1.05);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.35), inset 0 -4px 6px rgba(0,0,0,0.2);
+            border-color: #FFD700; /* 亮金色 */
+        }
+        #startButton:active {
+             transform: scale(0.98);
+             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2), inset 0 -2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* 状态区域 */
+        #statusArea {
+            display: flex; justify-content: space-around; align-items: center;
+            width: 100%; padding: var(--base-padding);
+            background: rgba(210, 180, 140, 0.8); /* 半透明褐色 */
+            border-radius: var(--base-radius); margin-bottom: var(--base-margin);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); flex-wrap: wrap;
+            gap: var(--base-margin); order: -1; border: 2px solid var(--button-border);
+        }
+        #progress, #score {
+            font-size: 1.8rem; font-weight: bold; color: var(--text-dark);
+            background-color: var(--button-bg);
+            padding: calc(var(--base-padding) * 0.6) calc(var(--base-padding) * 1.2);
+            border-radius: calc(var(--base-radius) * 0.6); border: 3px solid var(--secondary);
+            min-width: 100px; text-align: center; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        /* 倒计时样式优化 */
+        #countdown {
+            font-size: 2.2rem; font-weight: bold;
+            color: var(--primary); border-color: var(--primary);
+            min-width: 90px;
+            padding: calc(var(--base-padding) * 0.7) calc(var(--base-padding) * 1.3);
+            border-radius: calc(var(--base-radius) * 0.7); border: 4px solid var(--primary);
+            background-color: #fff; text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            transition: all 0.3s ease; opacity: 0; visibility: hidden; transform: scale(1);
+            animation: countdownPulse 1.5s infinite ease-in-out;
+        }
+        #countdown.visible { opacity: 1; visibility: visible; }
+        #countdown.warning {
+            color: var(--text-light); background-color: var(--timeout); border-color: var(--timeout);
+            animation: pulseWarningLarge 0.8s infinite, countdownPulse 1.5s infinite ease-in-out;
+        }
+        #countdown.timesup {
+            color: var(--text-light); background-color: var(--wrong); border-color: var(--wrong);
+            animation: shakeLarge 0.5s ease-in-out, countdownPulse 1.5s infinite ease-in-out;
+        }
+        @keyframes countdownPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+
+        /* 重置按钮 */
+        #restartButton {
+            font-family: var(--font-fun);
+            padding: calc(var(--base-padding) * 0.7) calc(var(--base-padding) * 1.5);
+            font-size: 1.5rem; border: 3px solid var(--button-border);
+            border-radius: calc(var(--base-radius) * 0.6); background: var(--button-bg);
+            color: var(--button-text); cursor: pointer; transition: all 0.2s ease-in-out;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+        }
+        #restartButton:hover {
+            background: var(--button-hover-bg); transform: translateY(-3px) scale(1.03);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+        }
+         #restartButton:active {
+             transform: translateY(1px) scale(0.98); box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+         }
+
+        /* 问题卡片区域 */
+        #quizArea {
+             width: 100%; flex-grow: 1; display: flex; align-items: center;
+             justify-content: center; padding: var(--base-padding);
+             box-sizing: border-box; overflow: hidden;
+        }
+
+        /* 问题卡片 */
+        .question-card {
+            background: var(--card-bg); border-radius: var(--base-radius);
+            padding: calc(var(--base-padding) * 1.5); box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transition: all 0.4s ease-in-out; width: 100%; max-width: 1000px;
+            border: 5px solid rgba(var(--primary-rgb, 139, 0, 0), 0.4); /* 暗红边框 */
+            opacity: 0; transform: translateY(30px);
+            animation: cardEnter 0.6s ease-out forwards;
+            max-height: 75vh; overflow-y: auto; display: flex; flex-direction: column;
+        }
+        .question-card.effect-shake { animation: shakeLarge 0.5s ease-in-out; }
+        .question-card.effect-pulse { animation: pulseCorrectLarge 0.6s ease-in-out; }
+
+        /* 问题文本 */
+        .question {
+            font-size: 2.2rem; margin-bottom: calc(var(--base-margin) * 1.5);
+            color: var(--text-dark); line-height: 1.6; font-weight: bold;
+        }
+
+        /* 选项区域 */
+        .options {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: calc(var(--base-margin) * 1.5); margin-top: calc(var(--base-margin) * 1.5);
+        }
+
+        /* 选项按钮 */
+        .options button {
+            font-family: var(--font-fun);
+            padding: calc(var(--base-padding) * 1.2); font-size: 1.8rem;
+            border: 4px solid var(--button-border); border-radius: calc(var(--base-radius) * 0.8);
+            background: linear-gradient(145deg, var(--button-bg), #E0C8A0); /* 调整渐变 */
+            color: var(--button-text); cursor: pointer; transition: all 0.2s ease-in-out;
+            text-align: left; overflow: hidden; white-space: normal; line-height: 1.5;
+            display: flex; align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1), inset 0 -3px 6px rgba(0,0,0,0.1);
+            transform: scale(1); position: relative;
+        }
+        .options button:hover:not(:disabled) {
+            background: linear-gradient(145deg, var(--button-hover-bg), #E8D0B0);
+            transform: scale(1.03);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15), inset 0 -3px 6px rgba(0,0,0,0.1);
+            border-color: var(--secondary); /* 金色边框 */
+        }
+        .options button:active:not(:disabled) {
+            transform: scale(0.97);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 -2px 4px rgba(0,0,0,0.1);
+        }
+        .options button.correct {
+            background: linear-gradient(145deg, var(--correct), #8FBC8F) !important; /* 暗绿渐变 */
+            color: var(--text-light) !important; border-color: transparent !important;
+            animation: bounceCorrectLarge 0.6s ease;
+            box-shadow: 0 6px 12px rgba(var(--correct-rgb, 85, 107, 47), 0.4);
+        }
+        .options button.wrong {
+            background: linear-gradient(145deg, var(--wrong), #BC8F8F) !important; /* 棕红渐变 */
+            color: var(--text-light) !important; border-color: transparent !important;
+            animation: shakeLarge 0.5s ease;
+            box-shadow: 0 6px 12px rgba(165, 42, 42, 0.4);
+        }
+        .options button.reveal-correct {
+            background: linear-gradient(145deg, var(--correct), #8FBC8F) !important;
+            color: var(--text-light) !important; border: 4px solid white !important;
+            opacity: 1 !important; transform: scale(1.05);
+            box-shadow: 0 0 15px 5px rgba(var(--correct-rgb, 85, 107, 47), 0.6);
+        }
+        .options button.reveal-correct::before {
+            content: '✔'; position: absolute; right: 15px; top: 50%;
+            transform: translateY(-50%); font-size: 1.5em; color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .options button:disabled {
+            cursor: not-allowed; opacity: 0.6; background: #E0E0E0 !important;
+            border-color: #BDBDBD !important; color: #757575 !important; box-shadow: none;
+        }
+         .options button:disabled::before { content: none; }
+
+        /* 结果区域 */
+        #resultArea {
+            text-align: center; padding: calc(var(--base-padding) * 2);
+            background: var(--card-bg); border-radius: var(--base-radius);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none;
+            width: 100%; max-width: 800px;
+            border: 5px solid rgba(var(--secondary-rgb, 184, 134, 11), 0.6); /* 暗金边框 */
+            animation: fadeInScaleUp 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        #resultArea.visible { display: block; }
+        #resultArea h2 {
+            color: var(--primary); font-size: 3rem; margin-bottom: var(--base-margin);
+            animation: textShine 2s infinite linear;
+        }
+        #resultArea p {
+            font-family: var(--font-elegant); font-size: 2.5rem;
+            margin-bottom: calc(var(--base-margin) * 2); line-height: 1.6;
+            color: var(--text-dark);
+        }
+
+        /* 特效层 */
+        .effect-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            background-color: rgba(0, 0, 0, 0.65); opacity: 0; visibility: hidden;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+            z-index: 1000; pointer-events: none; padding: 20px; box-sizing: border-box;
+        }
+        .effect-overlay.show { opacity: 1; visibility: visible; }
+        #effectText {
+            font-size: 8rem; font-weight: bold; color: white;
+            text-shadow: 5px 5px 10px rgba(0,0,0,0.5); transform: scale(0.5); opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease;
+            text-align: center; line-height: 1.3;
+        }
+        #effectText .explanation-popup {
+            display: block; font-size: 0.3em; font-weight: normal; margin-top: 15px;
+            color: var(--explanation-text-popup); text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+            line-height: 1.5; max-width: 80%; margin-left: auto; margin-right: auto;
+        }
+        .effect-overlay.show #effectText { transform: scale(1); opacity: 1; }
+        .effect-overlay.effect-correct #effectText { color: #9CCC65; animation: popAndFadeLarge 1.5s ease-out forwards; }
+        .effect-overlay.effect-wrong #effectText { color: #FFAAAA; animation: shakeHardFadeOutLarge 3s ease-out forwards; }
+        .effect-overlay.effect-timeout #effectText { color: #FFD180; animation: fadeInFadeOutLarge 3s ease-out forwards; }
+        .effect-overlay.effect-win { background: radial-gradient(circle, rgba(184, 134, 11, 0.7) 0%, rgba(255,255,255,0) 75%); animation: winShineLarge 3s ease-out forwards; }
+        .effect-overlay.effect-lose { background: radial-gradient(circle, rgba(100,100,100,0.6) 0%, rgba(0,0,0,0) 75%); animation: loseDimLarge 3s ease-out forwards; }
+
+        /* 页脚样式 */
+        .page-footer {
+            font-size: 0.8rem; color: rgba(var(--text-dark-rgb, 59, 36, 26), 0.8);
+            padding: calc(var(--base-padding) * 0.5) 0; width: 100%;
+            text-align: center; margin-top: auto; box-sizing: border-box;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.3);
+        }
+         #initialScreen .page-footer { margin-bottom: 2vh; }
+
+        /* --- 动画效果 --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeInScaleUp { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+        @keyframes shakeLarge { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-15px) rotate(-3deg); } 40% { transform: translateX(15px) rotate(3deg); } 60% { transform: translateX(-10px) rotate(-2deg); } 80% { transform: translateX(10px) rotate(2deg); } }
+        @keyframes pulseWarningLarge { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(var(--timeout-rgb, 205, 133, 63), 0.7); } 50% { transform: scale(1.15); box-shadow: 0 0 10px 15px rgba(var(--timeout-rgb, 205, 133, 63), 0); } }
+        @keyframes bounceCorrectLarge { 0%, 100% { transform: translateY(0) scale(1); } 40% { transform: translateY(-15px) scale(1.05); } 60% { transform: translateY(5px) scale(0.98); } }
+        @keyframes pulseCorrectLarge { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes popAndFadeLarge { 0% { transform: scale(0.5) rotate(-15deg); opacity: 0; } 30% { transform: scale(1.2) rotate(5deg); opacity: 1; } 80% { transform: scale(1.1) rotate(0deg); opacity: 1; } 100% { transform: scale(1.1) rotate(0deg); opacity: 0; } }
+        @keyframes shakeHardFadeOutLarge { 0% { transform: scale(0.8) translateX(0); opacity: 0; } 5% { transform: scale(1.1) translateX(-30px) rotate(-8deg); opacity: 1; } 10% { transform: scale(1.1) translateX(30px) rotate(8deg); opacity: 1; } 15% { transform: scale(1.1) translateX(-30px) rotate(-8deg); opacity: 1; } 20% { transform: scale(1.1) translateX(30px) rotate(8deg); opacity: 1; } 25%, 85% { transform: scale(1.1) translateX(0) rotate(0); opacity: 1; } 100% { transform: scale(1.1); opacity: 0; } }
+        @keyframes fadeInFadeOutLarge { 0% { opacity: 0; transform: scale(0.9)} 10% { opacity: 1; transform: scale(1.1)} 90% { opacity: 1; transform: scale(1.05)} 100% { opacity: 0; transform: scale(1)} }
+        @keyframes winShineLarge { 0% { background: radial-gradient(circle, rgba(184, 134, 11, 0.6) 0%, rgba(255,255,255,0) 80%); } 50% { background: radial-gradient(circle, rgba(184, 134, 11, 0.9) 40%, rgba(255,255,255,0) 85%); } 100% { background: radial-gradient(circle, rgba(184, 134, 11, 0) 80%, rgba(255,255,255,0) 100%); } }
+        @keyframes loseDimLarge { 0% { background: radial-gradient(circle, rgba(100,100,100,0.6) 0%, rgba(0,0,0,0) 80%); } 50% { background: radial-gradient(circle, rgba(60,60,60,0.8) 40%, rgba(0,0,0,0) 85%); } 100% { background: radial-gradient(circle, rgba(0,0,0,0) 80%, rgba(0,0,0,0) 100%); } }
+        @keyframes textShine { 0% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--secondary), 0 0 40px var(--secondary); } 50% { text-shadow: 0 0 15px #fff, 0 0 25px #fff, 0 0 35px var(--secondary), 0 0 45px var(--secondary), 0 0 55px var(--secondary); } 100% { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--secondary), 0 0 40px var(--secondary); } }
+
+        /* 响应式调整 */
+        @media (max-width: 900px) {
+             :root { --base-font-size: 18px; }
+             #initialScreen h1 { font-size: 4rem; }
+             #initialScreen #subtitle { font-size: 1.8rem; }
+             h1 { font-size: 2.8rem; }
+             #startButton { font-size: 2.2rem; padding: calc(var(--base-padding) * 1.2) calc(var(--base-padding) * 2.5); }
+             #progress, #score { font-size: 1.4rem; }
+             #countdown { font-size: 1.8rem; min-width: 80px; padding: calc(var(--base-padding) * 0.6) calc(var(--base-padding) * 1.1); }
+             #restartButton { font-size: 1.2rem; }
+             .question { font-size: 1.8rem; }
+             .options { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--base-margin); }
+             .options button { font-size: 1.5rem; padding: var(--base-padding); }
+             #resultArea h2 { font-size: 2.5rem; }
+             #resultArea p { font-size: 1.8rem; }
+             #effectText { font-size: 6rem; }
+             #effectText .explanation-popup { font-size: 0.3em; }
+             .page-footer { font-size: 0.7rem; }
+        }
+        @media (max-width: 600px) {
+            :root { --base-font-size: 16px; }
+             #initialScreen h1 { font-size: 3rem; }
+             #initialScreen #subtitle { font-size: 1.5rem; }
+            h1 { font-size: 2.2rem; }
+             #subtitle { font-size: 1.2rem; }
+            #startButton { font-size: 1.8rem; padding: var(--base-padding) calc(var(--base-padding) * 2); }
+            #statusArea { flex-direction: column; align-items: stretch; gap: 5px; }
+            #progress, #score { font-size: 1.2rem; }
+            #countdown { font-size: 1.6rem; min-width: 70px; padding: calc(var(--base-padding) * 0.5) var(--base-padding); }
+            #restartButton { font-size: 1rem; text-align: center; padding: calc(var(--base-padding) * 0.6); }
+            .question { font-size: 1.5rem; }
+            .options { grid-template-columns: 1fr; gap: calc(var(--base-margin) * 0.8); }
+            .options button { font-size: 1.3rem; padding: calc(var(--base-padding) * 0.8); }
+             #resultArea h2 { font-size: 2rem; }
+             #resultArea p { font-size: 1.6rem; }
+             #effectText { font-size: 4rem; }
+             #effectText .explanation-popup { font-size: 0.3em; }
+             .page-footer { font-size: 0.6rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <svg width="0" height="0" style="position:absolute;">
+        <defs>
+            <linearGradient id="hoopGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" style="stop-color: #FFD700; stop-opacity: 1" /> <stop offset="50%" style="stop-color: #FFB300; stop-opacity: 1" /> <stop offset="100%" style="stop-color: #FFD700; stop-opacity: 1" /> </linearGradient>
+        </defs>
+    </svg>
+
+    <div id="initialScreen" class="screen">
+        <h1>⚔️《三国演义》闯关赛⚔️</h1>
+        <p id="subtitle">群雄逐鹿，智勇争先</p>
+        <button id="startButton">开始挑战</button>
+        <footer class="page-footer">制作：管浩然 V1.1 (三国版-扩充题库)</footer>
+    </div>
+
+    <div id="quizScreen" class="screen">
+        <div id="statusArea">
+            <span id="progress">题目: 1/10</span>
+            <span id="score">得分: 0</span>
+            <span id="countdown">10</span>
+            <button id="restartButton" onclick="restartGame()">重新挑战</button>
+        </div>
+        <div id="quizArea"></div>
+        <div id="resultArea">
+            <h2>挑战完成！</h2>
+            <p id="resultText"></p>
+        </div>
+        <footer class="page-footer">制作：管浩然 V1.1 (三国版-扩充题库)</footer>
+    </div>
+
+    <div id="effectLayer" class="effect-overlay">
+        <span id="effectText"></span>
+    </div>
+
+    <audio id="audio-correct" src="sounds/correct.mp3" preload="auto"></audio>
+    <audio id="audio-wrong" src="sounds/wrong.mp3" preload="auto"></audio>
+    <audio id="audio-countdown" src="sounds/tick.mp3" preload="auto"></audio>
+    <audio id="audio-timeout" src="sounds/timeout.mp3" preload="auto"></audio>
+    <audio id="audio-win" src="sounds/win_mid.mp3" preload="auto"></audio> 
+    <audio id="audio-lose" src="sounds/lose.mp3" preload="auto"></audio>  
+
+
+    <script>
+        // DOM 元素获取
+        const initialScreen = document.getElementById('initialScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const startButton = document.getElementById('startButton');
+        const quizArea = document.getElementById('quizArea');
+        const resultArea = document.getElementById('resultArea');
+        const resultTextElement = document.getElementById('resultText');
+        const progressElement = document.getElementById('progress');
+        const scoreElement = document.getElementById('score');
+        const countdownElement = document.getElementById('countdown');
+        const effectLayer = document.getElementById('effectLayer');
+        const effectText = document.getElementById('effectText');
+        const restartButton = document.getElementById('restartButton');
+        const countdownAudio = document.getElementById('audio-countdown');
+
+        // --- 三国演义题库 (合并 V1.0 示例 + 用户提供的新题) ---
+        const combinedQuestionBank = [
+            // V1.0 示例题目
+            { q: "“三英战吕布”发生在哪场战役中？", opts: ["虎牢关之战", "官渡之战", "赤壁之战", "界桥之战"], a: 0, explanation: "十八路诸侯讨伐董卓时，刘备、关羽、张飞三兄弟在虎牢关前合力大战吕布。" },
+            { q: "“煮酒论英雄”时，曹操认为谁是当时的英雄？", opts: ["刘备", "袁绍", "孙策", "他自己"], a: 0, explanation: "曹操邀请刘备饮酒，席间评论天下英雄，最终指出“今天下英雄，惟使君与操耳！”" },
+            { q: "“刮骨疗毒”的故事主角是哪位名将？", opts: ["关羽", "张飞", "赵云", "马超"], a: 0, explanation: "关羽手臂中毒箭，华佗为其刮骨疗毒，关羽却能饮酒下棋，面不改色，展现其超凡的毅力。" },
+            { q: "诸葛亮“草船借箭”利用了什么天气条件？", opts: ["大雾", "大雨", "大风", "晴天"], a: 0, explanation: "诸葛亮算准江上将有大雾，利用浓雾掩护，派遣草船诱使曹军射箭，成功借得十万支箭。" },
+            { q: "“七擒孟获”是诸葛亮平定哪个地方的战役？", opts: ["南中", "西蜀", "荆州", "汉中"], a: 0, explanation: "为彻底收服南方少数民族的人心，诸葛亮七次擒获南中首领孟获，又七次将其释放，最终使其心悦诚服。" },
+            { q: "“空城计”中，诸葛亮在哪里吓退了司马懿的大军？", opts: ["西城", "街亭", "陈仓", "祁山"], a: 0, explanation: "街亭失守后，诸葛亮在兵力空虚的西城，大开城门，令老军扫地，自己登楼抚琴，司马懿疑有埋伏而退兵。" },
+            { q: "“过五关斩六将”的是哪位蜀汉名将？", opts: ["关羽", "张飞", "赵云", "黄忠"], a: 0, explanation: "关羽离开曹操，护送两位嫂嫂寻找刘备，途中经过五个关隘，斩杀了阻拦的六员曹将。" },
+            { q: "“单骑救主”在长坂坡救出阿斗的是谁？", opts: ["赵云", "张飞", "关羽", "马超"], a: 0, explanation: "在长坂坡之战中，赵云单枪匹马，在曹操大军中七进七出，救出了后主刘禅（阿斗）。" },
+            { q: "赤壁之战中，谁献策使用了“火攻”？", opts: ["周瑜与诸葛亮", "庞统", "黄盖", "鲁肃"], a: 0, explanation: "周瑜和诸葛亮不谋而合都想到了火攻，庞统献连环计，黄盖行苦肉计诈降，最终火烧曹操战船。" },
+            { q: "“三顾茅庐”请的是谁出山？", opts: ["诸葛亮", "庞统", "徐庶", "司马徽"], a: 0, explanation: "刘备为请诸葛亮出山辅佐，三次亲自到隆中拜访其草庐，最终成功请出卧龙。" },
+            { q: "“辕门射戟”是谁为调解刘备与纪灵的矛盾而使用的计策？", opts: ["吕布", "曹操", "袁术", "关羽"], a: 0, explanation: "吕布为防止袁术吞并刘备，在辕门外百步设戟，约定若射中戟上小枝，双方罢兵，结果一箭射中，成功调解。" },
+            { q: "“败走麦城”最终导致哪位名将阵亡？", opts: ["关羽", "张飞", "黄忠", "马超"], a: 0, explanation: "关羽大意失荆州后，败走麦城，最终被东吴擒获并杀害。" },
+            { q: "“水淹七军”是关羽在哪场战役中取得的辉煌胜利？", opts: ["襄樊之战", "赤壁之战", "合肥之战", "汉中之战"], a: 0, explanation: "关羽北伐攻打樊城时，利用汉水暴涨，水淹曹操派来增援的于禁七军，威震华夏。" },
+            { q: "“桃园三结义”的三位主角是刘备、关羽和谁？", opts: ["张飞", "赵云", "马超", "黄忠"], a: 0, explanation: "刘备、关羽、张飞在涿县张飞庄后的桃园结拜为异姓兄弟，誓同生死。" },
+            { q: "《三国演义》的作者一般认为是？", opts: ["罗贯中", "施耐庵", "吴承恩", "曹雪芹"], a: 0, explanation: "《三国演义》是中国古典四大名著之一，普遍认为其作者是元末明初的小说家罗贯中。" },
+            // 用户提供的新题目
+            { q: "“桃园三结义”的三位人物分别使用什么兵器？", opts: ["双股剑、青龙刀、蛇矛","方天画戟、双锏、长枪","丈八矛、铁鞭、长弓","剑、戟、斧"], a: 0, explanation: "刘备使双股剑，关羽用青龙偃月刀，张飞持丈八蛇矛，三人于桃园结义共谋大业。" },
+            { q: "“万事俱备，只欠东风”出自哪场战役？", opts: ["赤壁之战","官渡之战","夷陵之战","合肥之战"], a: 0, explanation: "诸葛亮借东风助火攻，周瑜感叹计策完备仅缺天时。" },
+            { q: "“七擒孟获”体现了哪种策略思想？", opts: ["攻心为上","火攻奇袭","声东击西","离间分化"], a: 0, explanation: "诸葛亮七次擒拿孟获使其心服，强调以德服人而非武力镇压。" },
+            { q: "“草船借箭”的核心智慧是？", opts: ["利用天时与虚实","强攻硬取","借刀杀人","诱敌深入"], a: 0, explanation: "诸葛亮借大雾诱敌放箭，十万支箭轻松得手，展现虚实结合之谋。" },
+            { q: "“望梅止渴”的典故关联哪位人物？", opts: ["曹操","刘备","孙权","诸葛亮"], a: 0, explanation: "曹操行军途中谎称前方有梅林，激励士兵坚持前行。" },
+            { q: "“乐不思蜀”讽刺的是哪位君主？", opts: ["刘禅","孙皓","曹奂","司马昭"], a: 0, explanation: "刘禅投降后沉迷享乐，称‘此间乐，不思蜀’。" },
+            { q: "“空城计”中诸葛亮用何物吓退司马懿？", opts: ["抚琴与城门大开","伏兵暗藏","火攻诱敌","假传圣旨"], a: 0, explanation: "诸葛亮于城头抚琴，司马懿疑有埋伏而退兵。" },
+            { q: "“过五关斩六将”与哪位人物相关？", opts: ["关羽","赵云","张飞","马超"], a: 0, explanation: "关羽护送刘备妻室，过五关斩曹军六将以示忠义。" },
+            { q: "“刮骨疗毒”展现关羽的何种特质？", opts: ["无畏坚韧","谋略过人","刚愎自用","暴躁冲动"], a: 0, explanation: "关羽刮骨时面不改色，与马良下棋以分散疼痛。" },
+            { q: "“火烧连营”是谁的战术？", opts: ["陆逊","周瑜","诸葛亮","司马懿"], a: 0, explanation: "陆逊以火攻破刘备七百里连营，终结夷陵之战。" },
+            { q: "“三顾茅庐”体现刘备的何种品质？", opts: ["求贤若渴","优柔寡断","虚伪作态","急功近利"], a: 0, explanation: "刘备三次拜访诸葛亮，以诚意打动其出山辅佐。" },
+            { q: "“连环计”在赤壁之战中的作用是？", opts: ["锁战船助火攻","诱敌深入","离间敌军","断敌粮草"], a: 0, explanation: "庞统献计将曹军战船连成一片，助周瑜火攻成功。" },
+            { q: "“挟天子以令诸侯”是谁的政治策略？", opts: ["曹操","袁绍","刘备","孙权"], a: 0, explanation: "曹操迎汉献帝至许昌，借皇权号令天下诸侯。" },
+            { q: "“苦肉计”中谁主动受罚？", opts: ["黄盖","周瑜","鲁肃","诸葛亮"], a: 0, explanation: "黄盖假意投降曹操，被周瑜责打以骗取信任。" },
+            { q: "“单骑救主”指赵云救何人？", opts: ["阿斗","刘备","诸葛亮","糜夫人"], a: 0, explanation: "赵云长坂坡七进七出，救出刘备之子刘禅。" },
+            { q: "“宝刀不老”形容哪位老将？", opts: ["黄忠","赵云","严颜","王平"], a: 0, explanation: "黄忠年过六旬仍能开宝雕弓，箭术震慑敌军。" },
+            { q: "“辕门射戟”化解了哪方争斗？", opts: ["刘备与纪灵","孙权与曹操","袁绍与公孙瓒","吕布与董卓"], a: 0, explanation: "吕布射中画戟小枝，威慑双方罢兵言和。" },
+            { q: "“暗度陈仓”与哪位历史人物相关？", opts: ["韩信","诸葛亮","司马懿","周瑜"], a: 0, explanation: "韩信明修栈道暗度陈仓，后成兵法经典。（此为历史典故，三国演义中常用类似计策）" },
+            { q: "“借刀杀人”计除掉了谁？", opts: ["吕布","关羽","袁绍","韩遂"], a: 0, explanation: "曹操借刘备之手除吕布，避免背负杀将恶名。" },
+            { q: "“反间计”使曹操误杀哪两位将领？", opts: ["蔡瑁、张允","于禁、庞德","夏侯惇、曹仁","李典、乐进"], a: 0, explanation: "周瑜伪造书信，曹操疑蔡瑁、张允通敌而杀之。" },
+            { q: "“笑里藏刀”与哪场政治阴谋相关？", opts: ["逢纪取冀州","董卓乱政","曹丕篡汉","孙权夺荆州"], a: 0, explanation: "逢纪假意联公孙瓒，实则谋取韩馥冀州之地。" },
+            { q: "“既生瑜，何生亮”是谁的临终感叹？", opts: ["周瑜","曹操","庞统","司马懿"], a: 0, explanation: "周瑜因嫉妒诸葛亮才华，三次斗智失败后含恨而终。" },
+            { q: "关羽使用的著名兵器是什么？", opts: ["青龙偃月刀","方天画戟","丈八蛇矛","双股剑"], a: 0, explanation: "关羽手持青龙偃月刀，斩颜良诛文丑，被尊为‘武圣’。" },
+            { q: "张飞在长坂桥吓退曹军时大喊什么？", opts: ["我乃燕人张翼德！","谁敢与我一战？","燕人张飞在此！","尔等速速退去！"], a: 0, explanation: "张飞怒吼‘我乃燕人张翼德！谁敢来决死战？’吓得夏侯杰坠马而亡。" },
+            { q: "吕布的坐骑叫什么名字？", opts: ["赤兔马","的卢马","绝影","爪黄飞电"], a: 0, explanation: "吕布骑赤兔马纵横战场，后此马归关羽所有。" },
+            { q: "诸葛亮用哪场火攻打败曹操？", opts: ["火烧赤壁","火烧新野","火烧博望坡","火烧连营"], a: 0, explanation: "赤壁之战中，诸葛亮借东风助周瑜火烧曹军连环船。" },
+            { q: "刘备为关羽报仇发动的战役是？", opts: ["夷陵之战","汉中之战","官渡之战","合肥之战"], a: 0, explanation: "刘备伐吴被陆逊火烧连营，史称夷陵之战。" },
+            { q: "“三个臭皮匠”下一句是什么？", opts: ["顶个诸葛亮","赛过曹操","不如张飞","胜过周瑜"], a: 0, explanation: "比喻集体智慧胜过个人才智。" },
+            { q: "“周瑜打黄盖”的完整歇后语是？", opts: ["一个愿打，一个愿挨","两败俱伤","假戏真做","苦肉成计"], a: 0, explanation: "黄盖假装挨打骗取曹操信任，实施火攻。" },
+            { q: "“张飞穿针”下一句是什么？", opts: ["粗中有细","有勇无谋","大眼瞪小眼","力大无穷"], a: 0, explanation: "形容张飞看似粗犷，实则也有细心一面。" },
+            { q: "刘备初见诸葛亮去了几次才见到？", opts: ["三次","两次","一次","四次"], a: 0, explanation: "三顾茅庐体现刘备求贤若渴，终请出诸葛亮。" },
+            { q: "谁在长坂坡救出刘备的儿子阿斗？", opts: ["赵云","张飞","关羽","黄忠"], a: 0, explanation: "赵云七进七出曹军，怀抱阿斗杀出重围。" },
+            { q: "三国最后被哪个国家统一？", opts: ["晋国","魏国","吴国","蜀国"], a: 0, explanation: "司马炎建立晋朝，先后灭蜀、吴，结束三国鼎立。" },
+            { q: "诸葛亮病逝于何处？", opts: ["五丈原","白帝城","成都","赤壁"], a: 0, explanation: "诸葛亮第六次北伐时病逝五丈原，遗命撤军。" },
+            { q: "刘备与诸葛亮的关系是？", opts: ["君臣与师徒","兄弟","父子","仇敌"], a: 0, explanation: "刘备三顾茅庐请诸葛亮出山，诸葛亮鞠躬尽瘁辅佐蜀汉。" },
+            { q: "孙权与孙策是什么关系？", opts: ["兄弟","父子","叔侄","君臣"], a: 0, explanation: "孙权继承兄长孙策之位，成为东吴之主。" },
+            { q: "曹操的哪个儿子擅长作诗？", opts: ["曹植","曹丕","曹冲","曹彰"], a: 0, explanation: "曹植七步成诗，被誉为‘建安之杰’。" },
+            { q: "“宁教我负天下人，休教天下人负我”是谁的名言？", opts: ["曹操","董卓","吕布","袁绍"], a: 0, explanation: "曹操误杀吕伯奢全家后表明极端利己主义。" },
+            { q: "“火烧赤壁”战役中，谁献策诈降曹操？", opts: ["黄盖","周瑜","鲁肃","庞统"], a: 0, explanation: "黄盖献苦肉计，假意投降以引火船接近曹军连环战船。" },
+            { q: "“空城计”是诸葛亮为吓退哪位将领所设？", opts: ["司马懿","张郃","曹真","夏侯惇"], a: 0, explanation: "诸葛亮在西城抚琴退敌，司马懿疑有埋伏撤兵。" },
+            { q: "“六出祁山”是诸葛亮为伐哪个国家？", opts: ["魏国","吴国","蜀国","东夷"], a: 0, explanation: "诸葛亮六次北伐曹魏，最终病逝五丈原。" },
+            { q: "“官渡之战”的主要指挥者是谁？", opts: ["曹操与袁绍","刘备与孙权","吕布与董卓","诸葛亮与司马懿"], a: 0, explanation: "曹操以少胜多击败袁绍，奠定统一北方的基础。" },
+            { q: "被称为“卧龙先生”的是谁？", opts: ["诸葛亮","庞统","徐庶","司马懿"], a: 0, explanation: "诸葛亮隐居南阳时人称“卧龙”，刘备三顾茅庐请他出山。" },
+            { q: "“一身是胆”形容哪位猛将？", opts: ["赵云","张飞","马超","黄忠"], a: 0, explanation: "赵云长坂坡单骑救主，刘备赞他“子龙一身都是胆”！" },
+            { q: "谁被称为“凤雏”？", opts: ["庞统","周瑜","陆逊","郭嘉"], a: 0, explanation: "庞统与诸葛亮齐名，曾献计刘备夺取西川。" },
+            { q: "“美髯公”指的是谁？", opts: ["关羽","曹操","孙权","吕布"], a: 0, explanation: "关羽胡须又长又美，被尊称为“美髯公”。" },
+            { q: "张飞的武器是什么？", opts: ["丈八蛇矛","青龙偃月刀","方天画戟","双股剑"], a: 0, explanation: "张飞的丈八蛇矛威震长坂桥，吓得曹军不敢追击。" },
+            { q: "“的卢马”曾救过谁的性命？", opts: ["刘备","曹操","孙权","刘表"], a: 0, explanation: "刘备骑的卢马跳过檀溪，逃脱追兵。" },
+            { q: "黄忠的武器是什么？", opts: ["宝雕弓","方天画戟","丈八蛇矛","双股剑"], a: 0, explanation: "黄忠年过六旬仍能开宝雕弓，箭术超群。" },
+            { q: "孙权的坐骑叫什么？", opts: ["快航","赤兔","绝影","的卢"], a: 0, explanation: "孙权骑“快航”马，曾跃过断桥脱险。" },
+            { q: "“水淹七军”是哪位将领的战术？", opts: ["关羽","张飞","赵云","黄忠"], a: 0, explanation: "关羽利用汉水暴涨，淹败曹军于禁、庞德。" },
+            { q: "“扶不起的阿斗”指的是谁？", opts: ["刘禅","刘协","刘表","刘璋"], a: 0, explanation: "刘禅昏庸无能，即使有诸葛亮辅佐也难以成事。" },
+            { q: "关羽败走麦城后被谁所杀？", opts: ["孙权","曹操","吕蒙","陆逊"], a: 0, explanation: "关羽被东吴将领潘璋部将马忠擒获，孙权下令处斩。" },
+            { q: "孙权的父亲是谁？", opts: ["孙坚","孙策","孙和","孙皓"], a: 0, explanation: "孙权是孙坚次子，继承兄长孙策之位成为东吴之主。" },
+            { q: "“五虎上将”不包括谁？", opts: ["姜维","关羽","张飞","赵云"], a: 0, explanation: "五虎上将是关羽、张飞、赵云、马超、黄忠，姜维是后期将领。" },
+            { q: "曹操的哪个儿子称象出名？", opts: ["曹冲","曹丕","曹植","曹彰"], a: 0, explanation: "曹冲七岁用船称象，展现惊人智慧。" },
+            { q: "刘备的军师中谁擅长“连环计”？", opts: ["庞统","诸葛亮","徐庶","法正"], a: 0, explanation: "庞统献计曹操将战船连成一片，助周瑜火攻成功。" },
+            { q: "《三国演义》的作者是谁？", opts: ["罗贯中","施耐庵","吴承恩","曹雪芹"], a: 0, explanation: "罗贯中是元末明初小说家，创作了这部经典名著。" },
+            { q: "“东风不与周郎便”下一句是？", opts: ["铜雀春深锁二乔","铁马冰河入梦来","卷土重来未可知","隔江犹唱后庭花"], a: 0, explanation: "出自杜牧《赤壁》，感叹东风成就了周瑜的火攻。" },
+            { q: "“三顾频烦天下计”称赞的是谁？", opts: ["诸葛亮","刘备","关羽","曹操"], a: 0, explanation: "杜甫诗句赞扬刘备三顾茅庐请诸葛亮定天下大计。" },
+            { q: "“出师未捷身先死”指哪位人物？", opts: ["诸葛亮","周瑜","庞统","姜维"], a: 0, explanation: "诸葛亮北伐未成而病逝，留下千古遗憾。" },
+            { q: "“青山依旧在，几度夕阳红”出自哪里？", opts: ["《三国演义》开篇词","《水浒传》开篇词","《临江仙》","《念奴娇》"], a: 0, explanation: "杨慎《临江仙》是《三国演义》开篇词，感叹历史变迁。" },
+            { q: "“五虎上将”中最早阵亡的是谁？", opts: ["关羽","张飞","赵云","黄忠"], a: 0, explanation: "关羽败走麦城被东吴所杀，成为五虎中首位殉国者。" },
+            { q: "“木牛流马”是谁发明的运输工具？", opts: ["诸葛亮","鲁班","马钧","黄承彦"], a: 0, explanation: "诸葛亮为北伐设计木牛流马，解决粮草运输难题。" },
+            { q: "“三国”最终被谁统一？", opts: ["司马炎","曹操","刘备","孙权"], a: 0, explanation: "司马炎篡魏建晋，先后灭蜀、吴，终结三国鼎立。" },
+            { q: "“吕布使用的武器是？", opts: ["方天画戟","青龙偃月刀","双股宝剑","狼牙棒"], a: 0, explanation: "吕布以方天画戟为兵器，战力冠绝群雄。" },
+            { q: "“七步成诗”的典故涉及哪两位人物？", opts: ["曹丕与曹植","曹操与曹冲","刘备与刘禅","孙权与孙策"], a: 0, explanation: "曹丕逼曹植七步内作诗，曹植以《七步诗》讽喻兄弟相残。" },
+            { q: "“白帝城托孤”中刘备托付的大臣是？", opts: ["诸葛亮与李严","赵云与关羽","张飞与庞统","马超与黄忠"], a: 0, explanation: "刘备临终将刘禅托付给诸葛亮与李严，嘱其辅佐幼主。" },
+            { q: "“舌战群儒”中诸葛亮驳斥的东吴谋士不包括谁？", opts: ["周瑜","张昭","陆绩","虞翻"], a: 0, explanation: "诸葛亮与张昭、陆绩等文臣辩论，周瑜为武将未参与舌战。" },
+            { q: "“假途灭虢”与哪场夺取荆州的计谋相关？", opts: ["吕蒙白衣渡江","诸葛亮借荆州","周瑜假道伐虢","曹操声东击西"], a: 0, explanation: "吕蒙伪装商船白衣渡江，偷袭荆州，与春秋‘假途灭虢’异曲同工。" },
+            { q: "“金蝉脱壳”在书中如何体现？", opts: ["诸葛亮增灶退兵","曹操割须弃袍","赵云空营退敌","孙权诈降诱敌"], a: 0, explanation: "诸葛亮北伐撤退时添灶减兵，伪装兵力充足，骗过司马懿追兵。" },
+            { q: "“反客为主”是哪场战役的关键策略？", opts: ["汉中之战","官渡之战","赤壁之战","夷陵之战"], a: 0, explanation: "法正建议刘备抢占定军山，迫使夏侯渊放弃地利，变被动为主动。" },
+            { q: "“树上开花”与哪位将领的疑兵计相关？", opts: ["张飞","赵云","姜维","陆逊"], a: 0, explanation: "张飞在长坂坡令士兵马尾绑树枝扬尘，伪装大军逼退曹军。" },
+            { q: "“笑里藏刀”体现在谁夺取冀州的过程中？", opts: ["逢纪","袁绍","曹操","公孙瓒"], a: 0, explanation: "逢纪假意联合公孙瓒威胁韩馥，实则助袁绍兵不血刃夺取冀州。" },
+            { q: "“李代桃僵”形容哪种牺牲策略？", opts: ["曹洪舍命救曹操","典韦以死阻追兵","周泰护主身中十二枪","庞德抬棺死战"], a: 1, explanation: "宛城之战典韦独守寨门，以死为曹操争取逃生时间。" },
+            { q: "“浑水摸鱼”适用于哪次突袭？", opts: ["甘宁百骑劫魏营","张辽威震逍遥津","赵云汉水空营计","徐晃偷渡蒲阪津"], a: 0, explanation: "甘宁趁夜率百骑突袭曹营制造混乱，大挫敌军士气。" },
+            { q: "“打草惊蛇”反面案例是哪次失败？", opts: ["张飞醉酒失徐州","关羽大意丢荆州","刘备怒征东吴","马谡拒谏失街亭"], a: 3, explanation: "马谡扎营山顶暴露兵力，被张郃围困断水，导致街亭失守。" },
+            { q: "“调虎离山”在定军山如何运用？", opts: ["法正诱夏侯渊出战","诸葛亮引司马懿入谷","陆逊诱刘备连营","姜维骗邓艾中伏"], a: 0, explanation: "法正建议刘备猛攻曹军次要据点，迫使夏侯渊离开险要地势救援。" },
+            { q: "“欲擒故纵”与哪次收服降将相关？", opts: ["诸葛亮七擒孟获","曹操厚待张辽","孙权赦免甘宁","刘备重用黄忠"], a: 0, explanation: "诸葛亮多次释放孟获，最终使其心服归顺。" },
+            { q: "“假痴不癫”形容哪位谋士的伪装？", opts: ["司马懿装病","贾诩示弱","庞统献拙计","徐庶缄默"], a: 0, explanation: "司马懿装病麻痹曹爽，暗中策划高平陵之变夺权。" },
+            { q: "“上屋抽梯”与哪次诱敌深入相关？", opts: ["刘琦问计诸葛亮","周瑜诱蒋干盗书","陆逊火烧连营","邓艾偷渡阴平"], a: 0, explanation: "刘琦邀诸葛亮登楼后撤梯，逼其献自保之策。" },
+            { q: "“擒贼擒王”在官渡之战如何体现？", opts: ["奇袭乌巢烧粮","斩杀颜良文丑","水淹冀州军民","离间袁谭袁尚"], a: 0, explanation: "曹操亲率精兵突袭袁绍粮仓乌巢，瓦解敌军核心命脉。" },
+            { q: "“釜底抽薪”与哪种战略决策相关？", opts: ["程昱断袁绍粮道","贾诩劝张绣降曹","荀彧反对迁都","郭嘉遗计定辽东"], a: 3, explanation: "郭嘉临终建议曹操放任公孙康杀二袁，彻底解决北方隐患。" },
+            { q: "“远交近攻”在三国初期被谁采用？", opts: ["曹操结盟孙权","袁绍联合刘表","刘备依附吕布","孙策结交陈登"], a: 1, explanation: "袁绍为对抗曹操，远交荆州刘表牵制曹军南线。" },
+            { q: "“偷梁换柱”与哪次政治阴谋相关？", opts: ["曹丕篡汉","董卓废立皇帝","司马昭弑君","孙权诈取荆州"], a: 1, explanation: "董卓废少帝刘辩，改立陈留王刘协为汉献帝，把持朝政。" },
+            { q: "“指桑骂槐”用于描述哪种政治警告？", opts: ["曹操借粮官首级安军心","诸葛亮斩马谡明军法","孙权责陆逊以稳江东","司马懿杀牛金慑政敌"], a: 0, explanation: "曹操以克扣军粮罪名斩杀粮官，实则转移士兵对缺粮的不满。" },
+            { q: "“假道伐虢”的现代版是？", opts: ["吕蒙白衣渡江","邓艾偷渡阴平","钟会吞并汉中","陆逊佯攻合肥"], a: 0, explanation: "吕蒙伪装商船骗取荆州守军信任，突袭夺取战略要地。" },
+            { q: "“连环计”除火攻外还包含哪些步骤？", opts: ["庞统献计+黄盖诈降","蒋干盗书+蔡中诈降","苦肉计+反间计","草船借箭+借东风"], a: 2, explanation: "连环计包含庞统锁战船、黄盖诈降、周瑜打黄盖等多重计策。" },
+            { q: "“走为上计”适用于哪位名将撤退？", opts: ["赵云空营退曹军","关羽败走麦城","吕布逃离兖州","马超弃潼关"], a: 0, explanation: "赵云偃旗息鼓大开营门，曹军疑有埋伏慌忙撤退。" },
+            { q: "“温酒斩华雄”的典故出自哪位人物？", opts: ["关羽","张飞","赵云","孙坚"], a: 0, explanation: "关羽请战华雄，曹操温酒未凉时已斩其首级回营。" },
+            { q: "“锦囊妙计”通常与哪位人物关联？", opts: ["诸葛亮","周瑜","司马懿","庞统"], a: 0, explanation: "诸葛亮常用锦囊预授计策，如赵云保护刘备入吴招亲。" },
+            { q: "“火烧连营”的战役名称是？", opts: ["夷陵之战","赤壁之战","官渡之战","合肥之战"], a: 0, explanation: "刘备为报关羽之仇伐吴，被陆逊火烧连营七百里。" },
+            { q: "“三英战吕布”中的“三英”指谁？", opts: ["刘备、关羽、张飞","关羽、张飞、赵云","马超、黄忠、魏延","孙策、周瑜、太史慈"], a: 0, explanation: "虎牢关前刘关张三兄弟合力战吕布，奠定其勇武之名。" },
+            { q: "“凤雏”是哪位谋士的称号？", opts: ["庞统","徐庶","郭嘉","荀彧"], a: 0, explanation: "庞统与诸葛亮并称“卧龙凤雏”，助刘备取西川时中箭身亡。" },
+            { q: "“割须弃袍”形容哪位人物的狼狈败逃？", opts: ["曹操","马超","袁绍","吕布"], a: 0, explanation: "曹操被马超追击时割须弃袍以保性命，凸显其机变求生。" }
+        ];
+
+        // 简单去重 (基于问题文本 q)
+        const uniqueQuestions = [];
+        const questionTexts = new Set();
+        for (const question of combinedQuestionBank) { // 使用 combinedQuestionBank
+            if (!questionTexts.has(question.q)) {
+                questionTexts.add(question.q);
+                uniqueQuestions.push(question);
+            }
+        }
+        const finalQuestionBank = uniqueQuestions; // 使用去重后的题库
+        console.log(`题库合并去重后，共 ${finalQuestionBank.length} 题。`);
+
+
+        // 游戏状态
+        let currentGame = {
+            questions: [], current: 0, score: 0, timer: null, currentTime: 10, gameActive: false
+        };
+        let QUESTIONS_PER_GAME = 10;
+        const COUNTDOWN_SECONDS = 10;
+
+        // --- 工具函数 ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+        function shuffleQuestionOptions(question) {
+            const options = [...question.opts];
+            const correctAnswerText = options[question.a];
+            shuffleArray(options);
+            const newCorrectIndex = options.indexOf(correctAnswerText);
+            if (newCorrectIndex === -1) {
+                 console.error("洗牌选项后找不到正确答案!", question, options);
+                 return { ...question, error: true };
+            }
+            return { q: question.q, opts: options, a: newCorrectIndex, explanation: question.explanation };
+        }
+        function playSound(id) {
+            const sound = document.getElementById(id);
+            if (sound) {
+                if (id === 'audio-countdown') {
+                    if (sound.paused) {
+                        sound.currentTime = 0;
+                        sound.play().catch(e => console.warn("倒计时音频播放失败:", e));
+                    }
+                } else {
+                    sound.currentTime = 0;
+                    sound.play().catch(e => console.warn(`音频 ${id} 播放失败:`, e));
+                }
+            } else {
+                console.warn(`未找到 ID 为 "${id}" 的音频元素。`);
+            }
+        }
+
+        // 触发视觉特效覆盖层 (修改以包含理由)
+        function triggerEffect(type, explanation = null) {
+            effectLayer.className = 'effect-overlay'; // 重置类
+            let message = '';
+            let duration = 1500; // 默认正确提示时长
+            let explanationHTML = '';
+
+            // 如果是错误或超时，且有解释文本，则准备解释的 HTML
+            if ((type === 'wrong' || type === 'timeout') && explanation) {
+                explanationHTML = `<span class="explanation-popup">【解析】${explanation}</span>`; // 添加【解析】前缀
+                duration = 3000; // 错误/超时提示持续3秒
+            } else if (type === 'wrong' || type === 'timeout') {
+                 // 如果没有解释文本，也显示3秒
+                 explanationHTML = `<span class="explanation-popup">（暂无详细解析）</span>`;
+                 duration = 3000;
+            } else if (type === 'win' || type === 'lose') {
+                duration = 3000; // 胜利/失败提示持续3秒
+            }
+
+
+            switch(type) {
+                case 'correct': message = '✔ 正确！'; effectLayer.classList.add('effect-correct'); break;
+                case 'wrong': message = `✘ 答错了！<br>${explanationHTML}`; effectLayer.classList.add('effect-wrong'); break; // 加入解释
+                case 'timeout': message = `⏳ 时间到！<br>${explanationHTML}`; effectLayer.classList.add('effect-timeout'); break; // 加入解释
+                case 'win': message = '🏆 挑战成功！ 🏆'; effectLayer.classList.add('effect-win'); break; // 更换图标
+                case 'lose': message = '🤔 再接再厉！ 🤔'; effectLayer.classList.add('effect-lose'); break;
+            }
+
+            effectText.innerHTML = message; // 使用 innerHTML 来渲染包含 span 的解释
+            effectLayer.classList.add('show');
+
+            // 动画结束后隐藏特效
+            setTimeout(() => {
+                effectLayer.classList.remove('show');
+                // 过渡效果结束后清理类和内容
+                setTimeout(() => {
+                     effectLayer.className = 'effect-overlay';
+                     effectText.innerHTML = ''; // 清空内容
+                }, 500); // 延迟时间应大于 CSS transition 时间
+            }, duration);
+        }
+
+
+        // --- 三国主题结果提示语 ---
+        const resultMessages = {
+            perfect: [ // 满分
+                "恭喜主公！智计无双，堪比卧龙凤雏，天下尽在掌握！💯",
+                "汝乃真英雄也！对三国了如指掌，可为当世之英杰！🏆",
+                "全对！主公真乃天命所归，速速招兵买马，一统中原！👑"
+            ],
+            great: [ // 高分
+                "主公英明！颇有五虎上将之风，勇冠三军，再进一步即可问鼎！👍",
+                "运筹帷幄，决胜千里！主公对三国战局洞若观火，前途无量！✨",
+                "好身手！已深得兵法要义，稍加磨炼，必成大器！💪"
+            ],
+            good: [ // 中等分数
+                "不错不错！已有关张之勇，略懂谋略，继续征战，必有所成！😊",
+                "尚需努力！虽斩将夺旗，但细节之处仍需精进，多读兵书方为上策！📖",
+                "兵家常事！胜败乃兵家常事，主公已显露锋芒，假以时日定能建功立业！😉"
+            ],
+            average: [ // 低分
+                "哎呀！莫非是中了空城计？知识储备尚需充实，主公勿忧，来日方长！😅",
+                "胜败乃兵家常事！这次权当演练，回去熟读《三国》，下次定能旗开得胜！🚀",
+                "主公大意失荆州矣！莫灰心，重整旗鼓，下次再与群雄一较高下！👊"
+            ]
+        };
+        function getRandomResultMessage(score, totalQuestions) {
+            const percentage = totalQuestions > 0 ? (score / (totalQuestions * 10)) * 100 : 0;
+            let category;
+            if (percentage >= 95) category = 'perfect';
+            else if (percentage >= 70) category = 'great';
+            else if (percentage >= 40) category = 'good';
+            else category = 'average';
+            const messages = resultMessages[category];
+            return messages[Math.floor(Math.random() * messages.length)];
+        }
+
+        // --- 游戏逻辑函数 ---
+
+        // 开始新游戏
+        function startNewGame() {
+             if (!finalQuestionBank || finalQuestionBank.length === 0) {
+                console.error("最终题库为空..."); alert("题库为空，无法开始游戏！");
+                startButton.disabled = true; startButton.textContent = '题库错误'; return;
+            }
+             QUESTIONS_PER_GAME = Math.min(10, finalQuestionBank.length);
+             if (QUESTIONS_PER_GAME < 1) {
+                 console.error("题库题目太少..."); alert("题库题目太少，无法开始游戏！"); return;
+             }
+            console.log(`开始新游戏，共 ${QUESTIONS_PER_GAME} 题...`);
+            currentGame.current = 0; currentGame.score = 0; currentGame.gameActive = true;
+            clearTimeout(currentGame.timer);
+            resultArea.style.display = 'none'; resultArea.classList.remove('visible');
+            quizArea.innerHTML = ''; quizArea.style.display = 'flex';
+
+            let shuffledBank = [...finalQuestionBank];
+            shuffleArray(shuffledBank);
+            currentGame.questions = shuffledBank.slice(0, QUESTIONS_PER_GAME)
+                                        .map(q => shuffleQuestionOptions(q))
+                                        .filter(q => !q.error);
+            if (currentGame.questions.length < QUESTIONS_PER_GAME) {
+                console.warn(`过滤无效题目后，本局实际题目数为 ${currentGame.questions.length}`);
+                QUESTIONS_PER_GAME = currentGame.questions.length;
+                if (QUESTIONS_PER_GAME === 0) {
+                     console.error("错误：有效题目不足..."); alert("加载题目时出错，请刷新页面重试！"); return;
+                }
+            }
+            console.log("本轮最终选中的有效题目:", currentGame.questions);
+            updateScore(); updateProgress(QUESTIONS_PER_GAME); showQuestion();
+        }
+
+        // 显示问题
+        function showQuestion() {
+            if (!currentGame.questions || currentGame.questions.length === 0 || currentGame.current >= currentGame.questions.length) {
+                console.log("题目显示条件不满足，结束游戏..."); endGame(); return;
+            }
+            const q = currentGame.questions[currentGame.current];
+            console.log(`显示第 ${currentGame.current + 1} 题:`, q);
+            const html = `
+                <div class="question-card">
+                    <div class="question">第${currentGame.current + 1}题：${q.q}</div>
+                    <div class="options">
+                        ${q.opts.map((opt, index) => `
+                            <button id="btn-${index}" onclick="checkAnswer(${index})">
+                                ${String.fromCharCode(65 + index)}. ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                    </div>
+            `;
+            quizArea.innerHTML = html;
+            startCountdown();
+        }
+
+        // 检查答案 (修改调用 triggerEffect 传递理由)
+        function checkAnswer(selectedIndex) {
+            if (!currentGame.gameActive) return;
+            clearTimeout(currentGame.timer);
+            countdownElement.classList.remove('visible', 'warning', 'timesup');
+            if (currentGame.current >= currentGame.questions.length) {
+                console.error("检查答案时当前题目索引无效！"); endGame(); return;
+            }
+
+            const q = currentGame.questions[currentGame.current];
+            const buttons = quizArea.querySelectorAll('.options button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const questionCard = quizArea.querySelector('.question-card');
+            const selectedButton = document.getElementById(`btn-${selectedIndex}`);
+            const correctButton = document.getElementById(`btn-${q.a}`);
+
+            if (selectedIndex === q.a) {
+                currentGame.score += 10;
+                selectedButton.classList.add('correct');
+                if (questionCard) questionCard.classList.add('effect-pulse');
+                playSound('audio-correct');
+                triggerEffect('correct'); // 正确时不需要理由
+            } else {
+                selectedButton.classList.add('wrong');
+                if (correctButton) correctButton.classList.add('reveal-correct');
+                else console.error("未找到正确答案按钮！ Index:", q.a);
+                if (questionCard) questionCard.classList.add('effect-shake');
+                playSound('audio-wrong');
+                triggerEffect('wrong', q.explanation); // 传递理由给弹窗
+            }
+
+            updateScore();
+
+            currentGame.gameActive = false;
+            // 延迟时间应略大于弹窗显示时间，确保弹窗消失后再切换题目
+            setTimeout(() => {
+                currentGame.current++; currentGame.gameActive = true;
+                if (currentGame.current < QUESTIONS_PER_GAME) {
+                    updateProgress(QUESTIONS_PER_GAME); showQuestion();
+                } else { endGame(); }
+            }, 3100); // 略大于 3 秒
+        }
+
+        // 启动倒计时
+        function startCountdown() {
+            currentGame.currentTime = COUNTDOWN_SECONDS;
+            countdownElement.textContent = currentGame.currentTime;
+            countdownElement.classList.remove('warning', 'timesup');
+            countdownElement.classList.add('visible');
+            clearTimeout(currentGame.timer);
+            currentGame.timer = setInterval(() => {
+                if (!currentGame.gameActive) { clearTimeout(currentGame.timer); return; }
+                playSound('audio-countdown'); // 使用优化后的播放逻辑
+                currentGame.currentTime--;
+                countdownElement.textContent = currentGame.currentTime;
+                if (currentGame.currentTime <= 3 && currentGame.currentTime > 0) countdownElement.classList.add('warning');
+                else countdownElement.classList.remove('warning');
+                if (currentGame.currentTime <= 0) handleTimeout();
+            }, 1000);
+        }
+
+        // 处理超时 (修改调用 triggerEffect 传递理由)
+        function handleTimeout() {
+            if (!currentGame.gameActive) return;
+            if (currentGame.current >= currentGame.questions.length) {
+                console.error("处理超时时当前题目索引无效！"); endGame(); return;
+            }
+            clearTimeout(currentGame.timer);
+            currentGame.gameActive = false;
+            countdownElement.classList.add('timesup');
+            playSound('audio-timeout');
+
+            const q = currentGame.questions[currentGame.current];
+            triggerEffect('timeout', q.explanation); // 传递理由给弹窗
+
+            const buttons = quizArea.querySelectorAll('.options button');
+            buttons.forEach(btn => btn.disabled = true);
+
+            const correctButton = document.getElementById(`btn-${q.a}`);
+            if (correctButton) correctButton.classList.add('reveal-correct');
+            else console.error("超时处理中未找到正确答案按钮！ Index:", q.a);
+
+            const questionCard = quizArea.querySelector('.question-card');
+            if (questionCard) questionCard.classList.add('effect-shake');
+
+            // 延迟时间应略大于弹窗显示时间
+            setTimeout(() => {
+                countdownElement.classList.remove('visible', 'warning', 'timesup');
+                currentGame.current++; currentGame.gameActive = true;
+                if (currentGame.current < QUESTIONS_PER_GAME) {
+                    updateProgress(QUESTIONS_PER_GAME); showQuestion();
+                } else { endGame(); }
+            }, 3100); // 略大于 3 秒
+        }
+
+        // 结束游戏
+        function endGame() {
+            console.log("游戏结束。最终得分:", currentGame.score);
+            currentGame.gameActive = false; clearTimeout(currentGame.timer);
+            countdownElement.classList.remove('visible', 'warning', 'timesup');
+            quizArea.style.display = 'none'; resultArea.style.display = 'block';
+            resultArea.classList.add('visible');
+            const message = getRandomResultMessage(currentGame.score, QUESTIONS_PER_GAME);
+            resultTextElement.innerHTML = `${message}<br><br>你的最终得分是：<span style="color:var(--primary); font-weight:bold;">${currentGame.score}</span>`;
+            const totalQuestions = QUESTIONS_PER_GAME;
+            if (totalQuestions > 0 && currentGame.score >= totalQuestions * 10 * 0.6) { playSound('audio-win'); triggerEffect('win'); }
+            else { playSound('audio-lose'); triggerEffect('lose'); }
+        }
+
+        // 更新进度
+        function updateProgress(totalQuestionsInGame) {
+             const currentQuestionNumber = Math.min(currentGame.current + 1, totalQuestionsInGame);
+             progressElement.textContent = `题目: ${currentQuestionNumber}/${totalQuestionsInGame}`;
+        }
+        // 更新分数
+        function updateScore() { scoreElement.textContent = `得分: ${currentGame.score}`; }
+        // 重新开始游戏
+        function restartGame() {
+            console.log("重新开始游戏..."); initialScreen.style.display = 'none';
+            quizScreen.style.display = 'flex'; startNewGame();
+        }
+
+        // --- 事件监听器 ---
+        startButton.addEventListener('click', () => {
+             if (!finalQuestionBank || finalQuestionBank.length === 0) { alert("题库错误，无法开始游戏！"); return; }
+            initialScreen.style.display = 'none'; quizScreen.style.display = 'flex';
+            startNewGame();
+        });
+
+        // --- 初始化 ---
+        if (!finalQuestionBank || finalQuestionBank.length === 0) {
+             console.error("错误：最终题库数据为空！"); startButton.textContent = '题库错误'; startButton.disabled = true;
+        } else { startButton.disabled = false; startButton.textContent = '开始挑战'; } // 修改按钮文字
+
+    </script>
+
+</body>
+</html>

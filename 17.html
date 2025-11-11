@@ -1,0 +1,1343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>曲靖二小六年级17班《爱的教育》阅读知识挑战赛</title>
+    <link rel="preconnect" href="https://fonts.font.im">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.font.im/css2?family=ZCOOL+KuaiLe&family=Ma+Shan+Zheng&family=Long+Cang&display=swap" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/pico.css/1.5.10/pico.min.css"></script>
+    <style>
+        :root {
+            /* 颜色主题 - 明亮温暖的渐变色系，适合儿童 */
+            --primary: #FF6B00;
+            --secondary: #FFE082;
+            --correct: #4CAF50;
+            --wrong: #E53935;
+            --timeout: #FF9800;
+            --background-start: #FFF8E6;
+            --background-end: #FFE0B2;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #333333;
+            --text-light: white;
+            --button-bg: #FFD180;
+            --button-border: #FF6B00;
+            --button-text: #BF360C;
+            --button-hover-bg: #FFA726;
+            --primary-rgb: 255, 107, 0;
+            --secondary-rgb: 255, 224, 130;
+            --timeout-rgb: 255, 152, 0;
+            --correct-rgb: 76, 175, 80;
+            --text-dark-rgb: 51, 51, 51;
+
+            /* 基础尺寸 */
+            --base-font-size: 20px; 
+            --base-padding: 16px;
+            --base-margin: 12px; 
+            --base-radius: 20px;
+
+            /* 字体栈 */
+            --font-fun: 'ZCOOL KuaiLe', cursive, 'Microsoft YaHei', sans-serif;
+            --font-formal: 'KaiTi', 'SimSun', serif, 'Microsoft YaHei';
+            --font-handwriting: 'Long Cang', cursive;
+            --font-elegant: 'Ma Shan Zheng', cursive;
+            --font-gaming: 'Comic Sans MS', sans-serif;
+        }
+
+        body {
+            margin: 0; 
+            padding: 0;
+            background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+            font-family: var(--font-fun);
+            font-size: var(--base-font-size);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            display: flex; 
+            align-items: flex-start;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            padding-top: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 20%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 224, 130, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .container {
+            width: 95%; 
+            max-width: 900px;
+            display: flex;
+            flex-direction: column;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            padding: var(--base-padding);
+            box-sizing: border-box;
+            text-align: center;
+            position: relative;
+            overflow-y: auto;
+            z-index: 1;
+            min-height: calc(100vh - 40px);
+        }
+
+        .title {
+            color: #FF0000;
+            text-align: center;
+            margin: 5px 0;
+            font-family: "黑体", sans-serif;
+            font-size: 29px;
+            line-height: 1.2;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(145deg, #FFD700, #FFA500);
+            padding: 15px 20px;
+            border-radius: 15px;
+            border: none;
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.3);
+            animation: titleGlow 2s ease-in-out infinite alternate;
+            white-space: nowrap;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+                transform: scale(1);
+            }
+            100% {
+                box-shadow: 0 12px 35px rgba(255, 0, 0, 0.5);
+                transform: scale(1.02);
+            }
+        }
+
+        .section {
+            margin-bottom: calc(var(--base-margin) * 1.5);
+        }
+
+        .challenge-info {
+            text-align: center;
+            margin-bottom: calc(var(--base-margin) * 1.5);
+            padding: calc(var(--base-padding) * 1.5);
+            background: rgba(var(--secondary-rgb), 0.15);
+            border-radius: var(--base-radius);
+            font-size: 18px;
+            color: #333;
+            font-family: var(--font-formal);
+            line-height: 1.6;
+            border: 2px dashed var(--primary);
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: calc(var(--base-margin) * 1.5) 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-fun {
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            color: var(--text-light);
+            border: none;
+            padding: 18px 40px;
+            border-radius: var(--base-radius);
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            font-family: var(--font-fun);
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-fun::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn-fun:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-fun:hover {
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+            transform: scale(1.05);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .btn-fun:active {
+            transform: scale(0.98);
+        }
+
+        .group-display {
+            background: linear-gradient(145deg, var(--secondary), #FFFFFF);
+            padding: 25px;
+            border-radius: var(--base-radius);
+            margin-bottom: calc(var(--base-margin) * 1.5);
+            min-height: 120px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            border: 3px solid var(--primary);
+        }
+
+        .group-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-family: var(--font-elegant);
+            text-align: center;
+            animation: bounceIn 0.6s ease-out;
+            width: 100%;
+        }
+
+        .student-name {
+            background: var(--button-bg);
+            padding: 10px 18px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-family: var(--font-gaming);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 2px solid var(--button-border);
+        }
+
+        .student-name:hover {
+            transform: scale(1.1) rotate(2deg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            background: var(--button-hover-bg);
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: var(--base-margin);
+            margin-bottom: var(--base-margin);
+            padding: var(--base-padding);
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: var(--base-radius);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 2px solid var(--secondary);
+        }
+
+        .status-item {
+            font-size: 36px;  /* 统一为36px，与倒计时一致 */
+            font-weight: bold;
+            color: var(--text-dark);
+            background: linear-gradient(145deg, var(--button-bg), var(--button-hover-bg));
+            padding: calc(var(--base-padding) * 0.8) calc(var(--base-padding) * 1.2);
+            border-radius: calc(var(--base-radius) * 0.6);
+            border: 3px solid var(--button-border);
+            min-width: 120px;
+            text-align: center;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            font-family: var(--font-gaming);
+        }
+
+        .timer {
+            font-size: 36px;  /* 保持36px */
+            font-weight: bold;
+            color: var(--primary);
+            border-color: var(--primary);
+            min-width: 120px;
+            padding: calc(var(--base-padding) * 1.0) calc(var(--base-padding) * 1.3);
+            border-radius: calc(var(--base-radius) * 0.8);
+            border: 5px solid var(--primary);
+            background: linear-gradient(145deg, #fff, var(--secondary));
+            text-align: center;
+            font-family: var(--font-gaming);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.3s ease-in-out;
+            animation: timerPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes timerPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .timer.warning {
+            color: var(--wrong);
+            border-color: var(--wrong);
+            animation: timerWarning 0.5s ease-in-out infinite;
+        }
+
+        @keyframes timerWarning {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            25% { transform: scale(1.1) rotate(-3deg); }
+            75% { transform: scale(1.1) rotate(3deg); }
+        }
+
+        .question-card {
+            background: var(--card-bg);
+            padding: calc(var(--base-padding) * 2);
+            border-radius: var(--base-radius);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            margin-bottom: var(--base-margin);
+            transition: all 0.4s ease-in-out;
+            width: 100%; 
+            max-width: 100%;  /* 确保不超出容器宽度 */
+            border: 5px solid rgba(var(--primary-rgb), 0.3);
+            position: relative;
+            opacity: 0; 
+            transform: translateY(30px);
+            overflow: visible;  /* 确保内容可见 */
+            box-sizing: border-box;  /* 包含padding和border在宽度内 */
+        }
+
+        .question-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .question-text {
+            font-size: 28px;
+            margin-bottom: calc(var(--base-margin) * 1.5);
+            color: var(--text-dark);
+            line-height: 1.6;
+            font-weight: 600;
+            font-family: var(--font-fun);
+            text-align: center;
+            word-wrap: break-word;  /* 确保长文本换行 */
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));  /* 调整最小宽度确保选项可见 */
+            gap: calc(var(--base-margin) * 1.5);
+            margin-top: calc(var(--base-margin) * 1.5);
+            justify-content: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .option-btn {
+            font-family: var(--font-gaming);
+            font-size: 24px;
+            padding: calc(var(--base-padding) * 1.2);
+            border: 4px solid var(--button-border);
+            background: linear-gradient(145deg, var(--button-bg), #FFD180);
+            color: var(--button-text);
+            border-radius: calc(var(--base-radius) * 0.8);
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            text-align: left;
+            white-space: normal; 
+            line-height: 1.5;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            position: relative;
+            word-wrap: break-word;
+            box-sizing: border-box;
+            min-height: 60px;  /* 确保按钮有足够高度 */
+            width: 100%;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: linear-gradient(145deg, var(--button-hover-bg), var(--button-bg));
+            color: var(--button-text);
+            border-color: var(--primary);
+            transform: scale(1.03) translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .option-btn.correct {
+            background: linear-gradient(145deg, var(--correct), #AED581);
+            color: var(--text-light) !important; 
+            border-color: transparent !important;
+            animation: bounceCorrectLarge 0.6s ease;
+            box-shadow: 0 8px 25px rgba(var(--correct-rgb), 0.4);
+            font-weight: 700;
+            transform: scale(1.05);
+        }
+
+        .option-btn.wrong {
+            background: linear-gradient(145deg, var(--wrong), #EF5350);
+            color: var(--text-light) !important; 
+            border-color: transparent !important;
+            animation: shakeLarge 0.5s ease-in-out;
+            box-shadow: 0 8px 25px rgba(239, 83, 80, 0.4);
+            transform: scale(0.95);
+        }
+
+        .answer-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            z-index: 2000;
+            display: none;
+            text-align: center;
+            border: 3px solid var(--primary);
+            min-width: 300px;
+            max-width: 80%;  /* 确保弹窗不会超出屏幕 */
+        }
+
+        .answer-popup.show {
+            display: block;
+            animation: popupShow 0.5s ease-out;
+        }
+
+        @keyframes popupShow {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .answer-popup h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 24px;
+        }
+
+        .answer-popup p {
+            color: var(--text-dark);
+            font-size: 18px;
+            line-height: 1.5;
+        }
+
+        .result-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+        }
+
+        .result-overlay.show {
+            display: flex;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-card {
+            background: white;
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: scaleIn 0.5s ease-out;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .result-group {
+            font-size: 32px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .result-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .result-message {
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-family: var(--font-elegant);
+        }
+
+        .excellent { color: var(--correct); }
+        .good { color: var(--primary); }
+        .encourage { color: var(--timeout); }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shakeLarge { 
+            0%, 100% { transform: translateX(0); } 
+            20% { transform: translateX(-15px) rotate(-3deg); } 
+            40% { transform: translateX(15px) rotate(3deg); } 
+            60% { transform: translateX(-10px) rotate(-2deg); } 
+            80% { transform: translateX(10px) rotate(3deg); } 
+        }
+
+        @keyframes bounceCorrectLarge { 
+            0%, 100% { transform: translateY(0) scale(1.05); } 
+            40% { transform: translateY(-15px) scale(1.05); } 
+            60% { transform: translateY(5px) scale(0.98); } 
+            100% { transform: translateY(0) scale(1); } 
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 页脚样式 */
+        footer {
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            color: #666;
+            font-family: 'Microsoft YaHei', sans-serif;
+            border-top: 2px solid var(--secondary);
+            background: rgba(var(--secondary-rgb), 0.1);
+            border-radius: 10px;
+        }
+
+        /* 触屏优化 */
+        @media (max-width: 768px) {
+            .container {
+                width: 98%;  /* 移动端更宽 */
+                padding: 8px;
+            }
+            
+            .title {
+                font-size: 22px;
+                padding: 12px 15px;
+            }
+            
+            .question-text {
+                font-size: 22px;
+            }
+            
+            .option-btn {
+                font-size: 18px;
+                padding: 12px;
+            }
+            
+            .options {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .btn-fun {
+                padding: 14px 30px;
+                font-size: 18px;
+            }
+
+            .status-item {
+                font-size: 28px;  /* 移动端稍微调小 */
+                min-width: 100px;
+                padding: 8px 12px;
+            }
+
+            .timer {
+                font-size: 28px;  /* 移动端稍微调小 */
+                min-width: 100px;
+                padding: 8px 12px;
+            }
+
+            footer {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">曲靖二小六年级17班《爱的教育》阅读知识挑战赛</h1>
+        
+        <div id="groupingSection" class="section">
+            <div id="challengeInfo" class="challenge-info">
+                <p>🎯 随机抽取5名同学组队，每队10题，每题10秒，满分100分！</p>
+            </div>
+            <div class="button-group">
+                <button id="startGroupingBtn" class="btn-fun">开始随机组队</button>
+                <button id="randomGroupBtn" class="btn-fun hidden">随机分组</button>
+                <button id="nextGroupBtn" class="btn-fun hidden">下一组</button>
+            </div>
+            <div id="groupDisplay" class="group-display hidden">
+                <div id="groupTitle" class="group-title"></div>
+                <div id="groupMembers" class="group-members"></div>
+            </div>
+            <div id="startChallengeContainer" class="hidden">
+                <button id="startChallengeBtn" class="btn-fun">开始挑战</button>
+            </div>
+        </div>
+
+        <div id="challengeSection" class="section hidden">
+            <div class="status-bar">
+                <div id="progress" class="status-item">第 1/10 题</div>
+                <div id="score" class="status-item">得分: 0</div>
+                <div id="timer" class="timer">10</div>
+            </div>
+            
+            <div id="questionCard" class="question-card">
+                <p id="questionText" class="question-text"></p>
+                <div id="optionsContainer" class="options"></div>
+            </div>
+            
+            <div id="actionButtons" class="hidden">
+                <div class="button-group">
+                    <button id="nextQuestion" class="btn-fun">下一题</button>
+                    <button id="restart" class="btn-fun">重新开始</button>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            管浩然 设计制作 V5.0
+        </footer>
+    </div>
+
+    <div id="answerPopup" class="answer-popup">
+        <h3>正确答案</h3>
+        <p id="correctAnswerText"></p>
+    </div>
+
+    <div id="resultOverlay" class="result-overlay">
+        <div class="result-card">
+            <div id="resultGroup" class="result-group"></div>
+            <div id="resultScore" class="result-score"></div>
+            <div id="resultMessage" class="result-message"></div>
+            <button id="continueNext" class="btn-fun">继续下一组</button>
+        </div>
+    </div>
+
+    <script>
+        // 音效生成器
+        class SoundEffects {
+            constructor() {
+                this.audioContext = null;
+                this.initAudio();
+            }
+
+            initAudio() {
+                try {
+                    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                    this.audioContext = new AudioContext();
+                } catch(e) {
+                    console.log('Web Audio API not supported');
+                }
+            }
+
+            playTick() {
+                if (!this.audioContext) return;
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.1);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.1);
+            }
+
+            playCorrect() {
+                if (!this.audioContext) return;
+                const notes = [523, 659, 784]; // C, E, G
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const oscillator = this.audioContext.createOscillator();
+                        const gainNode = this.audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(this.audioContext.destination);
+                        
+                        oscillator.frequency.value = freq;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+                        
+                        oscillator.start(this.audioContext.currentTime);
+                        oscillator.stop(this.audioContext.currentTime + 0.3);
+                    }, i * 100);
+                });
+            }
+
+            playWrong() {
+                if (!this.audioContext) return;
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.value = 200;
+                oscillator.type = 'sawtooth';
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.5);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.5);
+            }
+
+            playTimeout() {
+                if (!this.audioContext) return;
+                const oscillator = this.audioContext.createOscillator();
+                const gainNode = this.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(this.audioContext.destination);
+                
+                oscillator.frequency.value = 300;
+                oscillator.type = 'triangle';
+                
+                gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.8);
+                
+                oscillator.start(this.audioContext.currentTime);
+                oscillator.stop(this.audioContext.currentTime + 0.8);
+            }
+
+            playExcellent() {
+                if (!this.audioContext) return;
+                const notes = [523, 659, 784, 1047]; // C, E, G, High C
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const oscillator = this.audioContext.createOscillator();
+                        const gainNode = this.audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(this.audioContext.destination);
+                        
+                        oscillator.frequency.value = freq;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.3, this.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.2);
+                        
+                        oscillator.start(this.audioContext.currentTime);
+                        oscillator.stop(this.audioContext.currentTime + 0.2);
+                    }, i * 50);
+                });
+            }
+
+            playGood() {
+                if (!this.audioContext) return;
+                const notes = [523, 659, 784]; // C, E, G
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const oscillator = this.audioContext.createOscillator();
+                        const gainNode = this.audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(this.audioContext.destination);
+                        
+                        oscillator.frequency.value = freq;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.25, this.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.25);
+                        
+                        oscillator.start(this.audioContext.currentTime);
+                        oscillator.stop(this.audioContext.currentTime + 0.25);
+                    }, i * 75);
+                });
+            }
+
+            playEncourage() {
+                if (!this.audioContext) return;
+                const notes = [392, 440, 494]; // G, A, B
+                notes.forEach((freq, i) => {
+                    setTimeout(() => {
+                        const oscillator = this.audioContext.createOscillator();
+                        const gainNode = this.audioContext.createGain();
+                        
+                        oscillator.connect(gainNode);
+                        gainNode.connect(this.audioContext.destination);
+                        
+                        oscillator.frequency.value = freq;
+                        oscillator.type = 'sine';
+                        
+                        gainNode.gain.setValueAtTime(0.2, this.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, this.audioContext.currentTime + 0.3);
+                        
+                        oscillator.start(this.audioContext.currentTime);
+                        oscillator.stop(this.audioContext.currentTime + 0.3);
+                    }, i * 100);
+                });
+            }
+        }
+
+        // 初始化音效
+        const soundEffects = new SoundEffects();
+
+        // 学生名单
+        const studentNames = [
+            "蔡源", "蔡子烨", "陈文凯", "代哲旭", "段毓昊", "冯俊淇", "顾瑞鑫", "管浩然", 
+            "李昶锐", "李牧承", "李瀛博", "刘子铖", "卢思博", "缪奇", "普钰淮", "钱卓熠", 
+            "沈柯良", "谭铂禹", "唐靖恒", "吴芃希", "徐泽宁", "许景棋", "许瑞麟", "张怀谦", 
+            "赵宸楦", "赵浩然", "赵奕帆", "边玥萌", "曹涵淇", "付文萱", "高昕苒", "高梓曦", 
+            "韩欣霏", "李沅洢", "刘思娴", "刘曜菀", "栾孟澄", "孟庭谖", "莫予", "宋易桓", 
+            "苏沐辰", "唐畅", "王韵棋", "吴沅珂", "许梓恩", "杨雅涵", "赵希睿", "周沫", 
+            "郭宸宇", "李炜博", "杨孝然", "杨子晨", "张恩硕", "赵婉菁"
+        ];
+
+        // 题库 - 扩充版
+        const questions = [
+            // 基础题目
+            {q: "《爱的教育》的作者是谁？", opts: ["亚米契斯", "托尔斯泰", "雨果", "但丁"], a: 0, explanation: "《爱的教育》是意大利作家亚米契斯的代表作。"},
+            {q: "《爱的教育》是哪个国家的作品？", opts: ["意大利", "法国", "俄罗斯", "英国"], a: 0, explanation: "这是一部意大利儿童文学作品。"},
+            {q: "《爱的教育》全书共有多少章节？", opts: ["100章", "50章", "80章", "120章"], a: 0, explanation: "《爱的教育》全书共100章，采用日记体形式写成。"},
+            {q: "《爱的教育》原名是什么？", opts: ["Cuore", "Amore", "Vita", "Scuola"], a: 0, explanation: "《爱的教育》意大利语原名是Cuore，意为'心'。"},
+            {q: "《爱的教育》首次出版于哪一年？", opts: ["1886年", "1890年", "1880年", "1895年"], a: 0, explanation: "《爱的教育》首次出版于1886年。"},
+            
+            // 原有题目
+            {q: "主角恩里科所在的三年级班级共有多少名学生？", opts: ["54 人","48 人","60 人","50 人"], a: 0, explanation: "书中明确提到恩里科被分到佩尔博尼老师班上，全班共有五十四名学生。"},
+            {q: "始终保护驼背同学内利、阻止他人欺负他的善良男孩是谁？", opts: ["加罗内","德罗西","柯莱蒂","小瓦匠"], a: 0, explanation: "加罗内身材高大、内心善良，主动保护被欺负的驼背同学内利。"},
+            {q: "《帕多瓦的小爱国者》中，少年为何拒绝外国乘客的施舍？", opts: ["乘客辱骂意大利","施舍金额太少","不想接受陌生人的东西","要留给更需要的人"], a: 0, explanation: "外国乘客在船上辱骂意大利，少年虽贫困却极具爱国情怀。"},
+            {q: "班级里各科成绩始终第一、被全班同学敬佩的同学是？", opts: ["德罗西","斯塔尔蒂","加罗内","柯莱蒂"], a: 0, explanation: "德罗西聪明好学、记忆力超群，各科均是第一。"},
+            {q: "小瓦匠最具标志性、总能逗笑大家的技能是什么？", opts: ["做野兔鬼脸","搭建积木塔","模仿动物叫声","快速系鞋带"], a: 0, explanation: "小瓦匠擅长做野兔鬼脸，每次做都会让同学们开怀大笑。"},
+            {q: "《伦巴第的小哨兵》中，少年为侦察敌情爬上了什么树？", opts: ["欧洲白蜡树","松树","橡树","杨树"], a: 0, explanation: "少年为向意大利军队传递奥地利军队的动向，爬上了打谷场前的高大欧洲白蜡树。"},
+            {q: "铁匠的儿子普莱克西长期遭受的家庭困境是什么？", opts: ["父亲酗酒打骂","家境贫寒缺衣少食","母亲重病卧床","独自照顾年幼弟妹"], a: 0, explanation: "普莱克西的父亲酗酒成性，常无故打骂他，还破坏他的书本和作业。"},
+            {q: "加罗内的母亲去世后，老师用哪位伟人的文字安慰他？", opts: ["朱塞佩・马志尼","艾德蒙多・德・亚米契斯","加里波第","富兰克林"], a: 0, explanation: "老师朗读朱塞佩・马志尼关于母爱、坚强与责任的文字。"},
+            {q: "《佛罗伦萨小抄写员》中，朱塞佩深夜偷偷帮父亲抄写的是什么？", opts: ["信封收件人地址","商业账本","家书","文章稿件"], a: 0, explanation: "朱塞佩的父亲深夜抄写寄给订户的信封地址补贴家用。"},
+            {q: "恩里科最终要与三年级同学们永久告别的原因是什么？", opts: ["父亲工作调动需搬迁","毕业升入中学","学校合并搬迁","全家移民国外"], a: 0, explanation: "恩里科的父亲因工作原因要离开都灵，全家需一同搬迁。"},
+            {q: "从疾驰的马车车轮下救下一年级小男生的同学是谁？", opts: ["罗贝提","加罗内","德罗西","柯莱蒂"], a: 0, explanation: "炮兵上尉的儿子罗贝提，看到一年级小男生摔倒在马路中间，不顾危险冲过去救人。"},
+            {q: "班级里喜欢收集邮票、还会贩卖小物件的同学是？", opts: ["加罗非","加罗内","小瓦匠","斯塔尔蒂"], a: 0, explanation: "加罗非瘦高个、长着猫头鹰鼻子，收集邮票两年多。"},
+            {q: "《撒丁鼓手》中，鼓手为传递求援纸条付出了什么代价？", opts: ["失去一条腿","重伤手臂","失明一只眼","听力受损"], a: 0, explanation: "撒丁鼓手为给意大利军队传递求援纸条，在奔跑中被敌人子弹击中。"},
+            {q: "柯莱蒂一边帮助父亲打理木柴生意，一边坚持学习，他的特点是？", opts: ["乐观勤奋","沉默寡言","骄傲自负","胆小怯懦"], a: 0, explanation: "柯莱蒂是木柴销售商的儿子，每天帮忙搬运木柴、照顾生病的母亲。"},
+            {q: "恩里科的二年级女老师最让人印象深刻的品质是什么？", opts: ["温柔善良、关爱学生","严厉刻板、要求严格","幽默风趣、善于引导","知识渊博、讲课生动"], a: 0, explanation: "恩里科的二年级女老师温柔善良，始终牵挂学生。"},
+            {q: "《烟筒清扫工》中，小烟筒清扫工丢失的工钱是多少个币？", opts: ["三十个","二十个","四十个","十五个"], a: 0, explanation: "小烟筒清扫工打扫烟筒挣了三十个币，却从衣服兜的窟窿漏丢了。"},
+            {q: "万灵节时，母亲告诉恩里科要纪念的死者不包括以下哪类人？", opts: ["远方的陌生人","为孩子牺牲的人","过度劳累的女老师","救孩子的医生"], a: 0, explanation: "母亲让恩里科纪念为孩子牺牲的人、过度劳累的女老师、救孩子的医生等。"},
+            {q: "《煤贩与绅士》中，煤贩的儿子名叫什么？", opts: ["贝蒂","柯罗西","内利","普莱克西"], a: 0, explanation: "煤贩的儿子是贝蒂，因卡洛・诺比斯嘲笑他父亲是穷光蛋。"},
+            {q: "沃蒂尼因向谁炫耀服饰而感到羞愧？", opts: ["盲童","小瓦匠","柯莱蒂","普莱克西"], a: 0, explanation: "沃蒂尼穿着华丽服饰向邻座孩子炫耀，后来发现对方是盲童。"},
+            {q: "《一个雪球》中，加罗非扔的雪球意外伤到了谁？", opts: ["五楼的老职员","二年级的孩子","女老师","勤杂工"], a: 0, explanation: "加罗非扔的雪球意外伤到了恩里科家楼上五楼的老职员。"},
+            {q: "代课老师最初上课时无法维持秩序，主要原因是什么？", opts: ["太温和","太严厉","经验不足","声音太小"], a: 0, explanation: "代课老师性格温和，面对学生的吵闹只反复请求安静。"},
+            {q: "斯塔尔蒂的小小图书馆中，书架的材质是什么？", opts: ["核桃木","松木","橡木","杉木"], a: 0, explanation: "斯塔尔蒂的父亲为支持他的爱好，买了一个核桃木材质的书柜。"},
+            {q: "普莱克西获得奖章除了功课好，更重要的原因是什么？", opts: ["孝顺、坚强","家境贫困","人缘好","擅长手工"], a: 0, explanation: "普莱克西虽家境贫困、常遭父亲打骂，却始终孝顺、坚强。"},
+            {q: "恩里科决定把小火车送给普莱克西时，是谁用纸条鼓励他？", opts: ["父亲","母亲","姐姐","老师"], a: 0, explanation: "恩里科犹豫是否送小火车时，父亲用铅笔写纸条提醒他。"},
+            {q: "盲童学校的老师说，盲童最热爱的事物是什么？", opts: ["音乐","绘画","阅读","手工"], a: 0, explanation: "老师提到音乐是盲童的快乐与生命，他们能从音乐中获得慰藉。"},
+            {q: "夜校上课的工人们中，小瓦匠的父亲坐在哪个位置？", opts: ["小瓦匠的座位","第一排中间","最后一排角落","讲台旁边"], a: 0, explanation: "小瓦匠的父亲特意请求校长，坐在自己儿子平时上课的座位上。"},
+            {q: "七十八号犯人（柯罗西的父亲）送给老师的墨水瓶是什么材质？", opts: ["木头","陶瓷","玻璃","金属"], a: 0, explanation: "七十八号犯人在狱中用钉子尖头雕刻木头，制成锥形的木制墨水瓶。"},
+            {q: "《一个夭折的孩子》中，去世的孩子是哪个年级的学生？", opts: ["二年级","三年级","一年级","四年级"], a: 0, explanation: "夭折的孩子是二年级学生，也是恩里科弟弟的同学。"},
+            {q: "三月十四日颁奖时，卡拉布里亚男孩克拉奇代表哪个地区？", opts: ["卡拉布里亚","皮埃蒙特","伦巴第","撒丁岛"], a: 0, explanation: "校长选择克拉奇作为卡拉布里亚地区的代表，与其他地区的孩子一起为获奖同学颁奖。"},
+            {q: "柯莱蒂的父亲在一八六六年战争中，属于哪个团？", opts: ["四十九团第四营","十六师","第四十九团","第八营"], a: 0, explanation: "柯莱蒂的父亲曾是四十九团第四营的士兵，在翁贝托亲王的方阵中作战。"},
+            {q: "幼儿园的孩子们吃饭时，用什么容器盛米饭和青豆？", opts: ["黑碗","瓷碗","铁碗","木碗"], a: 0, explanation: "幼儿园的长桌上有很多圆洞，每个洞里放着一个黑碗，盛满米饭和青豆。"},
+            {q: "恩里科父亲的小学老师名叫什么？", opts: ["温琴佐・克罗塞蒂","朱塞佩・马志尼","艾德蒙多・亚米契斯","加里波第"], a: 0, explanation: "恩里科父亲的小学老师是温琴佐・克罗塞蒂，八十四岁时仍被教育部授予六十年教育成就奖。"},
+            {q: "患佝偻病学校的孩子们做体操时，常需要什么辅助工具？", opts: ["夹板","拐杖","凳子","绳子"], a: 0, explanation: "佝偻病孩子的腿多变形，做体操时需在夹板辅助下伸展腿部。"},
+            {q: "《牺牲》中，希尔维娅和恩里科为帮家里省钱，放弃了什么礼物？", opts: ["扇子和彩笔","娃娃和玩具车","故事书和画册","裙子和帽子"], a: 0, explanation: "希尔维娅放弃了母亲承诺的扇子，恩里科放弃了想要的彩笔。"},
+            {q: "《火灾》中，从着火房子里救出女人的消防员队长名叫什么？", opts: ["朱塞佩・罗比诺","马可・罗西","路易吉・柯莱蒂","安东尼奥・加罗内"], a: 0, explanation: "消防员队长朱塞佩・罗比诺不顾危险爬上房顶，从着火的房子里救出了悬在窗口的女人。"},
+            {q: "《从亚平宁到安第斯山脉》中，马可从热那亚出发，去哪个国家找母亲？", opts: ["阿根廷","美国","法国","西班牙"], a: 0, explanation: "马可的母亲在阿根廷的布宜诺斯艾利斯做工，失去联系后，马可独自前往阿根廷寻找母亲。"},
+            {q: "加里波第出生在哪个城市？", opts: ["尼斯","热那亚","罗马","佛罗伦萨"], a: 0, explanation: "加里波第是意大利统一运动的重要人物，1807年出生在尼斯。"},
+            {q: "国庆阅兵时，最先走过广场的兵种是什么？", opts: ["军校士官生","步兵","工兵","骑兵"], a: 0, explanation: "国庆阅兵时，最先走过广场的是军校士官生，他们将成为工兵和炮兵的军官。"},
+            {q: "'三十二度'章节中，柯莱蒂因为早上帮父亲运木柴，几点就起床了？", opts: ["五点钟","六点钟","七点钟","八点钟"], a: 0, explanation: "天气炎热时，柯莱蒂每天早上五点钟就起来帮父亲运木柴。"},
+            {q: "同学们去乡下郊游时，加罗内带了什么食物？", opts: ["白葡萄酒","黑面包","香肠","煮鸡蛋"], a: 0, explanation: "郊游时加罗内带了一个盛着白葡萄酒的葫芦。"},
+            {q: "恩里科的女老师去世后，哪个群体送了金色的合欢花圈？", opts: ["历届四年级女生","二年级学生","夜校学员","女老师的家人"], a: 0, explanation: "历届四年级女生为纪念曾经教过她们的女老师，送了一个大金合欢花圈。"},
+            {q: "《沉船》中，马里奥的目的地是哪里？", opts: ["巴勒莫","马耳他","布宜诺斯艾利斯","图库曼"], a: 0, explanation: "马里奥是孤儿，意大利领事将他送回巴勒莫，那里有他的远亲。"},
+            {q: "期末考试时，监考老师柯阿迪的特点是什么？", opts: ["声音像狮子吼却不惩罚人","严厉且爱批评人","温和且常笑","喜欢出难题"], a: 0, explanation: "柯阿迪老师留着黑胡子，声音像狮子吼，却从不对学生发脾气。"},
+            {q: "《告别》时，内利因为什么事拥抱加罗内？", opts: ["感谢加罗内一直保护他","加罗内要转学","内利要搬家","加罗内帮他补习"], a: 0, explanation: "加罗内长期保护内利不被欺负，告别时内利感激不已，紧紧拥抱加罗内。"},
+            {q: "《我的同学柯莱蒂》中，柯莱蒂的父亲得过几枚奖章？", opts: ["三枚","一枚","两枚","四枚"], a: 0, explanation: "柯莱蒂的父亲曾参加一八六六年战争，得过三枚奖章。"},
+            {q: "《虚荣心》中，沃蒂尼向盲童炫耀的物品不包括以下哪件？", opts: ["书包","山羊皮靴","丝绸衣服","金手表"], a: 0, explanation: "沃蒂尼穿着山羊皮靴、丝绸衣服，戴着金手表，向盲童炫耀。"},
+            {q: "《一个雪球》中，加罗非主动承认错误后，受伤的老职员做了什么？", opts: ["抚摸加罗非的头","批评加罗非","让加罗非赔偿","把加罗非赶走"], a: 0, explanation: "加罗非在加罗内鼓励下承认错误，受伤的老职员不仅没责怪他，还抚摸他的头。"},
+            {q: "代课老师上课时，是谁站出来制止同学们吵闹？", opts: ["加罗内","德罗西","斯塔尔蒂","柯莱蒂"], a: 0, explanation: "代课老师因性格温和无法制止吵闹，加罗内愤怒地站起来呵斥同学们。"},
+            {q: "斯塔尔蒂的小小图书馆中，书架上的书排列有什么特点？", opts: ["按颜色搭配排列","按大小排列","按科目排列","按出版时间排列"], a: 0, explanation: "斯塔尔蒂善于搭配书的颜色，将白色书挨着红色、黄色挨着黑色。"},
+            {q: "《一枚奖章》中，普莱克西获得奖章后，谁最先来接他？", opts: ["他的父亲（铁匠）","他的母亲","校长","老师"], a: 0, explanation: "普莱克西获得奖章后，他的铁匠父亲来学校接他。"},
+            {q: "《小火车》中，普莱克西收到小火车后，邀请恩里科去哪里？", opts: ["他父亲的铁匠铺","他家的亭子间","公园","学校"], a: 0, explanation: "普莱克西收到小火车后非常开心，邀请恩里科去他父亲的铁匠铺。"},
+            {q: "盲童学校的老师说，盲童识别文字用什么方式？", opts: ["摸凸出的点点","听老师朗读","用特殊眼镜","靠记忆"], a: 0, explanation: "盲童的书是特制的，字是凸出的，他们用手摸着识别字词。"},
+            {q: "夜校上课的工人们中，哪个职业的工人脸上沾着面粉？", opts: ["面包房伙计","泥瓦匠","铁匠","樵夫"], a: 0, explanation: "夜校里有各种职业的工人，其中面包房伙计的头发和衣服上沾着面粉。"},
+            {q: "七十八号犯人（柯罗西的父亲）制作墨水瓶时，上面雕刻了什么图案？", opts: ["钢笔和本子","星星和月亮","花朵和叶子","太阳和云朵"], a: 0, explanation: "七十八号犯人制作的木制墨水瓶上，雕刻着一支钢笔横放在本子上。"},
+            {q: "《一个夭折的孩子》中，孩子的父亲从事什么职业？", opts: ["铁路搬运工","木匠","铁匠","煤贩"], a: 0, explanation: "夭折的孩子父亲是铁路搬运工，孩子去世后，二年级的同学和老师都来送葬。"},
+            {q: "三月十四日颁奖时，罗贝提因为什么事迹获得大家的欢呼？", opts: ["从马车下救孩子","学习成绩第一","帮助同学补习","参加阅兵式"], a: 0, explanation: "罗贝提曾从疾驰的马车下救出一个一年级小男生，自己却被车轮轧伤腿。"},
+            {q: "柯莱蒂的父亲见到翁贝托国王时，喊了什么口号？", opts: ["四十九团第四营","国王万岁","意大利万岁","军队万岁"], a: 0, explanation: "柯莱蒂的父亲曾是四十九团第四营的士兵，见到翁贝托国王时，激动地喊出'四十九团第四营'。"},
+            {q: "幼儿园的老师问孩子们'稻米在哪里生长'，孩子们怎么回答？", opts: ["从水里长的","从土里长的","从树上长的","从石头里长的"], a: 0, explanation: "老师提问'稻米在哪里生长'，八个孩子张开满是饭的嘴，异口同声地唱着回答'是从水里长的'。"},
+            {q: "恩里科父亲去看望老师克罗塞蒂时，老师拿出了哪一年的作业？", opts: ["一八三八年","一八四八年","一八五八年","一八六八年"], a: 0, explanation: "克罗塞蒂老师保存着每届学生的作业，他找出恩里科父亲一八三八年四月三日的听写作业。"},
+            {q: "患佝偻病学校的老师说，孩子们最开心的事是什么？", opts: ["得到老师表扬","学会新技能","收到礼物","和同学玩耍"], a: 0, explanation: "老师提到佝偻病孩子虽然身体残疾，但很聪明好学，得到老师的表扬时会非常开心。"},
+            {q: "《牺牲》中，恩里科和希尔维娅放弃礼物后，父亲做了什么？", opts: ["偷偷买礼物放在他们餐巾下","批评他们浪费","让他们多吃点饭","带他们去郊游"], a: 0, explanation: "恩里科和希尔维娅为帮家里省钱放弃礼物，父亲深受感动，偷偷买了彩笔盒和扇子。"},
+            {q: "《火灾》中，消防员罗比诺救女人时，是从哪里进入着火的房子？", opts: ["房顶","窗户","大门","烟囱"], a: 0, explanation: "罗比诺队长为救悬在窗口的女人，爬上房顶，穿过狭窄的空间，用斧头砍开砖瓦和房梁。"},
+            {q: "马可寻找母亲的旅途中，曾乘坐什么交通工具从布宜诺斯艾利斯去罗萨里奥？", opts: ["帆船","火车","马车","汽车"], a: 0, explanation: "马可在博卡人的帮助下，乘坐一艘装满水果的帆船，从布宜诺斯艾利斯出发。"},
+            {q: "加里波第在美洲为解放外族人民战斗了多少年？", opts: ["十年","五年","十五年","二十年"], a: 0, explanation: "加里波第曾在美洲为解放外族人民战斗了十年，后来回到意大利。"},
+            {q: "国庆阅兵时，阿尔卑斯山地狙击兵的帽子有什么特点？", opts: ["戴卡拉布里亚式帽子，有翠绿翻领","戴高筒帽，有红色羽毛","戴贝雷帽，有蓝色徽章","戴钢盔，有金色花纹"], a: 0, explanation: "阿尔卑斯山地狙击兵戴着卡拉布里亚式的帽子，翻领是翠绿色。"},
+            {q: "'三十二度'章节中，沃蒂尼为体操课特意穿了什么衣服？", opts: ["天蓝条图案的新衣服","红色运动服","白色衬衫","黑色外套"], a: 0, explanation: "天气炎热时，沃蒂尼为体操课特意穿了一件天蓝条图案的新衣服。"},
+            {q: "同学们去乡下郊游时，是谁带了两公斤重的大面包？", opts: ["普莱克西","加罗内","德罗西","柯莱蒂"], a: 0, explanation: "郊游时，普莱克西穿着铁匠的衬衫，胳膊下夹着一个两公斤重的大面包。"},
+            {q: "恩里科的女老师去世前，最后一次见恩里科时送了什么礼物？", opts: ["橙子","苹果","糖果","饼干"], a: 0, explanation: "女老师病重时，恩里科去看望她，老师从床头柜上拿起一个橙子递给恩里科。"},
+            {q: "《沉船》中，马里奥救朱丽叶塔后，自己的结局是什么？", opts: ["和大船一起沉没","被其他船救起","游泳上岸","被鲸鱼吃掉"], a: 0, explanation: "马里奥把逃生的机会让给朱丽叶塔，自己留在即将沉没的大船上，最终和大船一起沉入海中。"},
+            {q: "期末考试时，德罗西是如何帮助其他同学的？", opts: ["悄悄传递答案提示","帮同学整理书包","给同学借文具","替同学答题"], a: 0, explanation: "考试时，德罗西利用自己的智慧，悄悄给不会答题的同学传递数字或运算提示。"},
+            {q: "《告别》时，小瓦匠最后一次对恩里科做了什么动作？", opts: ["做野兔鬼脸","拥抱恩里科","送恩里科钉子","帮恩里科背书包"], a: 0, explanation: "告别时，小瓦匠为了掩饰离别的伤感，最后一次对恩里科做了他标志性的野兔鬼脸。"},
+            {q: "《我的母亲》中，父亲批评恩里科不尊重母亲时，说什么人比冒犯母亲的人更可敬？", opts: ["尊重母亲的杀人犯","有钱的绅士","勇敢的士兵","聪明的学者"], a: 0, explanation: "父亲严厉批评恩里科不尊重母亲，说'尊重母亲的杀人犯还有一点诚实'。"}
+        ];
+
+        // 游戏状态
+        let gameState = {
+            currentGroup: [],
+            groupNumber: 0,
+            usedStudents: [],
+            currentQuestions: [],
+            currentQuestionIndex: 0,
+            score: 0,
+            timer: null,
+            timeLeft: 10,
+            isAnswering: false,
+            allGroups: [],
+            usedQuestions: [],
+            lastCorrectPositions: [] // 记录最近几题的正确答案位置
+        };
+
+        // DOM元素
+        const elements = {
+            startGroupingBtn: document.getElementById('startGroupingBtn'),
+            randomGroupBtn: document.getElementById('randomGroupBtn'),
+            nextGroupBtn: document.getElementById('nextGroupBtn'),
+            challengeInfo: document.getElementById('challengeInfo'),
+            groupDisplay: document.getElementById('groupDisplay'),
+            groupTitle: document.getElementById('groupTitle'),
+            groupMembers: document.getElementById('groupMembers'),
+            startChallengeContainer: document.getElementById('startChallengeContainer'),
+            startChallengeBtn: document.getElementById('startChallengeBtn'),
+            challengeSection: document.getElementById('challengeSection'),
+            questionCard: document.getElementById('questionCard'),
+            questionText: document.getElementById('questionText'),
+            optionsContainer: document.getElementById('optionsContainer'),
+            progress: document.getElementById('progress'),
+            score: document.getElementById('score'),
+            timer: document.getElementById('timer'),
+            actionButtons: document.getElementById('actionButtons'),
+            nextQuestion: document.getElementById('nextQuestion'),
+            restart: document.getElementById('restart'),
+            answerPopup: document.getElementById('answerPopup'),
+            correctAnswerText: document.getElementById('correctAnswerText'),
+            resultOverlay: document.getElementById('resultOverlay'),
+            resultGroup: document.getElementById('resultGroup'),
+            resultScore: document.getElementById('resultScore'),
+            resultMessage: document.getElementById('resultMessage'),
+            continueNext: document.getElementById('continueNext')
+        };
+
+        // 随机组队函数
+        function formGroup() {
+            if (gameState.usedStudents.length >= studentNames.length) {
+                gameState.usedStudents = [];
+                gameState.allGroups = [];
+                gameState.groupNumber = 0;
+            }
+
+            const availableStudents = studentNames.filter(name => !gameState.usedStudents.includes(name));
+            const shuffled = [...availableStudents].sort(() => Math.random() - 0.5);
+            const selected = shuffled.slice(0, 5);
+            
+            gameState.currentGroup = selected;
+            gameState.groupNumber++;
+            gameState.usedStudents.push(...selected);
+            gameState.allGroups.push(selected);
+
+            // 显示组队结果
+            elements.groupTitle.textContent = `第 ${gameState.groupNumber} 组`;
+            elements.groupMembers.innerHTML = '';
+            
+            selected.forEach((name, index) => {
+                const nameElement = document.createElement('div');
+                nameElement.className = 'student-name';
+                nameElement.textContent = `${index + 1}. ${name}`;
+                nameElement.style.animationDelay = `${index * 0.1}s`;
+                nameElement.style.animation = 'fadeIn 0.5s ease-out forwards';
+                elements.groupMembers.appendChild(nameElement);
+            });
+
+            // 显示组队信息
+            elements.challengeInfo.classList.add('hidden');
+            elements.groupDisplay.classList.remove('hidden');
+            elements.startGroupingBtn.classList.add('hidden');
+            elements.randomGroupBtn.classList.remove('hidden');
+            elements.startChallengeContainer.classList.remove('hidden');
+            
+            if (gameState.usedStudents.length >= studentNames.length) {
+                elements.randomGroupBtn.textContent = '全部同学均已参与，从头开始';
+            }
+        }
+
+        // 下一组
+        function nextGroup() {
+            if (gameState.usedStudents.length >= studentNames.length) {
+                gameState.usedStudents = [];
+                gameState.allGroups = [];
+                gameState.groupNumber = 0;
+                elements.nextGroupBtn.classList.add('hidden');
+            }
+            
+            formGroup();
+        }
+
+        // 准备挑战
+        function prepareChallenge() {
+            // 重置已使用题目
+            gameState.usedQuestions = [];
+            gameState.lastCorrectPositions = [];
+            
+            // 随机选择10道题目，确保不重复
+            let availableQuestions = questions.filter((q, index) => !gameState.usedQuestions.includes(index));
+            if (availableQuestions.length < 10) {
+                // 如果可用题目不足10道，重置已使用题目列表
+                gameState.usedQuestions = [];
+                availableQuestions = questions;
+            }
+            
+            const shuffled = [...availableQuestions].sort(() => Math.random() - 0.5);
+            gameState.currentQuestions = shuffled.slice(0, 10);
+            
+            // 记录已使用的题目索引
+            gameState.currentQuestions.forEach(q => {
+                const index = questions.findIndex(item => item.q === q.q);
+                if (index !== -1) {
+                    gameState.usedQuestions.push(index);
+                }
+            });
+            
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            
+            // 隐藏组队相关信息
+            elements.groupDisplay.classList.add('hidden');
+            elements.startChallengeContainer.classList.add('hidden');
+            elements.challengeInfo.classList.add('hidden');
+            elements.randomGroupBtn.classList.add('hidden');
+            elements.nextGroupBtn.classList.add('hidden');
+            
+            // 显示挑战区域
+            elements.challengeSection.classList.remove('hidden');
+            setTimeout(() => {
+                elements.questionCard.classList.add('visible');
+            }, 100);
+            
+            showQuestion();
+        }
+
+        // 显示题目
+        function showQuestion() {
+            if (gameState.currentQuestionIndex >= gameState.currentQuestions.length) {
+                showResult();
+                return;
+            }
+
+            const question = gameState.currentQuestions[gameState.currentQuestionIndex];
+            gameState.isAnswering = true;
+            gameState.timeLeft = 10;
+            
+            elements.progress.textContent = `第 ${gameState.currentQuestionIndex + 1}/10 题`;
+            elements.score.textContent = `得分: ${gameState.score}`;
+            elements.questionText.textContent = question.q;
+            
+            elements.optionsContainer.innerHTML = '';
+            
+            // 智能随机化选项顺序，避免连续相同位置
+            const { shuffled, correctIndex } = shuffleOptionsSmart(question.opts, question.a);
+            
+            shuffled.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => selectAnswer(index, correctIndex);
+                elements.optionsContainer.appendChild(button);
+            });
+            
+            elements.actionButtons.classList.add('hidden');
+            startTimer();
+        }
+
+        // 智能随机化选项顺序
+        function shuffleOptionsSmart(options, correctIndex) {
+            const shuffled = [...options];
+            let newCorrectIndex = correctIndex;
+            
+            // 获取最近3题的正确答案位置
+            const recentPositions = gameState.lastCorrectPositions.slice(-3);
+            
+            // 尝试找到一个不在最近3个位置的新位置
+            let availablePositions = [];
+            for (let i = 0; i < options.length; i++) {
+                if (!recentPositions.includes(i)) {
+                    availablePositions.push(i);
+                }
+            }
+            
+            // 如果可用位置为空（极端情况），使用所有位置
+            if (availablePositions.length === 0) {
+                availablePositions = [0, 1, 2, 3];
+            }
+            
+            // 随机选择一个可用位置作为正确答案的新位置
+            const targetCorrectIndex = availablePositions[Math.floor(Math.random() * availablePositions.length)];
+            
+            // 执行洗牌，确保正确答案落在目标位置
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                
+                if (i === newCorrectIndex) {
+                    newCorrectIndex = j;
+                } else if (j === newCorrectIndex) {
+                    newCorrectIndex = i;
+                }
+            }
+            
+            // 如果正确答案不在目标位置，调整
+            if (newCorrectIndex !== targetCorrectIndex) {
+                const currentCorrectOption = shuffled[newCorrectIndex];
+                const targetOption = shuffled[targetCorrectIndex];
+                shuffled[newCorrectIndex] = targetOption;
+                shuffled[targetCorrectIndex] = currentCorrectOption;
+                newCorrectIndex = targetCorrectIndex;
+            }
+            
+            // 记录这次的正确答案位置
+            gameState.lastCorrectPositions.push(newCorrectIndex);
+            if (gameState.lastCorrectPositions.length > 5) {
+                gameState.lastCorrectPositions.shift();
+            }
+            
+            return { shuffled, correctIndex: newCorrectIndex };
+        }
+
+        // 开始计时
+        function startTimer() {
+            clearInterval(gameState.timer);
+            elements.timer.textContent = gameState.timeLeft;
+            elements.timer.classList.remove('warning');
+            
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                elements.timer.textContent = gameState.timeLeft;
+                
+                soundEffects.playTick();
+                
+                if (gameState.timeLeft <= 3) {
+                    elements.timer.classList.add('warning');
+                }
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    timeOut();
+                }
+            }, 1000);
+        }
+
+        // 选择答案
+        function selectAnswer(index, correctIndex) {
+            if (!gameState.isAnswering) return;
+            
+            clearInterval(gameState.timer);
+            gameState.isAnswering = false;
+            
+            const buttons = elements.optionsContainer.querySelectorAll('.option-btn');
+            
+            buttons.forEach(button => button.disabled = true);
+            
+            if (index === correctIndex) {
+                buttons[index].classList.add('correct');
+                gameState.score += 10;
+                soundEffects.playCorrect();
+            } else {
+                buttons[index].classList.add('wrong');
+                buttons[correctIndex].classList.add('correct');
+                soundEffects.playWrong();
+                const question = gameState.currentQuestions[gameState.currentQuestionIndex];
+                showAnswerPopup(question.opts[question.a], question.explanation);
+            }
+            
+            setTimeout(() => {
+                elements.actionButtons.classList.remove('hidden');
+            }, 2000);
+        }
+
+        // 超时处理
+        function timeOut() {
+            gameState.isAnswering = false;
+            const question = gameState.currentQuestions[gameState.currentQuestionIndex];
+            const buttons = elements.optionsContainer.querySelectorAll('.option-btn');
+            
+            buttons.forEach(button => button.disabled = true);
+            buttons[question.a].classList.add('correct');
+            
+            soundEffects.playTimeout();
+            showAnswerPopup(question.opts[question.a], question.explanation);
+            
+            setTimeout(() => {
+                elements.actionButtons.classList.remove('hidden');
+            }, 3000);
+        }
+
+        // 显示答案弹窗
+        function showAnswerPopup(answer, explanation) {
+            elements.correctAnswerText.innerHTML = `正确答案：${answer}<br><br>${explanation}`;
+            elements.answerPopup.classList.add('show');
+            
+            setTimeout(() => {
+                elements.answerPopup.classList.remove('show');
+            }, 3000);
+        }
+
+        // 下一题
+        function nextQuestion() {
+            // 重置题目卡片动画
+            elements.questionCard.classList.remove('visible');
+            elements.optionsContainer.innerHTML = '';
+            
+            gameState.currentQuestionIndex++;
+            
+            // 延迟显示下一题，创建过渡效果
+            setTimeout(() => {
+                elements.questionCard.classList.add('visible');
+                showQuestion();
+            }, 150);
+        }
+
+        // 显示结果
+        function showResult() {
+            clearInterval(gameState.timer);
+            elements.challengeSection.classList.add('hidden');
+            
+            const percentage = gameState.score;
+            let message = '';
+            let className = '';
+            
+            if (percentage === 100) {
+                elements.resultScore.textContent = `${gameState.score}分`;
+                elements.resultScore.className = 'result-score excellent';
+                message = '太棒了！满分通关！';
+                className = 'excellent';
+                soundEffects.playExcellent();
+            } else if (percentage >= 80) {
+                elements.resultScore.textContent = `${gameState.score}分`;
+                elements.resultScore.className = 'result-score good';
+                message = '很厉害！继续保持！';
+                className = 'good';
+                soundEffects.playGood();
+            } else {
+                elements.resultScore.textContent = `${gameState.score}分`;
+                elements.resultScore.className = 'result-score encourage';
+                message = '加油！再接再厉！';
+                className = 'encourage';
+                soundEffects.playEncourage();
+            }
+            
+            elements.resultGroup.textContent = `第${gameState.groupNumber}组`;
+            elements.resultMessage.textContent = message;
+            elements.resultMessage.className = `result-message ${className}`;
+            elements.resultOverlay.classList.add('show');
+        }
+
+        // 继续下一组（结束挑战后）
+        function continueToNextGroup() {
+            elements.resultOverlay.classList.remove('show');
+            elements.challengeSection.classList.add('hidden');
+            elements.questionCard.classList.remove('visible');
+            elements.actionButtons.classList.add('hidden');
+            
+            // 不重置groupNumber和usedStudents，继续使用当前进度
+            gameState.currentQuestions = [];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            
+            // 显示组队界面，准备下一组
+            elements.startGroupingBtn.classList.add('hidden');
+            elements.randomGroupBtn.classList.remove('hidden');
+            elements.nextGroupBtn.classList.remove('hidden');
+            elements.challengeInfo.classList.remove('hidden');
+            elements.groupDisplay.classList.add('hidden');
+            elements.startChallengeContainer.classList.add('hidden');
+            
+            // 自动进入下一组
+            nextGroup();
+        }
+        
+        // 重新开始（从第一组开始）
+        function restart() {
+            elements.resultOverlay.classList.remove('show');
+            elements.challengeSection.classList.add('hidden');
+            elements.questionCard.classList.remove('visible');
+            elements.actionButtons.classList.add('hidden');
+            
+            gameState.groupNumber = 0;
+            gameState.usedStudents = [];
+            gameState.allGroups = [];
+            gameState.currentQuestions = [];
+            gameState.currentQuestionIndex = 0;
+            gameState.score = 0;
+            gameState.usedQuestions = [];
+            gameState.lastCorrectPositions = [];
+            
+            elements.startGroupingBtn.classList.remove('hidden');
+            elements.randomGroupBtn.classList.add('hidden');
+            elements.nextGroupBtn.classList.add('hidden');
+            elements.challengeInfo.classList.remove('hidden');
+            elements.groupDisplay.classList.add('hidden');
+            elements.startChallengeContainer.classList.add('hidden');
+        }
+
+        // 初始化事件监听器
+        function initializeEventListeners() {
+            elements.startGroupingBtn.addEventListener('click', function() {
+                formGroup();
+                elements.nextGroupBtn.classList.remove('hidden');
+            });
+            elements.randomGroupBtn.addEventListener('click', formGroup);
+            elements.nextGroupBtn.addEventListener('click', nextGroup);
+            elements.startChallengeBtn.addEventListener('click', prepareChallenge);
+            elements.nextQuestion.addEventListener('click', nextQuestion);
+            elements.restart.addEventListener('click', restart);
+            elements.continueNext.addEventListener('click', continueToNextGroup);
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEventListeners();
+            // 触发音频上下文（某些浏览器需要用户交互）
+            document.addEventListener('click', function initAudio() {
+                if (soundEffects.audioContext && soundEffects.audioContext.state === 'suspended') {
+                    soundEffects.audioContext.resume();
+                }
+                document.removeEventListener('click', initAudio);
+            }, { once: true });
+        });
+    </script>
+</body>
+</html>
